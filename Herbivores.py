@@ -1,6 +1,7 @@
 import math
 import random
 
+
 class Herbivore:
 
 
@@ -29,7 +30,7 @@ class Herbivore:
     def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, N):
         if self.w < zeta * (w_birth + sigma_birth):
             probability = 0
-        elif self.w < xi * w_birth: # xi * babys vekt. Vet ikke helt hva babys vekt er?
+        elif self.w < xi * w_birth:  # xi * babys vekt. Vet ikke helt hva babys vekt er?
             probability = 0
         else:
             probability = min(1, gamma * self.fitness * (N - 1))
@@ -52,7 +53,7 @@ class Herbivore:
 
     def death(self, omega):
         if self.w == 0:
-           self.alive = False
+            self.alive = False
         else:
             probability = omega * (1 - self.fitness)
             if random.random() < probability:
