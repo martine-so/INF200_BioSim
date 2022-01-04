@@ -6,7 +6,7 @@ class Lowland:
         self.fodder = f_max
         self.animals = animals
 
-    def eating(self, F, beta):
+    def eating(self, F, beta, phi_age, phi_weight, a_half, w_half):
         for animal in self.animals:
             if F < self.fodder:
                 f = F
@@ -15,6 +15,7 @@ class Lowland:
 
             animal.update_weight(f, beta)
             self.fodder -= f
+            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
 
     def aging(self):
         for animal in self.animals:
@@ -33,3 +34,6 @@ class Lowland:
             if baby == True:
                 self.animals.append(Herbivore(w=w_birth))
 
+    def loose_weight(self, eta):
+        for animal in self.animals:
+            animal.loose_weight(eta)
