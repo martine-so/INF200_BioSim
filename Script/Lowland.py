@@ -27,5 +27,9 @@ class Lowland:
             if animal.alive == False:
                 self.animals.remove(animal)
 
-
+    def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, N):
+        for animal in self.animals:
+            animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, N)
+            if baby == True:
+                self.animals.append(Herbivore(w=w_birth))
 
