@@ -4,7 +4,7 @@ import random
 class Herbivore:
 
 
-    def __init__(self, a, w):
+    def __init__(self, a=0, w=0):
         self.a = a
         self.w = w
         self.fitness = 0
