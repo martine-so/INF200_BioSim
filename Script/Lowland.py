@@ -7,6 +7,7 @@ class Lowland:
         self.animals = animals
 
     def eating(self, F, beta, phi_age, phi_weight, a_half, w_half):
+        self.animals.sort(key=attrgetter('fitness'), reversed=True)
         for animal in self.animals:
             if F < self.fodder:
                 f = F
