@@ -16,3 +16,10 @@ class Lowland:
     def aging(self):
         for animal in self.animals:
             Herbivore.update_a(animal)
+
+    def dying(self, omega):
+        for animal in self.animals:
+            Herbivore.death(animal, omega)
+            if animal.alive == False:
+                self.animals.pop(animal)
+
