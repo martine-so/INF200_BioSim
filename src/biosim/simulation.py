@@ -12,6 +12,19 @@ class BioSim:
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
 
+        self.island_map = island_map
+        self.ini_pop = ini_pop
+        self.seed = seed
+        self.vis_years = vis_years
+        self.ymax_animals = ymax_animals
+        self.cmax_aminals = cmax_animals
+        self.hist_specs = hist_specs
+        self.img_dir = img_dir
+        self.img_base = img_base
+        self.img_fmt = img_fmt
+        self.img_years = img_years
+        self.log_file = log_file
+
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
