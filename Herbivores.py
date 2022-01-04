@@ -59,3 +59,4 @@ class Herbivore:
             if random.seed(self.seed) < probability:
                 self.alive = False
 
+        return self.alive
