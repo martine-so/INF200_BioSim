@@ -37,6 +37,7 @@ class Herbivore:
 
         if random.seed(self.seed) < probability:
             baby = True
+            self.w -= xi * w_birth
         else:
             baby = False
 
