@@ -21,5 +21,7 @@ class Lowland:
         for animal in self.animals:
             Herbivore.death(animal, omega)
             if animal.alive == False:
-                self.animals.pop(animal)
+                self.animals.remove(animal)
+
+
 
