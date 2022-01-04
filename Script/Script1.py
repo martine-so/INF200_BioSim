@@ -1,7 +1,7 @@
 #For testing Herbivores and Lowland
 
 from Herbivores import Herbivore
-#from Lowland import Lowland
+from Lowland import Lowland
 import textwrap
 
 geogr = """\
@@ -28,7 +28,11 @@ F = 10
 for i in ini_herbs:
     animals = [Herbivore(j['age'], j['weight']) for j in i['pop']]
 
-print(len(animals))
+
+lowlandfield = Lowland(f_max, animals)
+
+print(len(lowland))
+
 
 
 #f_herb = Lowland.fodder(f_max, animals)
