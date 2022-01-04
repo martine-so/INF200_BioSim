@@ -1,7 +1,7 @@
 #For testing Herbivores and Lowland
 
-#from Herbivores import Herbivore
-#from Lowlands import Lowland
+from Herbivores import Herbivore
+#from Lowland import Lowland
 import textwrap
 
 geogr = """\
@@ -26,8 +26,9 @@ f_max = 800
 F = 10
 
 for i in ini_herbs:
-    for j in i['pop']:
-        animals = [Herbivore(j['age'], j['weight'])]
+    animals = [Herbivore(j['age'], j['weight']) for j in i['pop']]
+
+print(len(animals))
 
 
 #f_herb = Lowland.fodder(f_max, animals)
