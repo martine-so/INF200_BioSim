@@ -6,20 +6,24 @@ class Lowland:
         self.fodder = f_max
         self.animals = animals
 
-    def eating(self, F):
-        if F < self.fodder:
-            f = self.fodder
-        else:
-            f = F
-        return f
+    def eating(self, F, beta):
+        for animal in self.animals:
+            if F < self.fodder:
+                f = F
+            else:
+                f = self.fodder
+
+            animal.update_weight(f, beta)
+            self.fodder -= f
 
     def aging(self):
         for animal in self.animals:
-            Herbivore.update_a(animal)
+            animal.update_a()
+
 
     def dying(self, omega):
         for animal in self.animals:
-            Herbivore.death(animal, omega)
+            animal.death(omega)
             if animal.alive == False:
                 self.animals.remove(animal)
 
