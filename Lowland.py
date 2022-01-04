@@ -1,3 +1,4 @@
+from Herbivores import Herbivore
 
 class Lowland:
 
@@ -11,3 +12,7 @@ class Lowland:
         else:
             f = F
         return f
+
+    def aging(self):
+        for animal in self.animals:
+            Herbivore.update_a(animal)
