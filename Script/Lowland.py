@@ -1,4 +1,5 @@
 from Herbivores import Herbivore
+from operator import attrgetter
 
 class Lowland:
 
@@ -7,7 +8,7 @@ class Lowland:
         self.animals = animals
 
     def eating(self, F, beta, phi_age, phi_weight, a_half, w_half):
-        self.animals.sort(key=attrgetter('fitness'), reversed=True)
+        self.animals.sort(key=attrgetter('fitness'), reverse=True)
         for animal in self.animals:
             if F < self.fodder:
                 f = F
@@ -32,7 +33,7 @@ class Lowland:
     def breeding(self, zeta, w_birth, sigma_birth, xi, gamma):
         for animal in self.animals:
             animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, len(self.animals))
-            if baby == True:
+            if animal.baby == True:
                 self.animals.append(Herbivore(w=w_birth))
 
     def loose_weight(self, eta):
