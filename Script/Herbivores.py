@@ -4,7 +4,7 @@ import random
 class Herbivore:
 
 
-    def __init__(self, a=0, w=0, seed=9001):
+    def __init__(self, a=0, w=0, seed=101):
         self.a = a
         self.w = w
         self.fitness = 0
@@ -35,12 +35,12 @@ class Herbivore:
             probability = 0
         else:
             probability = min(1, gamma * self.fitness * (N - 1))
+
         if random.random() < probability:
             self.baby = True
             self.w -= xi * w_birth
         else:
             self.baby = False
-
 
 
     def update_a(self):
@@ -59,4 +59,3 @@ class Herbivore:
             if random.random() < probability:
                 self.alive = False
 
-        return self.alive

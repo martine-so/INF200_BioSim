@@ -10,7 +10,7 @@ geogr = """\
            WWW"""
 geogr = textwrap.dedent(geogr)
 
-print(geogr)
+#print(geogr)
 
 ini_herbs = [{'loc': (2, 2),
               'pop': [{'species': 'Herbivore',
@@ -19,12 +19,12 @@ ini_herbs = [{'loc': (2, 2),
                       for _ in range(50)]}]
 
 coordinates = [i['loc'] for i in ini_herbs]
-print(coordinates)
+#print(coordinates)
 
 ## Finner ut at vi står i Lowland:
 f_max = 800
 F = 10
-years = 10
+years = 5
 beta = 0.9
 phi_age = 0.6
 phi_weight = 0.1
@@ -49,7 +49,4 @@ for year in range(years):
     lowlandfield.loose_weight(eta)
     lowlandfield.dying(omega)
     animals = lowlandfield.animals
-    print(len(animals))
-
-
-#f_herb = Lowland.fodder(f_max, animals)
+    print(len(animals)) ## Alle føder 2. året. WHYYYYYYY?!?!?!?!
