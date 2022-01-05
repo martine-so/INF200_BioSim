@@ -4,6 +4,20 @@ import random
 
 class Herbivore:
 
+    @classmethod
+    def set_params(cls, new_params):
+        """Set class parameters
+        """
+
+        for key in new_params:
+            if key not in ('???', '???'):
+                raise KeyError('Invalid parameter name: ' + key)
+
+        if 'eta' in new_params:
+            if not 0 <= new_params['eta'] <= 1:
+                raise ValueError('eta must be in [0, 1].')
+            cls.eta = new_params['eta']
+
     def __init__(self, a=0, w=8, seed=100):
         self.a = a
         self.w = w
