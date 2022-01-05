@@ -1,4 +1,4 @@
-#For testing Herbivores and Lowland
+"""For testing Herbivores and Lowland"""
 
 from Herbivores import Herbivore
 from Lowland import Lowland
@@ -10,7 +10,7 @@ geogr = """\
            WWW"""
 geogr = textwrap.dedent(geogr)
 
-#print(geogr)
+# print(geogr)
 
 ini_herbs = [{'loc': (2, 2),
               'pop': [{'species': 'Herbivore',
@@ -19,9 +19,9 @@ ini_herbs = [{'loc': (2, 2),
                       for _ in range(50)]}]
 
 coordinates = [i['loc'] for i in ini_herbs]
-#print(coordinates)
+# print(coordinates)
 
-## Finner ut at vi står i Lowland:
+"""Finner ut at vi står i Lowland:"""
 f_max = 800
 F = 10
 years = 5
@@ -49,4 +49,4 @@ for year in range(years):
     lowlandfield.loose_weight(eta)
     lowlandfield.dying(omega)
     animals = lowlandfield.animals
-    print(len(animals)) ## Alle føder 2. året. WHYYYYYYY?!?!?!?!
+    print(len(animals))  # Alle føder 2. året. WHYYYYYYY?!?!?!?!

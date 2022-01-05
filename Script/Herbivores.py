@@ -1,8 +1,8 @@
 import math
 import random
 
-class Herbivore:
 
+class Herbivore:
 
     def __init__(self, a=0, w=0, seed=101):
         self.a = a
@@ -12,10 +12,8 @@ class Herbivore:
         self.baby = False
         random.seed(seed)
 
-
     def update_weight(self, f, beta):
         self.w += beta * f
-
 
     def calculate_fitness(self, phi_age, phi_weight, a_half, w_half):
         if self.w <= 0:
@@ -26,7 +24,6 @@ class Herbivore:
                            (1/(1 + math.exp(-phi_weight * (self.w - w_half))))
 
         return self.fitness
-
 
     def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, N):
         if self.w < zeta * (w_birth + sigma_birth):
@@ -42,14 +39,11 @@ class Herbivore:
         else:
             self.baby = False
 
-
     def update_a(self):
         self.a += 1
 
-
     def loose_weight(self, eta):
         self.w -= eta * self.w
-
 
     def death(self, omega):
         if self.w == 0:
@@ -58,4 +52,3 @@ class Herbivore:
             probability = omega * (1 - self.fitness)
             if random.random() < probability:
                 self.alive = False
-
