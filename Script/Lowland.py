@@ -20,22 +20,25 @@ class Lowland:
             self.fodder -= f
             animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
 
-    def aging(self):
+    def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, phi_age, phi_weight, a_half, w_half):
+        for animal in self.animals:
+            animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, len(self.animals))
+            if animal.baby is True:
+                self.animals.append(Herbivore(w=w_birth))
+                animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+
+    def aging(self, phi_age, phi_weight, a_half, w_half):
         for animal in self.animals:
             animal.update_a()
+            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+
+    def loose_weight(self, eta, phi_age, phi_weight, a_half, w_half):
+        for animal in self.animals:
+            animal.loose_weight(eta)
+            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
 
     def dying(self, omega):
         for animal in self.animals:
             animal.death(omega)
             if animal.alive is not True:
                 self.animals.remove(animal)
-
-    def breeding(self, zeta, w_birth, sigma_birth, xi, gamma):
-        for animal in self.animals:
-            animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, len(self.animals))
-            if animal.baby is True:
-                self.animals.append(Herbivore(w=w_birth))
-
-    def loose_weight(self, eta):
-        for animal in self.animals:
-            animal.loose_weight(eta)

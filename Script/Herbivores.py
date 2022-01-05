@@ -23,7 +23,6 @@ class Herbivore:
             self.fitness = (1/(1 + math.exp(phi_age * (self.a - a_half)))) * \
                            (1/(1 + math.exp(-phi_weight * (self.w - w_half))))
 
-        return self.fitness
 
     def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, N):
         if self.w < zeta * (w_birth + sigma_birth):

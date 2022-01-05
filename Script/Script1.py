@@ -44,9 +44,9 @@ for i in ini_herbs:
 for year in range(years):
     lowlandfield = Lowland(animals, f_max)
     lowlandfield.eating(F, beta, phi_age, phi_weight, a_half, w_half)
-    lowlandfield.breeding(zeta, w_birth, sigma_birth, xi, gamma)
-    lowlandfield.aging()
-    lowlandfield.loose_weight(eta)
+    lowlandfield.breeding(zeta, w_birth, sigma_birth, xi, gamma, phi_age, phi_weight, a_half, w_half)
+    lowlandfield.aging(phi_age, phi_weight, a_half, w_half)
+    lowlandfield.loose_weight(eta, phi_age, phi_weight, a_half, w_half)
     lowlandfield.dying(omega)
     animals = lowlandfield.animals
     print(len(animals))  # Alle føder 2. året. WHYYYYYYY?!?!?!?!
