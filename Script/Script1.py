@@ -42,7 +42,7 @@ for i in ini_herbs:
     animals = [Herbivore(j['age'], j['weight']) for j in i['pop']]
 
 for year in range(years):
-    lowlandfield = Lowland(f_max, animals)
+    lowlandfield = Lowland(animals, f_max)
     lowlandfield.eating(F, beta, phi_age, phi_weight, a_half, w_half)
     lowlandfield.breeding(zeta, w_birth, sigma_birth, xi, gamma)
     lowlandfield.aging()

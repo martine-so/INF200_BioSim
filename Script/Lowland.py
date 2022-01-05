@@ -4,7 +4,7 @@ from operator import attrgetter
 
 class Lowland:
 
-    def __init__(self, f_max, animals):
+    def __init__(self, animals, f_max=800):
         self.fodder = f_max
         self.animals = animals
 
