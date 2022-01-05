@@ -13,10 +13,22 @@ class Herbivore:
             if key not in ('???', '???'):
                 raise KeyError('Invalid parameter name: ' + key)
 
+        for key in new_params:
+            if not 0 <= new_params[key]:
+                raise ValueError('All parametervalues must be positiv')
+            cls.key = new_params[key]
+
         if 'eta' in new_params:
-            if not 0 <= new_params['eta'] <= 1:
+            if not new_params['eta'] <= 1:
                 raise ValueError('eta must be in [0, 1].')
             cls.eta = new_params['eta']
+
+        if 'DeltaPhiMax' in new_params:
+            if not 0 < new_params['DeltaPhiMax']:
+                raise ValueError('DeltaPhiMax must be higher than 0')
+            cls.DeltaPhiMax = new_params['DeltaPhiMax']
+
+
 
     def __init__(self, a=0, w=8, seed=100):
         self.a = a
