@@ -24,7 +24,7 @@ coordinates = [i['loc'] for i in ini_herbs]
 """Finner ut at vi står i Lowland:"""
 f_max = 800
 F = 10
-years = 5
+years = 50
 beta = 0.9
 phi_age = 0.6
 phi_weight = 0.1
@@ -45,6 +45,7 @@ for year in range(years):
     lowlandfield = Lowland(animals, f_max)
     lowlandfield.eating(F, beta, phi_age, phi_weight, a_half, w_half)
     lowlandfield.breeding(zeta, w_birth, sigma_birth, xi, gamma, phi_age, phi_weight, a_half, w_half)
+    print(len(animals))
     lowlandfield.aging(phi_age, phi_weight, a_half, w_half)
     lowlandfield.loose_weight(eta, phi_age, phi_weight, a_half, w_half)
     lowlandfield.dying(omega)

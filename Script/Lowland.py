@@ -21,11 +21,13 @@ class Lowland:
             animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
 
     def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, phi_age, phi_weight, a_half, w_half):
+        newborns = []
         for animal in self.animals:
             animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, len(self.animals))
             if animal.baby is True:
-                self.animals.append(Herbivore(w=w_birth))
+                newborns.append(Herbivore(w=w_birth))
                 animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+        self.animals.extend(newborns)
 
     def aging(self, phi_age, phi_weight, a_half, w_half):
         for animal in self.animals:
