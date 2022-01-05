@@ -67,6 +67,39 @@ class BioSim:
         :param params: Dict with valid parameter specification for species
         """
 
+        @classmethod
+        def set_params(cls, new_params):
+            """Set class parameters
+            """
+
+            for key in new_params:
+                if key not in ('???', '???'):
+                    raise KeyError('Invalid parameter name: ' + key)
+
+            for key in new_params:
+                if not 0 <= new_params[key]:
+                    raise ValueError('All parametervalues must be positiv')
+                cls.key = new_params[key]
+
+            if 'eta' in new_params:
+                if not new_params['eta'] <= 1:
+                    raise ValueError('eta must be in [0, 1].')
+                cls.eta = new_params['eta']
+
+            if 'DeltaPhiMax' in new_params:
+                if not 0 < new_params['DeltaPhiMax']:
+                    raise ValueError('DeltaPhiMax must be higher than 0')
+                cls.DeltaPhiMax = new_params['DeltaPhiMax']
+
+        @classmethod
+        def get_params(cls):
+            """Get class parameters"""
+            return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
+                    'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zigma, 'w_birth': cls.w_birth,
+                    'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
+                    'omega': cls.omega}
+            # mu skal også inn her når de beveger seg
+
     def set_landscape_parameters(self, landscape, params):
         """
         Set parameters for landscape type.
