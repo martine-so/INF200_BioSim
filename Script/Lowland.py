@@ -5,8 +5,8 @@ from operator import attrgetter
 class Lowland:
     """Lowland"""
 
-    #parameters defined at class level
-    f_max=800
+    # parameters defined at class level
+    f_max = 800
 
     default_params = {'f_max': f_max}
 
@@ -16,12 +16,12 @@ class Lowland:
         """
 
         for key in new_params:
-            if key not in ('f_max'):
+            if key not in 'f_max':
                 raise KeyError('Invalid parameter name: ' + key)
 
         for key in new_params:
             if not 0 <= new_params[key]:
-                raise ValueError('All parametervalues must be positiv')
+                raise ValueError('All parameter values must be positive')
             cls.key = new_params[key]
 
     @classmethod

@@ -5,7 +5,7 @@ import random
 class Herbivore:
     """How Herbivores work"""
 
-    #Parameters defined at class level
+    # Parameters defined at class level
     F = 10
     beta = 0.9
     phi_age = 0.6
@@ -36,7 +36,7 @@ class Herbivore:
 
         for key in new_params:
             if not 0 <= new_params[key]:
-                raise ValueError('All parametervalues must be positiv')
+                raise ValueError('All parameter values must be positive')
             cls.key = new_params[key]
 
         if 'eta' in new_params:
@@ -53,7 +53,7 @@ class Herbivore:
     def get_params(cls):
         """Get class parameters"""
         return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
-                'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zigma, 'w_birth': cls.w_birth,
+                'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
                 'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
                 'omega': cls.omega}
         # mu skal også inn her når de beveger seg
@@ -78,7 +78,6 @@ class Herbivore:
         else:
             self.fitness = (1/(1 + math.exp(self.phi_age * (self.a - self.a_half)))) * \
                            (1/(1 + math.exp(-self.phi_weight * (self.w - self.w_half))))
-
 
     def breeding(self, N):
         self.newborn_weight = random.gauss(self.w_birth, self.sigma_birth)
