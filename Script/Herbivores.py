@@ -3,9 +3,26 @@ import random
 
 
 class Herbivore:
+    """How Herbivores work"""
+    #Parameters defined at class level
+    F = 10
+    beta = 0.9
+    phi_age = 0.6
+    phi_weight = 0.1
+    a_half = 40
+    w_half = 10
+    zeta = 3.5
+    w_birth = 8
+    sigma_birth = 1.5
+    xi = 1.2
+    gamma = 0.2
+    eta = 0.05
+    omega = 0.4
 
-    params = {'beta': 0.9, 'phi_age': 0.6, 'phi_weight': 0.1, 'a_half': 40, 'w_half': 10,
-              'zeta': 3.5, 'w_birth': 8, 'sigma_birth': 1.5, 'xi': 1.2, 'gamma': 0.2, 'eta': 0.05, 'omega': 0.4}
+    default_params = {'F': F, 'beta': beta, 'phi_age': phi_age, 'phi_weight': phi_weight, 'a_half': a_half,
+                      'w_half': w_half, 'zeta': zeta, 'w_birth': w_birth, 'sigma_birth': sigma_birth,
+                      'xi': xi, 'gamma': gamma, 'eta': eta, 'omega': omega}
+
     @classmethod
     def set_params(cls, new_params):
         """Set class parameters
@@ -47,20 +64,6 @@ class Herbivore:
         self.alive = True
         self.baby = False
         random.seed(seed)
-
-        self.beta = 0.9
-        self.phi_age = 0.6
-        self.phi_weight = 0.1
-        self.a_half = 40
-        self.w_half = 10
-        self.zeta = 3.5
-        self.w_birth = 8
-        self.sigma_birth = 1.5
-        self.xi = 1.2
-        self.gamma = 0.2
-        self.eta = 0.05
-        self.omega = 0.4
-        self.F = 10
 
         self.newborn_weight = 0
 
