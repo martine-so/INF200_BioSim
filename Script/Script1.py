@@ -33,7 +33,7 @@ for year in range(years):
     field = landtypes[location](animals)
     field.eating()
     field.breeding()
-    # print(len(animals))
+    print(len(animals))
     field.aging()
     field.loose_weight()
     field.dying()

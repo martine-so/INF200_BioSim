@@ -62,6 +62,8 @@ class Herbivore:
         self.omega = 0.4
         self.F = 10
 
+        self.newborn_weight = 0
+
     def update_weight(self, f):
         self.w += self.beta * f
 
@@ -75,9 +77,10 @@ class Herbivore:
 
 
     def breeding(self, N):
+        self.newborn_weight = random.gauss(self.w_birth, self.sigma_birth)
         if self.w < self.zeta * (self.w_birth + self.sigma_birth):
             probability = 0
-        elif self.w < self.xi * self.w_birth:  # xi * babys vekt. Vet ikke helt hva babys vekt er?
+        elif self.w < self.xi * self.newborn_weight:  # xi * babys vekt. Vet ikke helt hva babys vekt er?
             probability = 0
         else:
             probability = min(1, self.gamma * self.fitness * (N - 1))

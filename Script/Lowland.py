@@ -27,7 +27,7 @@ class Lowland:
         for animal in self.animals:
             animal.breeding(len(self.animals))
             if animal.baby is True:
-                newborns.append(Herbivore(animal.w_birth))
+                newborns.append(Herbivore(animal.newborn_weight))
                 animal.calculate_fitness()
         self.animals.extend(newborns)
 
