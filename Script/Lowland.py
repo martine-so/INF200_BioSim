@@ -24,6 +24,10 @@ class Lowland:
                 raise ValueError('All parametervalues must be positiv')
             cls.key = new_params[key]
 
+    @classmethod
+    def get_params(cls):
+        """Get class parameters"""
+        return {'f_max': cls.f_max}
 
     def __init__(self, animals):
         self.f_max = 800
