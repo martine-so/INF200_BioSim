@@ -30,7 +30,7 @@ for i in ini_herbs:
     animals = [Herbivore(j['age'], j['weight']) for j in i['pop']]
 
 for year in range(years):
-    field = landtypes[location](animals)
+    field = landtype(animals)
     field.eating()
     field.breeding()
     print(len(animals))
