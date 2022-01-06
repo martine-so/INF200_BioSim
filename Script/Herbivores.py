@@ -90,7 +90,7 @@ class Herbivore:
 
         if random.random() < probability:
             self.baby = True
-            self.w -= self.xi * self.w_birth
+            self.w -= self.xi * self.newborn_weight
         else:
             self.baby = False
 
