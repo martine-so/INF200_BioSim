@@ -4,44 +4,47 @@ from operator import attrgetter
 
 class Lowland:
 
-    def __init__(self, animals, f_max=800):
-        self.fodder = f_max
+    def __init__(self, animals):
+        self.f_max = 800
+
+        self.fodder = self.f_max
         self.animals = animals
 
-    def eating(self, F, beta, phi_age, phi_weight, a_half, w_half):
+    def eating(self):
         self.animals.sort(key=attrgetter('fitness'), reverse=True)
         for animal in self.animals:
-            if F < self.fodder:
-                f = F
+            if animal.F < self.fodder:
+                f = animal.F
             else:
                 f = self.fodder
 
-            animal.update_weight(f, beta)
+            animal.update_weight(f)
             self.fodder -= f
-            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+            animal.calculate_fitness()
 
-    def breeding(self, zeta, w_birth, sigma_birth, xi, gamma, phi_age, phi_weight, a_half, w_half):
+    def breeding(self):
         newborns = []
         for animal in self.animals:
-            animal.breeding(zeta, w_birth, sigma_birth, xi, gamma, len(self.animals))
+            animal.breeding(len(self.animals))
             if animal.baby is True:
-                newborns.append(Herbivore(w=w_birth))
-                animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+                newborns.append(Herbivore(animal.newborn_weight))
+                animal.calculate_fitness()
         self.animals.extend(newborns)
 
-    def aging(self, phi_age, phi_weight, a_half, w_half):
+    def aging(self):
         for animal in self.animals:
             animal.update_a()
-            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+            animal.calculate_fitness()
 
-    def loose_weight(self, eta, phi_age, phi_weight, a_half, w_half):
+    def loose_weight(self):
         for animal in self.animals:
-            animal.loose_weight(eta)
-            animal.calculate_fitness(phi_age, phi_weight, a_half, w_half)
+            animal.loose_weight()
+            animal.calculate_fitness()
 
-    def dying(self, omega):
+    def dying(self):
         for animal in self.animals:
-            animal.death(omega)
+            animal.death()
             # if animal.alive is not True:
             #     self.animals.remove(animal)
         self.animals = [animal for animal in self.animals if animal.alive is True]
+
