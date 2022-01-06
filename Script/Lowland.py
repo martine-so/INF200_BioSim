@@ -44,5 +44,7 @@ class Lowland:
     def dying(self):
         for animal in self.animals:
             animal.death()
-            if animal.alive is not True:
-                self.animals.remove(animal)
+            # if animal.alive is not True:
+            #     self.animals.remove(animal)
+        self.animals = [animal for animal in self.animals if animal.alive is True]
+
