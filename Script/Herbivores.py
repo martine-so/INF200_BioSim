@@ -4,6 +4,7 @@ import random
 
 class Herbivore:
     """How Herbivores work"""
+
     #Parameters defined at class level
     F = 10
     beta = 0.9

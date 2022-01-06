@@ -3,6 +3,27 @@ from operator import attrgetter
 
 
 class Lowland:
+    """Lowland"""
+
+    #parameters defined at class level
+    f_max=800
+
+    default_params = {'f_max': f_max}
+
+    @classmethod
+    def set_params(cls, new_params):
+        """Set class parameters
+        """
+
+        for key in new_params:
+            if key not in ('f_max'):
+                raise KeyError('Invalid parameter name: ' + key)
+
+        for key in new_params:
+            if not 0 <= new_params[key]:
+                raise ValueError('All parametervalues must be positiv')
+            cls.key = new_params[key]
+
 
     def __init__(self, animals):
         self.f_max = 800
@@ -47,4 +68,3 @@ class Lowland:
             # if animal.alive is not True:
             #     self.animals.remove(animal)
         self.animals = [animal for animal in self.animals if animal.alive is True]
-
