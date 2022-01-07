@@ -1,5 +1,7 @@
 from Herbivores import Herbivore
+from Carnivores import Carnivore
 from operator import attrgetter
+import random
 
 
 class Lowland:
@@ -29,46 +31,96 @@ class Lowland:
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, animals):
+    def __init__(self, herb, carn, seed=100):
         self.f_max = 800
 
-        self.fodder = self.f_max
-        self.animals = animals
+        self.DeltaPhiMax = 10 # Carnivore
 
-    def eating(self):
-        self.animals.sort(key=attrgetter('fitness'), reverse=True)
-        for animal in self.animals:
-            if animal.F < self.fodder:
-                f = animal.F
+        self.fodder = self.f_max
+        self.herb = herb
+        self.carn = carn
+        self.seed = seed
+        random.seed(seed)
+
+
+    def eating_herbivores(self):
+        self.herb.sort(key=attrgetter('fitness'), reverse=True)
+        for herb in self.herb:
+            if herb.F < self.fodder:
+                f = herb.F
             else:
                 f = self.fodder
 
-            animal.update_weight(f)
+            herb.update_weight(f)
             self.fodder -= f
-            animal.calculate_fitness()
+            herb.calculate_fitness()
+
+    def eating_carnivores(self):
+        probability = 0
+        self.carn.sort(key=attrgetter('fitness'), reverse=True)
+        for carn in self.carn:
+            eaten_weight = 0
+            for herb in self.herb:
+                if eaten_weight < carn.F:
+                    if 0 < carn.fitness - herb.fitness < self.DeltaPhiMax:
+                        probability = (carn.fitness - herb.fitness)/self.DeltaPhiMax
+                    elif carn.fitness > herb.fitness:
+                        probability = 1
+
+                    if  probability > random.random():
+                        f = herb.w
+                        carn.update_weight(f)
+                        carn.calculate_fitness()
+                        eaten_weight += f
+
+            self.herb = [herb for herb in self.herb if carn.fitness < herb.fitness]
+
 
     def breeding(self):
-        newborns = []
-        for animal in self.animals:
-            animal.breeding(len(self.animals))
-            if animal.baby is True:
-                newborns.append(Herbivore(animal.newborn_weight))
-                animal.calculate_fitness()
-        self.animals.extend(newborns)
+        newborns_herb = []
+        for herb in self.herb:
+            herb.breeding(len(self.herb))
+            if herb.baby is True:
+                newborns_herb.append(Herbivore(herb.newborn_weight))
+                herb.calculate_fitness()
+        self.herb.extend(newborns_herb)
+
+        if len(self.carn) != 0:
+            newborns_carn = []
+            for carn in self.carn:
+                carn.breeding(len(self.carn))
+                if carn.baby is True:
+                    newborns_carn.append(Carnivore(carn.newborn_weight))
+                    carn.calculate_fitness()
+            self.carn.extend(newborns_carn)
 
     def aging(self):
-        for animal in self.animals:
-            animal.update_a()
-            animal.calculate_fitness()
+        for herb in self.herb:
+            herb.update_a()
+            herb.calculate_fitness()
+
+        if len(self.carn) != 0:
+            for carn in self.carn:
+                carn.update_a()
+                carn.calculate_fitness()
 
     def loose_weight(self):
-        for animal in self.animals:
-            animal.loose_weight()
-            animal.calculate_fitness()
+        for herb in self.herb:
+            herb.loose_weight()
+            herb.calculate_fitness()
+
+        if len(self.carn) != 0:
+            if len(self.carn) != 0:
+                for carn in self.carn:
+                    carn.loose_weight()
+                    carn.calculate_fitness()
 
     def dying(self):
-        for animal in self.animals:
-            animal.death()
-            # if animal.alive is not True:
-            #     self.animals.remove(animal)
-        self.animals = [animal for animal in self.animals if animal.alive is True]
+        for herb in self.herb:
+            herb.death()
+        self.herb = [herb for herb in self.herb if herb.alive is True]
+
+        if len(self.carn) != 0:
+            for carn in self.carn:
+                carn.death()
+            self.carn = [carn for carn in self.carn if carn.alive is True]
