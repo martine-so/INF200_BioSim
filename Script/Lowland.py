@@ -57,7 +57,8 @@ class Lowland:
 
     def eating_carnivores(self):
         probability = 0
-        self.carn.sort(key=attrgetter('fitness'), reverse=True)
+        random.shuffle(self.carn)
+        self.herb.sort(key=attrgetter('fitness'))
         for carn in self.carn:
             eaten_weight = 0
             for herb in self.herb:
@@ -69,9 +70,15 @@ class Lowland:
 
                     if probability > random.random():
                         f = herb.w
-                        carn.update_weight(f)
-                        carn.calculate_fitness()
-                        eaten_weight += f
+                        eaten_weight += herb.w
+                        if eaten_weight > carn.F:
+                            eaten_weight -= herb.w
+                            f = carn.F - eaten_weight
+                            carn.update_weight(f)
+                            carn.calculate_fitness()
+                        else:
+                            carn.update_weight(f)
+                            carn.calculate_fitness()
 
             self.herb = [herb for herb in self.herb if carn.fitness < herb.fitness]
 
