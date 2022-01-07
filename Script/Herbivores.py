@@ -64,6 +64,7 @@ class Herbivore:
         self.fitness = 0
         self.alive = True
         self.baby = False
+        self.newborn_weight = 0
         random.seed(seed)
 
         self.newborn_weight = 0
@@ -81,9 +82,7 @@ class Herbivore:
 
     def breeding(self, N):
         self.newborn_weight = random.gauss(self.w_birth, self.sigma_birth)
-        if self.w < self.zeta * (self.w_birth + self.sigma_birth):
-            probability = 0
-        elif self.w < self.xi * self.newborn_weight:  # xi * babys vekt. Vet ikke helt hva babys vekt er?
+        if self.w < self.zeta * (self.w_birth + self.sigma_birth) or self.w < self.xi * self.newborn_weight:  # xi * babys vekt. Vet ikke helt hva babys vekt er?:
             probability = 0
         else:
             probability = min(1, self.gamma * self.fitness * (N - 1))
