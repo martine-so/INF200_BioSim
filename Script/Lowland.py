@@ -67,7 +67,7 @@ class Lowland:
                     elif carn.fitness > herb.fitness:
                         probability = 1
 
-                    if  probability > random.random():
+                    if probability > random.random():
                         f = herb.w
                         carn.update_weight(f)
                         carn.calculate_fitness()
