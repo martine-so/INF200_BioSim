@@ -18,10 +18,11 @@ class Carnivore:
     gamma = 0.8
     eta = 0.125
     omega = 0.8
+    mu = 0.4
 
     default_params = {'F': F, 'beta': beta, 'phi_age': phi_age, 'phi_weight': phi_weight, 'a_half': a_half,
                       'w_half': w_half, 'zeta': zeta, 'w_birth': w_birth, 'sigma_birth': sigma_birth,
-                      'xi': xi, 'gamma': gamma, 'eta': eta, 'omega': omega}
+                      'xi': xi, 'gamma': gamma, 'eta': eta, 'omega': omega, 'mu': mu}
 
     @classmethod
     def set_params(cls, new_params):
@@ -54,8 +55,8 @@ class Carnivore:
         return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
                 'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
                 'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
-                'omega': cls.omega}
-        # mu skal også inn her når de beveger seg
+                'omega': cls.omega, 'mu': cls.mu}
+
 
     def __init__(self, a=0, w=6, seed=100):
         self.a = a
