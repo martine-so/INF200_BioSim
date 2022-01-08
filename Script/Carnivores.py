@@ -57,16 +57,15 @@ class Carnivore:
                 'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
                 'omega': cls.omega, 'mu': cls.mu}
 
-
-    def __init__(self, a=0, w=6, seed=100):
+    def __init__(self, a=0, w=None):
         self.a = a
-        self.w = w
-        self.seed = seed
         self.fitness = 0
-        self.alive = True
-        self.baby = False
-        self.newborn_weight = 0
-        random.seed(self.seed)
+        self.w = w
+
+        if w is None:
+            self.w = random.gauss(self.w_birth, self.sigma_birth)
+        else:
+            self.w = w
 
     def update_weight(self, f):
         self.w += self.beta * f
@@ -76,35 +75,25 @@ class Carnivore:
             self.fitness = 0
 
         else:
-            self.fitness = (1/(1 + math.exp(self.phi_age * (self.a - self.a_half)))) * \
-                           (1/(1 + math.exp(-self.phi_weight * (self.w - self.w_half))))
+            self.fitness = (1 / (1 + math.exp(self.phi_age * (self.a - self.a_half)))) * \
+                           (1 / (1 + math.exp(-self.phi_weight * (self.w - self.w_half))))
 
-    def breeding(self, N):
-        self.newborn_weight = random.gauss(self.w_birth, self.sigma_birth)
-        if self.w < self.zeta * (self.w_birth + self.sigma_birth):
-            probability = 0
-        elif self.w < self.xi * self.newborn_weight:  # xi * babys vekt. Vet ikke helt hva babys vekt er?
-            probability = 0
-        else:
-            probability = min(1, self.gamma * self.fitness * (N - 1))
+    def breeding(self, num_of_animals):
+        newborn = type(self)()
+        if self.w < self.zeta * (self.w_birth + self.sigma_birth) or self.w < self.xi * newborn.w:
+            return None
 
-        if random.random() < probability:
-            self.baby = True
-            self.w -= self.xi * self.newborn_weight
-        else:
-            self.baby = False
+        prob = min(1, self.gamma * self.fitness * (num_of_animals - 1))
+        if random.random() < prob:
+            self.w -= self.xi * newborn.w
+            return newborn
 
-    def update_a(self):
+    def update_a_and_w(self):
         self.a += 1
-
-    def loose_weight(self):
         self.w -= self.eta * self.w
 
     def death(self):
-        if self.w == 0:
-            self.alive = False
-        else:
-            probability = self.omega * (1 - self.fitness)
-            if random.random() < probability:
-                self.alive = False
+        prob = self.omega * (1 - self.fitness)
+        if random.random() < prob or self.w == 0:
+            return True
 

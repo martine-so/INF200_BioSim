@@ -86,48 +86,33 @@ class Lowland:
     def breeding(self):
         newborns_herb = []
         for herb in self.herb:
-            herb.breeding(len(self.herb))
-            if herb.baby is True:
-                newborns_herb.append(Herbivore(herb.newborn_weight))
+            newborn = herb.breeding(len(self.herb))
+            if newborn is not None:
+                newborns_herb.append(newborn)
                 herb.calculate_fitness()
         self.herb.extend(newborns_herb)
 
         if len(self.carn) != 0:
             newborns_carn = []
             for carn in self.carn:
-                carn.breeding(len(self.carn))
-                if carn.baby is True:
-                    newborns_carn.append(Carnivore(carn.newborn_weight))
+                newborn = carn.breeding(len(self.carn))
+                if newborn is not None:
+                    newborns_carn.append(newborn)
                     carn.calculate_fitness()
             self.carn.extend(newborns_carn)
 
-    def aging(self):
+    def aging_and_loosing_weight(self):
         for herb in self.herb:
-            herb.update_a()
+            herb.update_a_and_w()
             herb.calculate_fitness()
 
         if len(self.carn) != 0:
             for carn in self.carn:
-                carn.update_a()
+                carn.update_a_and_w()
                 carn.calculate_fitness()
 
-    def loose_weight(self):
-        for herb in self.herb:
-            herb.loose_weight()
-            herb.calculate_fitness()
-
-        if len(self.carn) != 0:
-            if len(self.carn) != 0:
-                for carn in self.carn:
-                    carn.loose_weight()
-                    carn.calculate_fitness()
-
     def dying(self):
-        for herb in self.herb:
-            herb.death()
-        self.herb = [herb for herb in self.herb if herb.alive is True]
+        self.herb = [herb for herb in self.herb if not herb.death()]
 
         if len(self.carn) != 0:
-            for carn in self.carn:
-                carn.death()
-            self.carn = [carn for carn in self.carn if carn.alive is True]
+            self.carn = [carn for carn in self.carn if not carn.death()]

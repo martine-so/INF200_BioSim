@@ -9,6 +9,7 @@ from Herbivores import Herbivore
 from Carnivores import Carnivore
 from Lowland import Lowland
 import matplotlib.pyplot as plt
+import random
 
 class BioSim:
     def __init__(self, island_map, ini_pop, seed,
@@ -136,15 +137,16 @@ class BioSim:
         species = {'Herbivore': Herbivore, 'Carnivore': Carnivore}
 
         for i in self.ini_pop:
-            herbList = [Herbivore(j['age'], j['weight'], self.seed) for j in i['pop'] if j['species'] == 'Herbivore']
+            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
             if len(herbList) != 0:
                 self.herb.extend(herbList)
-            carnList = [Carnivore(j['age'], j['weight'], self.seed) for j in i['pop'] if j['species'] == 'Carnivore']
+            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
             if len(carnList) != 0:
                 self.carn.extend(carnList)
 
         num_herbs = [len(self.herb)]
         num_carns = []
+        random.seed(self.seed)
         num_years_list = list(range(self.years, self.years + num_years+1))
         for year in range(num_years):
             field = land_type(self.herb, self.carn)
@@ -152,8 +154,7 @@ class BioSim:
             field.eating_carnivores()
             field.breeding()
             # print(len(animals))
-            field.aging()
-            field.loose_weight()
+            field.aging_and_loosing_weight()
             field.dying()
             self.herb = field.herb  # Får samme tall selv om denne kommenteres ut. Kan dette være kilden til feil tall??
             self.carn = field.carn
@@ -209,10 +210,10 @@ class BioSim:
         :param population: List of dictionaries specifying population
         """
         for i in population:
-            herbList = [Herbivore(j['age'], j['weight'], self.seed) for j in i['pop'] if j['species'] == 'Herbivore']
+            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
             if len(herbList) != 0:
                 self.herb.extend(herbList)
-            carnList = [Carnivore(j['age'], j['weight'], self.seed) for j in i['pop'] if j['species'] == 'Carnivore']
+            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
             if len(carnList) != 0:
                 self.carn.extend(carnList)
 
