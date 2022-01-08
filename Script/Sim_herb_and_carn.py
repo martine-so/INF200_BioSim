@@ -142,11 +142,10 @@ class BioSim:
             carnList = [Carnivore(j['age'], j['weight'], self.seed) for j in i['pop'] if j['species'] == 'Carnivore']
             if len(carnList) != 0:
                 self.carn.extend(carnList)
-        print(len(self.herb))
 
-        num_herbs = []
+        num_herbs = [len(self.herb)]
         num_carns = []
-        num_years_list = list(range(self.years+1, self.years + num_years+1))
+        num_years_list = list(range(self.years, self.years + num_years+1))
         for year in range(num_years):
             field = land_type(self.herb, self.carn)
             field.eating_herbivores()
@@ -162,6 +161,7 @@ class BioSim:
 
             num_herbs.append(len(self.herb))
             num_carns.append(len(self.carn))
+        print(len(self.herb))
 
         plt.figure()
         plt.plot(num_years_list, num_herbs)
