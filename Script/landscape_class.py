@@ -32,6 +32,10 @@ class Landscape:
         return {'f_max': cls.f_max}
 
     def __init__(self, herb, carn):
+        """
+        :param a: age of an animal. Zero as default value.
+        :param w: Weight of an animal.
+        """
         self.f_max = None
         self.DeltaPhiMax = 10  # Carnivore
 
