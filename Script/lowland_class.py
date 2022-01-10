@@ -1,6 +1,6 @@
 from landscape_class import Landscape
-from carnivores_class import Carnivore
-from operator import attrgetter
+#from carnivores_class import Carnivore
+#from operator import attrgetter
 import random
 
 

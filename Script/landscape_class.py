@@ -1,4 +1,5 @@
 from operator import attrgetter
+from animals_class import Animals
 import random
 
 
