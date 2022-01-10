@@ -39,4 +39,4 @@ class Lowland(Landscape):
         self.fodder = self.f_max
         self.herb = herb
         self.carn = carn
-        super().__init__(animals, f_max) # må se hva vi trenger og hente
+        super().__init__(herb, carn)

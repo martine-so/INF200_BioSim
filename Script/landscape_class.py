@@ -36,13 +36,12 @@ class Landscape:
         :param a: age of an animal. Zero as default value.
         :param w: Weight of an animal.
         """
-        self.f_max = None
         self.DeltaPhiMax = 10  # Carnivore
 
         self.fodder = self.f_max
         self.herb = herb
         self.carn = carn
-# Må se nærmere på hva som må stå her???
+
 
     def eating_herbivores(self):
         self.herb.sort(key=attrgetter('fitness'), reverse=True)
@@ -94,27 +93,23 @@ class Landscape:
                 herb.calculate_fitness()
         self.herb.extend(newborns_herb)
 
-        if len(self.carn) != 0:
-            newborns_carn = []
-            for carn in self.carn:
-                newborn = carn.breeding(len(self.carn))
-                if newborn is not None:
-                    newborns_carn.append(newborn)
-                    carn.calculate_fitness()
-            self.carn.extend(newborns_carn)
+        newborns_carn = []
+        for carn in self.carn:
+            newborn = carn.breeding(len(self.carn))
+            if newborn is not None:
+                newborns_carn.append(newborn)
+                carn.calculate_fitness()
+        self.carn.extend(newborns_carn)
 
     def aging_and_loosing_weight(self):
         for herb in self.herb:
             herb.update_a_and_w()
             herb.calculate_fitness()
 
-        if len(self.carn) != 0:
-            for carn in self.carn:
-                carn.update_a_and_w()
-                carn.calculate_fitness()
+        for carn in self.carn:
+            carn.update_a_and_w()
+            carn.calculate_fitness()
 
     def dying(self):
         self.herb = [herb for herb in self.herb if not herb.death()]
-
-        if len(self.carn) != 0:
-            self.carn = [carn for carn in self.carn if not carn.death()]
+        self.carn = [carn for carn in self.carn if not carn.death()]
