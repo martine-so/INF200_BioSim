@@ -53,25 +53,28 @@ class Lowland:
             self.fodder -= f
             herb.calculate_fitness()
 
-    def eating_carnivores(self):
+    def prob_carn_eating(self, carn, herb):
         probability = 0
+        if 0 < carn.fitness - herb.fitness < self.DeltaPhiMax:
+            probability = (carn.fitness - herb.fitness) / self.DeltaPhiMax
+        elif carn.fitness > herb.fitness:
+            probability = 1
+        return probability
+
+    def eating_carnivores(self):
         random.shuffle(self.carn)
         self.herb.sort(key=attrgetter('fitness'))
         for carn in self.carn:
             eaten_weight = 0
             for herb in self.herb:
                 if eaten_weight < carn.F:
-                    if 0 < carn.fitness - herb.fitness < self.DeltaPhiMax:
-                        probability = (carn.fitness - herb.fitness)/self.DeltaPhiMax
-                    elif carn.fitness > herb.fitness:
-                        probability = 1
+                    probability= self.prob_carn_eating(carn, herb)
 
                     if probability > random.random():
                         f = herb.w
                         eaten_weight += herb.w
                         if eaten_weight > carn.F:
-                            eaten_weight -= herb.w
-                            f = carn.F - eaten_weight
+                            f = carn.F - (eaten_weight - herb.w)
                             eaten_weight = carn.F
                         carn.update_weight(f)
                         carn.calculate_fitness()
