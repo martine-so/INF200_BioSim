@@ -1,0 +1,1 @@
+# fyller ut etter hvert. Er egentlig helt lik lowland bare annen parameterverdi
