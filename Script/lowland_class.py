@@ -1,10 +1,10 @@
-from herbivores_class import Herbivore
+from landscape_class import Landscape
 from carnivores_class import Carnivore
 from operator import attrgetter
 import random
 
 
-class Lowland:
+class Lowland(Landscape):
     """Lowland"""
 
     # parameters defined at class level
