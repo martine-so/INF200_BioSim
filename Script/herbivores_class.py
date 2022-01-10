@@ -1,4 +1,3 @@
-import math
 import random
 from animals_class import Animals
 
@@ -50,7 +49,7 @@ class Herbivore(Animals):
 
     @classmethod
     def get_params(cls):
-        """ Get classparameters"""
+        """ Get class parameters"""
         return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
                 'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
                 'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
@@ -66,33 +65,4 @@ class Herbivore(Animals):
             self.w = random.gauss(self.w_birth, self.sigma_birth)
         else:
             self.w = w
-
-    def update_weight(self, f):
-        self.w += self.beta * f
-
-    def calculate_fitness(self):
-        if self.w <= 0:
-            self.fitness = 0
-
-        else:
-            self.fitness = (1/(1 + math.exp(self.phi_age * (self.a - self.a_half)))) * \
-                           (1/(1 + math.exp(-self.phi_weight * (self.w - self.w_half))))
-
-    def breeding(self, num_of_animals):
-        newborn = type(self)()
-        if self.w < self.zeta * (self.w_birth + self.sigma_birth) or self.w < self.xi * newborn.w:
-            return None
-
-        prob = min(1, self.gamma * self.fitness * (num_of_animals - 1))
-        if random.random() < prob:
-            self.w -= self.xi * newborn.w
-            return newborn
-
-    def update_a_and_w(self):
-        self.a += 1
-        self.w -= self.eta * self.w
-
-    def death(self):
-        prob = self.omega * (1 - self.fitness)
-        if random.random() < prob or self.w == 0:
-            return True
+        super().__init__(a, w)
