@@ -1,12 +1,13 @@
-from Herbivores import Herbivore
+from herbivores_class import Herbivore
 
 
 def test_update_weight():
-     h = Herbivore()
-     w=20
-     f=10
-     h.update_weight()
-     assert w == 29 #??
+     a = 0
+     w = 20
+     f = 10
+     h = Herbivore(a, w)
+     h.update_weight(f)
+     assert h.w == 29
 
 def test_calculate_fitness():
     h= Herbivore()
@@ -16,8 +17,8 @@ def test_calculate_fitness():
 def test_breeding():
     pass
 
-def test_update_a():
+def test_update_a_and_w():
     h = Herbivore()
     for n in range(5):
-        h.update_a()
+        h.update_a_and_w()
         assert h.a == n + 1
