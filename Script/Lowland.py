@@ -31,7 +31,7 @@ class Lowland:
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, herb, carn, seed=100):
+    def __init__(self, herb, carn):
         self.f_max = 800
 
         self.DeltaPhiMax = 10 # Carnivore
@@ -39,8 +39,6 @@ class Lowland:
         self.fodder = self.f_max
         self.herb = herb
         self.carn = carn
-        self.seed = seed
-        random.seed(seed)
 
 
     def eating_herbivores(self):
@@ -74,13 +72,12 @@ class Lowland:
                         if eaten_weight > carn.F:
                             eaten_weight -= herb.w
                             f = carn.F - eaten_weight
-                            carn.update_weight(f)
-                            carn.calculate_fitness()
-                        else:
-                            carn.update_weight(f)
-                            carn.calculate_fitness()
+                            eaten_weight = carn.F
+                        carn.update_weight(f)
+                        carn.calculate_fitness()
+                        herb.dead = True
 
-            self.herb = [herb for herb in self.herb if carn.fitness < herb.fitness]
+            self.herb = [herb for herb in self.herb if not herb.dead]
 
 
     def breeding(self):

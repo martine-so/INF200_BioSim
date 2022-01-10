@@ -162,7 +162,7 @@ class BioSim:
 
             num_herbs.append(len(self.herb))
             num_carns.append(len(self.carn))
-        print(len(self.herb))
+            print(len(self.herb), len(self.carn))
 
         plt.figure()
         plt.plot(num_years_list, num_herbs)
