@@ -1,8 +1,9 @@
 import math
 import random
+from animals_class import Animals
 
 
-class Herbivore:
+class Herbivore(Animals):
     """How Herbivores work"""
 
     # Parameters defined at class level
