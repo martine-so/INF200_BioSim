@@ -34,6 +34,25 @@ class BioSim:
         self.herb = []
         self.carn = []
 
+        coordinates = [i['loc'] for i in self.ini_pop]
+
+        for i in coordinates:
+            y, x = i
+        location = self.island_map.split()[y - 1][x - 1]
+        land_types = {'L': Lowland}
+        if location in land_types:
+            self.land_type = land_types[location]
+
+        species = {'Herbivore': Herbivore, 'Carnivore': Carnivore}
+
+        for i in self.ini_pop:
+            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
+            if len(herbList) != 0:
+                self.herb.extend(herbList)
+            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
+            if len(carnList) != 0:
+                self.carn.extend(carnList)
+
         """
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
@@ -125,31 +144,13 @@ class BioSim:
         :param num_years: number of years to simulate
         """
 
-        coordinates = [i['loc'] for i in self.ini_pop]
-
-        for i in coordinates:
-            y, x = i
-        location = self.island_map.split()[y - 1][x - 1]
-        land_types = {'L': Lowland}
-        if location in land_types:
-            land_type = land_types[location]
-
-        species = {'Herbivore': Herbivore, 'Carnivore': Carnivore}
-
-        for i in self.ini_pop:
-            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
-            if len(herbList) != 0:
-                self.herb.extend(herbList)
-            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
-            if len(carnList) != 0:
-                self.carn.extend(carnList)
 
         num_herbs = [len(self.herb)]
         num_carns = []
         random.seed(self.seed)
         num_years_list = list(range(self.years, self.years + num_years+1))
         for year in range(num_years):
-            field = land_type(self.herb, self.carn)
+            field = self.land_type(self.herb, self.carn)
             field.eating_herbivores()
             field.eating_carnivores()
             field.breeding()
@@ -162,7 +163,7 @@ class BioSim:
 
             num_herbs.append(len(self.herb))
             num_carns.append(len(self.carn))
-        print(len(self.herb))
+            print(len(self.herb), len(self.carn))
 
         plt.figure()
         plt.plot(num_years_list, num_herbs)
