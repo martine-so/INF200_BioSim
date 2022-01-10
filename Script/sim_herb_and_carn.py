@@ -5,9 +5,9 @@ Template for BioSim class.
 # The material in this file is licensed under the BSD 3-clause license
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
-from Herbivores import Herbivore
-from Carnivores import Carnivore
-from Lowland import Lowland
+from herbivores_class import Herbivore
+from carnivores_class import Carnivore
+from lowland_class import Lowland
 import matplotlib.pyplot as plt
 import random
 

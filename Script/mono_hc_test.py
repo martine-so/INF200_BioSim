@@ -7,7 +7,7 @@ __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 
 import textwrap
-from Sim_herb_and_carn import BioSim
+from sim_herb_and_carn import BioSim
 
 geogr = """\
            WWW

@@ -1,5 +1,5 @@
-from Herbivores import Herbivore
-from Carnivores import Carnivore
+from herbivores_class import Herbivore
+from carnivores_class import Carnivore
 from operator import attrgetter
 import random
 

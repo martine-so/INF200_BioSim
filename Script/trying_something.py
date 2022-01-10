@@ -1,5 +1,5 @@
 import textwrap
-import Lowland
+import lowland_class
 
 geogr = """\
            WWW
