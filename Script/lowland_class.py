@@ -1,7 +1,4 @@
 from landscape_class import Landscape
-#from carnivores_class import Carnivore
-#from operator import attrgetter
-import random
 
 
 class Lowland(Landscape):
@@ -31,12 +28,14 @@ class Lowland(Landscape):
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, herb, carn):
+    def __init__(self, animals=[]):
         self.f_max = 800
 
         self.DeltaPhiMax = 10 # Carnivore
 
         self.fodder = self.f_max
-        self.herb = herb
-        self.carn = carn
-        super().__init__(herb, carn)
+        self.animals = animals
+        self.herb = []
+        self.carn = []
+
+        super().__init__(animals)

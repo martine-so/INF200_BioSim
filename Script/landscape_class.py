@@ -1,5 +1,6 @@
 from operator import attrgetter
-from animals_class import Animals
+from herbivores_class import Herbivore
+from carnivores_class import Carnivore
 import random
 
 
@@ -24,24 +25,27 @@ class Landscape:
             if key == 'DeltaPhiMax':
                 if not 0 < new_params['DeltaPhiMax']:
                     raise ValueError('DeltaPhiMax must be higher than 0')
-        cls.key = new_params[key]
+            cls.key = new_params[key]
 
     @classmethod
     def get_params(cls):
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, herb, carn):
-        """
-        :param a: age of an animal. Zero as default value.
-        :param w: Weight of an animal.
-        """
+    def __init__(self, animals=[]):
+
         self.DeltaPhiMax = 10  # Carnivore
 
-        self.fodder = self.f_max
-        self.herb = herb
-        self.carn = carn
+        self.animals = animals
+        self.herb = []
+        self.carn = []
 
+    def add_animals(self, pop):
+        self.herb.extend([Herbivore(i['age'], i['weight']) for i in pop if i['species'] == 'Herbivore'])
+        self.carn.extend([Carnivore(i['age'], i['weight']) for i in pop if i['species'] == 'Carnivore'])
+
+    def reset_fodder(self):
+        self.fodder = self.f_max
 
     def eating_herbivores(self):
         self.herb.sort(key=attrgetter('fitness'), reverse=True)

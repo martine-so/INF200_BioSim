@@ -56,6 +56,10 @@ class Carnivore(Animals):
     #             'omega': cls.omega, 'mu': cls.mu}
 
     def __init__(self, a=0, w=None):
+        """
+        :param a: age of an animal. Zero as default value.
+        :param w: Weight of an animal.
+        """
         self.a = a
         self.fitness = 0
         self.w = w

@@ -44,7 +44,6 @@ class Animals:
         """
         self.a = a
         self.fitness = 0
-        self.w = w
         self.dead = False
 
         if w is None:
@@ -78,6 +77,15 @@ class Animals:
         if random.random() < prob:
             self.w -= self.xi * newborn.w
             return newborn
+
+    # def prob_of_migrating(self):
+    #     prob = self.mu * self.fitness
+    #     return prob
+    #
+    # def migrating(self):
+    #     prob = self.prob_of_migrating()
+    #     if random.random() < prob:
+    #         pass
 
     def update_a_and_w(self):
         """updates the age of an animal with 1 and weight..."""
