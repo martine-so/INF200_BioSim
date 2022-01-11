@@ -1,6 +1,10 @@
 from herbivores_class import Herbivore
 from carnivores_class import Carnivore
 
+def test_init_herb_a():
+    herb = Herbivore()
+    assert herb.a == 0
+
 
 def test_update_weight_herb():
      herb = Herbivore(a=0, w=20)
@@ -39,16 +43,30 @@ def test_calculate_fitness_carn_weigth_positive():
     assert carn.fitness == 0.25
 
 
-def test_breeding_herb():
+def test_breeding_herb_none():
     herb = Herbivore()
     breeding = herb.breeding(2)
     assert breeding is None
 
 
-def test_breeding_carn():
+def test_breeding_herb_works():
+    herb = Herbivore(a=10, w=40)
+    herb.calculate_fitness()
+    breeding = herb.breeding(20)
+    assert breeding
+
+
+def test_breeding_carn_none():
     carn = Carnivore()
     breeding = carn.breeding(2)
     assert breeding is None
+
+
+def test_breeding_carn_works():
+    carn = Carnivore(a=10, w=40)
+    carn.calculate_fitness()
+    breeding = carn.breeding(20)
+    assert breeding
 
 
 def test_update_a_and_w_herb_a():
