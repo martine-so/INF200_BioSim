@@ -149,7 +149,7 @@ def test_calculate_fitness_carn_zero():
         assert carn.fitness == 0
 
 
-def test_calculate_fitness_carn_weigth_positive():
+def test_calculate_fitness_carn_weight_positive():
     """
     Checks that fitness gets calculated right for carnivore if weight is positive.
     Here we calculated by hand that if a=a_half and w=w_half fitness should be 0.25.
