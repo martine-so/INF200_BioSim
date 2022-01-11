@@ -1,9 +1,24 @@
 from herbivores_class import Herbivore
 from carnivores_class import Carnivore
 
-def test_init_herb_a():
+
+def test_init_herb_a_default():
     herb = Herbivore()
     assert herb.a == 0
+
+
+def test_init_herb_a_defined():
+    herb = Herbivore(a=5, w=20)
+    assert herb.a == 5
+
+
+def test_init_herb_w_default():
+    pass
+
+
+def test_init_herb_w_defined():
+    herb = Herbivore(a=0, w=20)
+    assert herb.w == 20
 
 
 def test_update_weight_herb():
