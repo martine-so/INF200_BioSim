@@ -160,12 +160,20 @@ def test_calculate_fitness_carn_weigth_positive():
 
 
 def test_breeding_herb_none():
+    """
+    Checks that newborns don't give birth.
+    """
     herb = Herbivore()
     breeding = herb.breeding(2)
     assert breeding is None
 
 
 def test_breeding_herb_works():
+    """
+    Checks that if probability is one the herbivore gives birth.
+    Here we put number of animals as 20 to make sure probability became one.
+    Probability is gamma * fitness * (num_of_animals in cell - 1) or 1 if the equation is over one.
+    """
     herb = Herbivore(a=10, w=40)
     herb.calculate_fitness()
     breeding = herb.breeding(20)
@@ -173,12 +181,20 @@ def test_breeding_herb_works():
 
 
 def test_breeding_carn_none():
+    """
+    Checks that carnivores dont give birth if they are newborn
+    """
     carn = Carnivore()
     breeding = carn.breeding(2)
     assert breeding is None
 
 
 def test_breeding_carn_works():
+    """
+    Checks that if probability is one the carnivore gives birth.
+    Here we put number of carnivores as 20 to make sure probability became one.
+    Probability is gamma * fitness * (num_of_animals in cell - 1) or 1 if the equation is over one.
+    """
     carn = Carnivore(a=10, w=40)
     carn.calculate_fitness()
     breeding = carn.breeding(20)
@@ -186,6 +202,9 @@ def test_breeding_carn_works():
 
 
 def test_update_a_and_w_herb_a():
+    """
+    Checks that herbivores age ones every year.
+    """
     herb = Herbivore()
     for n in range(5):
         herb.update_a_and_w()
