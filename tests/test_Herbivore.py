@@ -212,12 +212,19 @@ def test_update_a_and_w_herb_a():
 
 
 def test_update_a_and_w_herb_w():
+    """
+    Checks that herbivore looses the amount of weight it is supposed to.
+    looses eta=0.05 * weight=10. Here it looses 0.5.
+    """
     herb = Herbivore(a=2, w=10)
     herb.update_a_and_w()
     assert herb.w == 9.5
 
 
 def test_update_a_and_w_carn_a():
+    """
+    Checks that carnivore ages one year every year.
+    """
     carn = Carnivore()
     for n in range(2):
         carn.update_a_and_w()
@@ -225,12 +232,19 @@ def test_update_a_and_w_carn_a():
 
 
 def test_update_a_and_w_carn_w():
+    """
+    Checks that carnivore looses the amount of weight it is supposed to every year.
+    looses eta=0.125 * weight=10. Here it looses 1.25.
+    """
     carn = Carnivore(a=2, w=10)
     carn.update_a_and_w()
     assert carn.w == 8.75
 
 
 def test_death_herb_w_zero():
+    """
+    Checks that herbivores dies if weight is zero or less
+    """
     herb = Herbivore(a=20, w=0)
     assert herb.death() is True
 
@@ -240,6 +254,9 @@ def test_death_herb_dies():  # se på dette
 
 
 def test_death_carn_w_zero():
+    """
+    Checks that carnivores dies if weight equals zero or less.
+    """
     carn = Carnivore(a=20, w=0)
     assert carn.death() is True
 
