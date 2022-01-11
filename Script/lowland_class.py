@@ -28,14 +28,13 @@ class Lowland(Landscape):
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, animals=[]):
+    def __init__(self):
         self.f_max = 800
 
         self.DeltaPhiMax = 10 # Carnivore
 
         self.fodder = self.f_max
-        self.animals = animals
         self.herb = []
         self.carn = []
 
-        super().__init__(animals)
+        super().__init__()

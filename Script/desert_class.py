@@ -28,7 +28,7 @@ class Desert(Landscape):
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, animals=[]):
+    def __init__(self):
         self.f_max = 0
 
         self.DeltaPhiMax = 10 # Carnivore
@@ -37,4 +37,4 @@ class Desert(Landscape):
         self.herb = []
         self.carn = []
 
-        super().__init__(animals)
+        super().__init__()

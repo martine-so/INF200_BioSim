@@ -32,11 +32,10 @@ class Landscape:
         """Get class parameters"""
         return {'f_max': cls.f_max}
 
-    def __init__(self, animals=[]):
+    def __init__(self):
 
         self.DeltaPhiMax = 10  # Carnivore
 
-        self.animals = animals
         self.herb = []
         self.carn = []
 
