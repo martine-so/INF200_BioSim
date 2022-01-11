@@ -123,6 +123,9 @@ def test_update_weight_carn():
 
 
 def test_calculate_fitness_herb_weight_under_zero():
+    """
+    Checks that fitness for herbivore equals zero if weight is zero or less.
+    """
     herb = Herbivore()
     if herb.w < 0:
         herb.calculate_fitness()
@@ -130,6 +133,10 @@ def test_calculate_fitness_herb_weight_under_zero():
 
 
 def test_calculate_fitness_herb_weight_positive():
+    """
+    Checks that fitness gets calculated right for herbivore if weight is positive.
+    Here we calculated by hand that if a=a_half and w=w_half fitness should be 0.25.
+    """
     herb = Herbivore(a=40, w=10)
     herb.calculate_fitness()
     assert herb.fitness == 0.25
@@ -143,6 +150,10 @@ def test_calculate_fitness_carn_zero():
 
 
 def test_calculate_fitness_carn_weigth_positive():
+    """
+    Checks that fitness gets calculated right for carnivore if weight is positive.
+    Here we calculated by hand that if a=a_half and w=w_half fitness should be 0.25.
+    """
     carn = Carnivore(a=40, w=4)
     carn.calculate_fitness()
     assert carn.fitness == 0.25
