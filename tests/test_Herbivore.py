@@ -12,7 +12,7 @@ def test_init_herb_a_defined():
     assert herb.a == 5
 
 
-def test_init_herb_w_default():
+def test_init_herb_w_default():  # Må se på dette
     pass
 
 
@@ -21,10 +21,49 @@ def test_init_herb_w_defined():
     assert herb.w == 20
 
 
+def test_init_herb_fitness_default():
+    herb = Herbivore()
+    assert herb.fitness == 0
+
+
+def test_init_herb_dead_default():
+    herb = Herbivore()
+    assert herb.dead is False
+
+
+def test_init_carn_a_default():
+    carn = Carnivore()
+    assert carn.a == 0
+
+
+def test_init_carn_a_defined():
+    carn = Carnivore(a=5, w=20)
+    assert carn.a == 5
+
+
+def test_init_carn_w_default():  # må se på dette
+    pass
+
+
+def test_init_carn_w_defined():
+    carn = Carnivore(a=0, w=20)
+    assert carn.w == 20
+
+
+def test_init_carn_fitness_default():
+    carn = Carnivore()
+    assert carn.fitness == 0
+
+
+def test_init_carn_dead_default():
+    carn = Carnivore()
+    assert carn.dead is False
+
+
 def test_update_weight_herb():
-     herb = Herbivore(a=0, w=20)
-     herb.update_weight(f=10)
-     assert herb.w == 29
+    herb = Herbivore(a=0, w=20)
+    herb.update_weight(f=10)
+    assert herb.w == 29
 
 
 def test_update_weight_carn():
@@ -34,7 +73,7 @@ def test_update_weight_carn():
 
 
 def test_calculate_fitness_herb_weight_under_zero():
-    herb= Herbivore()
+    herb = Herbivore()
     if herb.w < 0:
         herb.calculate_fitness()
         assert herb.fitness == 0
@@ -51,6 +90,7 @@ def test_calculate_fitness_carn_zero():
     if carn.w < 0:
         carn.calculate_fitness()
         assert carn.fitness == 0
+
 
 def test_calculate_fitness_carn_weigth_positive():
     carn = Carnivore(a=40, w=4)
@@ -108,3 +148,21 @@ def test_update_a_and_w_carn_w():
     carn = Carnivore(a=2, w=10)
     carn.update_a_and_w()
     assert carn.w == 8.75
+
+
+def test_death_herb_w_zero():
+    herb = Herbivore(a=20, w=0)
+    assert herb.death() is True
+
+
+def test_death_herb_dies(): # se på dette
+    pass
+
+
+def test_death_carn_w_zero():
+    carn = Carnivore(a=20, w=0)
+    assert carn.death() is True
+
+
+def test_death_carn_dies(): # se på dette
+    pass
