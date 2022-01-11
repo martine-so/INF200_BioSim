@@ -1,11 +1,11 @@
 from landscape_class import Landscape
 
 
-class Highland(Landscape):
-    """Highland"""
+class Desert(Landscape):
+    """Desert"""
 
     # parameters defined at class level
-    f_max = 300
+    f_max = 0
 
     default_params = {'f_max': f_max}
 
@@ -29,7 +29,7 @@ class Highland(Landscape):
         return {'f_max': cls.f_max}
 
     def __init__(self, animals=[]):
-        self.f_max = 300
+        self.f_max = 0
 
         self.DeltaPhiMax = 10 # Carnivore
 
