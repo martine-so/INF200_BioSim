@@ -1,6 +1,7 @@
 import textwrap
 from herbivores_class import Herbivore
 from carnivores_class import Carnivore
+from island_class import Island
 from lowland_class import Lowland
 import random
 import matplotlib.pyplot as plt
@@ -29,6 +30,10 @@ for seed in range(100,150):
     herbs = []
     carns = []
 
+    island = Island(geogr)
+    island.place_animals(ini_herbs)
+    coordinates = [i['loc'] for i in ini_herbs]
+
     # coordinates = [i['loc'] for i in ini_herbs]
     #
     # for i in coordinates:
@@ -38,15 +43,13 @@ for seed in range(100,150):
     # if location in land_types:
     #     land_type = land_types[location]
 
-    for i in ini_herbs:
-        herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
-        herbs.extend(herbList)
-
     num_herbs = [len(herbs)]
     num_carns = [len(carns)]
 
+    field = island.animals_loc[coordinates[0]]
+
     for year in range(50):
-        field = Lowland(herbs, carns)
+        field.reset_fodder()
         field.eating_herbivores()
         field.eating_carnivores()
         field.breeding()
@@ -55,13 +58,12 @@ for seed in range(100,150):
         herbs = field.herb
 
         num_herbs.append(len(herbs))
+        num_carns.append(len(carns))
 
-    for i in ini_carns:
-        carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
-        carns.extend(carnList)
+    island.place_animals(ini_carns)
 
     for year in range(50, 300):
-        field = Lowland(herbs, carns)
+        field.reset_fodder()
         field.eating_herbivores()
         field.eating_carnivores()
         field.breeding()

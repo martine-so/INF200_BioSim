@@ -5,9 +5,7 @@ Template for BioSim class.
 # The material in this file is licensed under the BSD 3-clause license
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
-from herbivores_class import Herbivore
-from carnivores_class import Carnivore
-from lowland_class import Lowland
+from island_class import Island
 import matplotlib.pyplot as plt
 import random
 
@@ -34,24 +32,9 @@ class BioSim:
         self.herb = []
         self.carn = []
 
-        coordinates = [i['loc'] for i in self.ini_pop]
-
-        for i in coordinates:
-            y, x = i
-        location = self.island_map.split()[y - 1][x - 1]
-        land_types = {'L': Lowland}
-        if location in land_types:
-            self.land_type = land_types[location]
-
-        species = {'Herbivore': Herbivore, 'Carnivore': Carnivore}
-
-        for i in self.ini_pop:
-            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
-            if len(herbList) != 0:
-                self.herb.extend(herbList)
-            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
-            if len(carnList) != 0:
-                self.carn.extend(carnList)
+        self.island = Island(self.island_map)
+        self.island.place_animals(self.ini_pop)
+        self.coordinates = [i['loc'] for i in self.ini_pop]
 
         """
         :param island_map: Multi-line string specifying island geography
@@ -143,23 +126,23 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
-
+        random.seed(self.seed)
 
         num_herbs = [len(self.herb)]
         num_carns = []
-        random.seed(self.seed)
         num_years_list = list(range(self.years, self.years + num_years+1))
+        field = self.island.animals_loc[self.coordinates[0]]
+
         for year in range(num_years):
-            field = self.land_type(self.herb, self.carn)
+            field.reset_fodder()
             field.eating_herbivores()
             field.eating_carnivores()
             field.breeding()
             # print(len(animals))
             field.aging_and_loosing_weight()
             field.dying()
-            self.herb = field.herb  # Får samme tall selv om denne kommenteres ut. Kan dette være kilden til feil tall??
+            self.herb = field.herb
             self.carn = field.carn
-            # print(len(herb))  # Alle føder 2. året. WHYYYYYYY?!?!?!?!
 
             num_herbs.append(len(self.herb))
             num_carns.append(len(self.carn))
@@ -210,13 +193,7 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
-        for i in population:
-            herbList = [Herbivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Herbivore']
-            if len(herbList) != 0:
-                self.herb.extend(herbList)
-            carnList = [Carnivore(j['age'], j['weight']) for j in i['pop'] if j['species'] == 'Carnivore']
-            if len(carnList) != 0:
-                self.carn.extend(carnList)
+        self.island.place_animals(population)
 
 
     # @property
