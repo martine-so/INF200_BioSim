@@ -155,7 +155,7 @@ def test_death_herb_w_zero():
     assert herb.death() is True
 
 
-def test_death_herb_dies(): # se på dette
+def test_death_herb_dies():  # se på dette
     pass
 
 
@@ -164,5 +164,5 @@ def test_death_carn_w_zero():
     assert carn.death() is True
 
 
-def test_death_carn_dies(): # se på dette
+def test_death_carn_dies():  # se på dette
     pass
