@@ -7,35 +7,35 @@ class Animals:
 
     default_params = None
 
-    @classmethod
-    def set_params(cls, new_params):
-        """Set class parameters
-        """
-
-        for key in new_params:
-            if key not in ('beta', 'phi_age', 'phi_weight', 'a_half', 'w_half', 'zeta', 'w_birth',
-                           'sigma_birth', 'xi', 'gamma', 'eta', 'omega'):
-                raise KeyError('Invalid parameter name: ' + key)
-
-            if not 0 <= new_params[key]:
-                raise ValueError('All parameter values must be positive')
-
-            if key == 'eta':
-                if not new_params['eta'] <= 1:
-                    raise ValueError('eta must be in [0, 1].')
-
-            if key == 'DeltaPhiMax':
-                if not 0 < new_params['DeltaPhiMax']:
-                    raise ValueError('DeltaPhiMax must be higher than 0')
-            cls.key = new_params[key]
-
-    @classmethod
-    def get_params(cls):
-        """ Get classparameters"""
-        return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
-                'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
-                'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
-                'omega': cls.omega, 'mu': cls.mu}
+    # @classmethod
+    # def set_params(cls, new_params):
+    #     """Set class parameters
+    #     """
+    #
+    #     for key in new_params:
+    #         if key not in ('beta', 'phi_age', 'phi_weight', 'a_half', 'w_half', 'zeta', 'w_birth',
+    #                        'sigma_birth', 'xi', 'gamma', 'eta', 'omega'):
+    #             raise KeyError('Invalid parameter name: ' + key)
+    #
+    #         if not 0 <= new_params[key]:
+    #             raise ValueError('All parameter values must be positive')
+    #
+    #         if key == 'eta':
+    #             if not new_params['eta'] <= 1:
+    #                 raise ValueError('eta must be in [0, 1].')
+    #
+    #         if key == 'DeltaPhiMax':
+    #             if not 0 < new_params['DeltaPhiMax']:
+    #                 raise ValueError('DeltaPhiMax must be higher than 0')
+    #         cls.key = new_params[key]
+    #
+    # @classmethod
+    # def get_params(cls):
+    #     """ Get classparameters"""
+    #     return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
+    #             'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
+    #             'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
+    #             'omega': cls.omega, 'mu': cls.mu}
 
     def __init__(self, a=0, w=None):
         """
@@ -78,14 +78,10 @@ class Animals:
             self.w -= self.xi * newborn.w
             return newborn
 
-    # def prob_of_migrating(self):
-    #     prob = self.mu * self.fitness
-    #     return prob
-    #
-    # def migrating(self):
-    #     prob = self.prob_of_migrating()
-    #     if random.random() < prob:
-    #         pass
+    def migrating(self):
+        prob = self.mu * self.fitness
+        if random.random() < prob:
+            return True
 
     def update_a_and_w(self):
         """updates the age of an animal with 1 and weight..."""
