@@ -45,6 +45,7 @@ class Animals:
         self.a = a
         self.fitness = 0
         self.dead = False
+        self.moved = False
 
         if w is None:
             self.w = random.gauss(self.w_birth, self.sigma_birth)

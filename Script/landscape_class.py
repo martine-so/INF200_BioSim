@@ -105,20 +105,21 @@ class Landscape:
         self.carn.extend(newborns_carn)
 
     def migrating_animal(self, loc, dict_with_land_locs):
-        remainingHerbs = []
+        # remainingHerbs = []
         x, y = loc
         spaces_around = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
         for herb in self.herb:
             if herb.migrating() is True:
                 newloc = random.choice(spaces_around)
                 if newloc in dict_with_land_locs:
-                    dict_with_land_locs[newloc].extend(herb)
-                else:
-                    remainingHerbs.append(herb)
-            else:
-                remainingHerbs.append(herb)
+                    herb.moved = True
+                    dict_with_land_locs[newloc].herb.extend(herb)
+                    dict_with_land_locs[loc].herb.pop(herb)
+            #     else:
+            #         remainingHerbs.append(herb)
+            # else:
+            #     remainingHerbs.append(herb)
 
-        self.herb = remainingHerbs
         return dict_with_land_locs
 
 

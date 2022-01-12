@@ -33,31 +33,46 @@ class Island:
     #         print(len(self.animals_loc[i].herb))
     #
     def migrating(self):
-        moved_animals = []
         for i in self.animals_loc:
+            print(len(self.animals_loc[i].herb))
             self.animals_loc = self.animals_loc[i].migrating_animal(i, self.animals_loc)
     #
-        for i in moved_animals:
-            for j in i:
-                self.animals_loc[j].herb.extend(i[j])
+        # for i in moved_animals:
+        #     for j in i:
+        #         self.animals_loc[j].herb.extend(i[j])
     #
-    #     for i in self.animals_loc:
-    #         print(len(self.animals_loc[i].herb))
+        for i in self.animals_loc:
+            print(len(self.animals_loc[i].herb))
     #
+    def one_year(self):
+        for i in self.animals_loc:
+            self.animals_loc[i].herbs.moving = False
+            self.animals_loc[i].reset_fodder()
+            self.animals_loc[i].eating_herbivores()
+            self.animals_loc[i].eating_carnivores()
+            self.animals_loc[i].breeding()
 
-# geogr = """\
-#            WWWW
-#            WLLW
-#            WWWW"""
-#
-# ini_herbs = [{'loc': (2, 2),
-#               'pop': [{'species': 'Herbivore',
-#                        'age': 5,
-#                        'weight': 20}
-#                       for _ in range(50)]}]
-#
-# geogr = textwrap.dedent(geogr)
-# island = Island(geogr)
-# island.place_animals(ini_herbs)
-# for year in range(5):
-#     island.migrating()
+        self.migrating()
+
+        for i in self.animals_loc:
+            self.animals_loc[i].aging_and_loosing_weight()
+            self.animals_loc[i].dying()
+
+geogr = """\
+           WWWWW
+           WWLWW
+           WLLLW
+           WWLWW
+           WWWWW"""
+
+ini_herbs = [{'loc': (3, 3),
+              'pop': [{'species': 'Herbivore',
+                       'age': 5,
+                       'weight': 20}
+                      for _ in range(50)]}]
+
+geogr = textwrap.dedent(geogr)
+island = Island(geogr)
+island.place_animals(ini_herbs)
+for year in range(5):
+    island.migrating()
