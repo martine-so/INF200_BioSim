@@ -51,6 +51,9 @@ class Animals:
         else:
             self.w = w
 
+        if self.w < 0 or self.a < 0:
+            raise ValueError('Weight and age must be positive')
+
     def update_weight(self, f):
         """
         Updates an animal's weight

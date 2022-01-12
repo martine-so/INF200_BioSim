@@ -63,9 +63,4 @@ class Carnivore(Animals):
         self.a = a
         self.fitness = 0
         self.w = w
-
-        if w is None:
-            self.w = random.gauss(self.w_birth, self.sigma_birth)
-        else:
-            self.w = w
         super().__init__(a, w)
