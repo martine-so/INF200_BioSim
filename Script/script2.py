@@ -6,6 +6,8 @@ from lowland_class import Lowland
 import random
 import matplotlib.pyplot as plt
 
+import statistics
+
 geogr = """\
            WWW
            WLW
@@ -24,7 +26,11 @@ ini_carns = [{'loc': (2, 2),
                       for _ in range(20)]}]
 
 plt.figure(figsize=(14,8))
-for seed in range(100,150):
+total_num_herbs = []
+total_num_carns = []
+herbs_die = 0
+carns_die = 0
+for seed in range(100,199):
     random.seed(seed)
 
     herbs = []
@@ -78,4 +84,16 @@ for seed in range(100,150):
     plt.plot(num_herbs, 'b')
     plt.plot(num_carns, 'r')
 
+    if num_carns[-1] != 0 and num_herbs[-1] != 0:
+        total_num_herbs.extend(num_herbs)
+        total_num_carns.extend(num_carns)
+
+    if num_carns[-1] == 0:
+        carns_die += 1
+
+    if num_herbs[-1] == 0:
+        herbs_die += 1
+
 plt.show()
+print(statistics.mean(total_num_herbs), statistics.mean(total_num_carns))
+# print(herbs_die, carns_die)

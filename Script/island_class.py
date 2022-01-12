@@ -1,6 +1,7 @@
 from lowland_class import Lowland
 from highland_class import Highland
 from desert_class import Desert
+import textwrap
 
 
 class Island:
@@ -28,26 +29,26 @@ class Island:
             else:
                 self.animals_loc[i['loc']].add_animals(i['pop'])
 
-
-    def specified_loc(self, loc):
-        pass
-
-    def migrating(self):
-        # coordinates = [i['loc'] for i in self.ini_pop]
-        #
-        # for i in coordinates:
-        #     x, y = i
-        # location = self.island_map.split()[x - 1][y - 1]
-        # land_types = {'L': Lowland}
-        # if location in land_types:
-        #     self.land_type = land_types[location]
-        pass
-
+    #     for i in self.animals_loc:
+    #         print(len(self.animals_loc[i].herb))
+    #
+    # def migrating(self):
+    #     moved_animals = []
+    #     for i in self.animals_loc:
+    #         moved_animals.append(self.animals_loc[i].migrating_animal(i, self.migrated_animals))
+    #
+    #     for i in moved_animals:
+    #         for j in i:
+    #             self.animals_loc[j].herb.extend(i[j])
+    #
+    #     for i in self.animals_loc:
+    #         print(len(self.animals_loc[i].herb))
+    #
 
 # geogr = """\
-#            WWW
-#            WLW
-#            WWW"""
+#            WWWW
+#            WLLW
+#            WWWW"""
 #
 # ini_herbs = [{'loc': (2, 2),
 #               'pop': [{'species': 'Herbivore',
@@ -57,4 +58,6 @@ class Island:
 #
 # geogr = textwrap.dedent(geogr)
 # island = Island(geogr)
-# island.place_ini_animals()
+# island.place_animals(ini_herbs)
+# for year in range(5):
+#     island.migrating()
