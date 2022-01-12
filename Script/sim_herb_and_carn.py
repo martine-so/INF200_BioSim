@@ -120,12 +120,47 @@ class BioSim:
         """
         pass
 
+    def plot_map(self):
+        """
+        Plots island map
+
+        Code authored by: Hans Ekkehard Plesser
+        """
+        # #                   R    G    B
+        rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
+                     'L': (0.0, 0.6, 0.0),  # dark green
+                     'H': (0.5, 1.0, 0.5),  # light green
+                     'D': (1.0, 1.0, 0.5)}  # light yellow
+
+        map_rgb = [[rgb_value[column] for column in row]
+                   for row in self.island_map.splitlines()]
+
+        map = plt.figure()
+
+        ax_im = map.add_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
+
+        ax_im.imshow(map_rgb)
+
+        ax_im.set_xticks(range(len(map_rgb[0])))
+        ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
+        ax_im.set_yticks(range(len(map_rgb)))
+        ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
+
+        ax_lg = map.add_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
+        ax_lg.axis('off')
+        for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
+            ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
+            ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
+
+        plt.show()
+
     def simulate(self, num_years):
         """
         Run simulation while visualizing the result.
 
         :param num_years: number of years to simulate
         """
+        self.plot_map()
         random.seed(self.seed)
 
         num_herbs = [len(self.herb)]
@@ -155,37 +190,6 @@ class BioSim:
 
         self.years += num_years
 
-
-        # #                   R    G    B
-        # rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
-        #              'L': (0.0, 0.6, 0.0),  # dark green
-        #              'H': (0.5, 1.0, 0.5),  # light green
-        #              'D': (1.0, 1.0, 0.5)}  # light yellow
-        #
-        # map_rgb = [[rgb_value[column] for column in row]
-        #            for row in self.island_map.splitlines()]
-        #
-        # map = plt.figure()
-        #
-        # ax_im = map.add_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
-        #
-        # ax_im.imshow(map_rgb)
-        #
-        # ax_im.set_xticks(range(len(map_rgb[0])))
-        # ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
-        # ax_im.set_yticks(range(len(map_rgb)))
-        # ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
-        #
-        # ax_lg = map.add_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
-        # ax_lg.axis('off')
-        # for ix, name in enumerate(('Water', 'Lowland',
-        #                            'Highland', 'Desert')):
-        #     ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1,
-        #                                   edgecolor='none',
-        #                                   facecolor=rgb_value[name[0]]))
-        #     ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
-        #
-        # plt.show()
 
     def add_population(self, population):
         """
