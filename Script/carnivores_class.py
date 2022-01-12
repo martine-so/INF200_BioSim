@@ -60,7 +60,4 @@ class Carnivore(Animals):
         :param a: age of an animal. Zero as default value.
         :param w: Weight of an animal.
         """
-        self.a = a
-        self.fitness = 0
-        self.w = w
         super().__init__(a, w)
