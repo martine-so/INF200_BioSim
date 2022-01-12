@@ -4,13 +4,14 @@ from herbivores_class import Herbivore
 from carnivores_class import Carnivore
 
 def test_eating_herbivores():
-    herb = Herbivore(a=5, w=20)
-    carn = Carnivore(a=5, w=20)
     field = Lowland()
+    field.herb.extend(Herbivore(a=5, w=20))
     field.eating_herbivores()
-    assert herb.w == 29
+    # assert field.herb.w == 29
+    pass
 
 def test_prob_carn_eating():
+    # field.carn.extend(Carnivore(a=5, w=20))
     pass
 
 def test_eating_carnivores():
