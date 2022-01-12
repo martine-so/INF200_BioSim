@@ -43,7 +43,7 @@ class Animals:
         :param w: Weight of an animal.
         """
         self.a = a
-        self.fitness = 0
+        self.fitness = 1
         self.dead = False
         self.moved = False
 
@@ -83,9 +83,10 @@ class Animals:
             return newborn
 
     def migrating(self):
-        prob = self.mu * self.fitness
-        if random.random() < prob:
-            return True
+        if self.moved is False:
+            prob = self.mu * self.fitness
+            if random.random() < prob:
+                return True
 
     def update_a_and_w(self):
         """updates the age of an animal with 1 and weight..."""

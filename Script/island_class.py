@@ -29,25 +29,20 @@ class Island:
             else:
                 self.animals_loc[i['loc']].add_animals(i['pop'])
 
-    #     for i in self.animals_loc:
-    #         print(len(self.animals_loc[i].herb))
-    #
     def migrating(self):
+        new_animals_loc = self.animals_loc
+        for i in self.animals_loc:
+            new_animals_loc = new_animals_loc[i].migrating_animal(i, new_animals_loc)
+
+        self.animals_loc = new_animals_loc
+
+
         for i in self.animals_loc:
             print(len(self.animals_loc[i].herb))
-            self.animals_loc = self.animals_loc[i].migrating_animal(i, self.animals_loc)
-    #
-        # for i in moved_animals:
-        #     for j in i:
-        #         self.animals_loc[j].herb.extend(i[j])
-    #
-        for i in self.animals_loc:
-            print(len(self.animals_loc[i].herb))
-    #
+
     def one_year(self):
         for i in self.animals_loc:
-            self.animals_loc[i].herbs.moving = False
-            self.animals_loc[i].reset_fodder()
+            self.animals_loc[i].reset_fodder_and_moved()
             self.animals_loc[i].eating_herbivores()
             self.animals_loc[i].eating_carnivores()
             self.animals_loc[i].breeding()
@@ -74,5 +69,4 @@ ini_herbs = [{'loc': (3, 3),
 geogr = textwrap.dedent(geogr)
 island = Island(geogr)
 island.place_animals(ini_herbs)
-for year in range(5):
-    island.migrating()
+island.migrating()

@@ -43,8 +43,11 @@ class Landscape:
         self.herb.extend([Herbivore(i['age'], i['weight']) for i in pop if i['species'] == 'Herbivore'])
         self.carn.extend([Carnivore(i['age'], i['weight']) for i in pop if i['species'] == 'Carnivore'])
 
-    def reset_fodder(self):
+    def reset_fodder_and_moved(self):
         self.fodder = self.f_max
+
+        for herb in self.herb:
+            herb.moved = False
 
     def eating_herbivores(self):
         self.herb.sort(key=attrgetter('fitness'), reverse=True)
@@ -105,7 +108,6 @@ class Landscape:
         self.carn.extend(newborns_carn)
 
     def migrating_animal(self, loc, dict_with_land_locs):
-        # remainingHerbs = []
         x, y = loc
         spaces_around = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
         for herb in self.herb:
@@ -113,12 +115,8 @@ class Landscape:
                 newloc = random.choice(spaces_around)
                 if newloc in dict_with_land_locs:
                     herb.moved = True
-                    dict_with_land_locs[newloc].herb.extend(herb)
-                    dict_with_land_locs[loc].herb.pop(herb)
-            #     else:
-            #         remainingHerbs.append(herb)
-            # else:
-            #     remainingHerbs.append(herb)
+                    dict_with_land_locs[newloc].herb.append(herb)
+                    dict_with_land_locs[loc].herb.remove(herb)
 
         return dict_with_land_locs
 
