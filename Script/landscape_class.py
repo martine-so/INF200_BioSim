@@ -113,6 +113,8 @@ class Landscape:
                 newloc = random.choice(spaces_around)
                 if newloc in dict_with_land_locs:
                     dict_with_land_locs[newloc].extend(herb)
+                else:
+                    remainingHerbs.append(herb)
             else:
                 remainingHerbs.append(herb)
 

@@ -32,14 +32,14 @@ class Island:
     #     for i in self.animals_loc:
     #         print(len(self.animals_loc[i].herb))
     #
-    # def migrating(self):
-    #     moved_animals = []
-    #     for i in self.animals_loc:
-    #         moved_animals.append(self.animals_loc[i].migrating_animal(i, self.migrated_animals))
+    def migrating(self):
+        moved_animals = []
+        for i in self.animals_loc:
+            self.animals_loc = self.animals_loc[i].migrating_animal(i, self.animals_loc)
     #
-    #     for i in moved_animals:
-    #         for j in i:
-    #             self.animals_loc[j].herb.extend(i[j])
+        for i in moved_animals:
+            for j in i:
+                self.animals_loc[j].herb.extend(i[j])
     #
     #     for i in self.animals_loc:
     #         print(len(self.animals_loc[i].herb))
