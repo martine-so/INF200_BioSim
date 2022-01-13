@@ -282,3 +282,37 @@ def test_death_carn_dies():
     carn.fitness = 0
     carn.omega = 1
     assert carn.death() is True
+
+def test_migrating_herb():
+    """
+    Checks that animals move when probability is 1 and they have not moved before
+    """
+    herb = Herbivore()
+    herb.mu = 1
+    herb.fitness = 1
+    assert herb.migrating() is True
+
+def test_migrating_herb_same_year():
+    """
+    Checks that animals do not move if attribute moved is True
+    """
+    herb = Herbivore()
+    herb.moved = True
+    assert herb.migrating() is not True
+
+def test_migrating_carn():
+    """
+    Checks that animals move when probability is 1 and they have not moved before
+    """
+    carn = Carnivore()
+    carn.mu = 1
+    carn.fitness = 1
+    assert carn.migrating() is True
+
+def test_migrating_carn_same_year():
+    """
+    Checks that animals do not move if attribute moved is True
+    """
+    carn = Carnivore()
+    carn.moved = True
+    assert carn.migrating() is not True

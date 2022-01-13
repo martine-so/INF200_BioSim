@@ -95,7 +95,13 @@ def test_aging_and_loosing_weight_a():
 
 def test_migrating_animal():
     field = Lowland()
-    pass
+    field.herb.append(Herbivore(a=5, w=20))
+    field.herb[0].mu = 1
+    field.herb[0].fitness = 1
+    loc = (3, 3)
+    dict = {(2, 3): Lowland(), (3, 2): Lowland(), (3, 3): field, (3, 4): Lowland(), (4, 3): Lowland()}
+    newDict = dict[loc].migrating_animal(loc, dict)
+    assert len(newDict[loc].herb) == 0
 
 def test_breeding():
     field = Lowland()
