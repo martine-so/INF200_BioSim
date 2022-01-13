@@ -6,6 +6,10 @@ from carnivores_class import Carnivore
 
 
 def test_add_animals_herb():
+    """
+    Checks that the method add_animals actually adds animals. Here it does so by adding one herbivore and
+    checking that the number of herbivores is one more after calling the function.
+    """
     field = Lowland()
     init_length = len(field.herb)
     pop = [{'species': 'Herbivore', 'age': 5, 'weight': 20}]
@@ -13,6 +17,10 @@ def test_add_animals_herb():
     assert len(field.herb) == init_length + 1
 
 def test_add_animals_carn():
+    """
+    Checks that the method add_animals actually adds animals. Here it does so by adding one carnivore and
+    checking that the number of carnivores is one more after calling the function.
+    """
     field = Lowland()
     init_length = len(field.carn)
     pop = [{'species': 'Carnivore', 'age': 5, 'weight': 20}]
@@ -21,6 +29,10 @@ def test_add_animals_carn():
 
 
 def test_reset_fodder_and_moved_f():
+    """
+    Tests that the amount of food available in a cell is reset every year.
+    Here it tests for landscape type lowland where f_max=800 as default.
+    """
     field = Lowland()
     field.fodder = 500
     field.reset_fodder_and_moved()
@@ -41,13 +53,26 @@ def test_reset_fodder_and_moved_m():
 
 
 def test_eating_herbivores():
+    """
+    This test checks that herbivores gain the amount of weight they are supposed to after eating.
+    Here it gains beta=0.9 times F=10, so 9.
+    """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20))
+    init_w = field.herb[0].w
     field.eating_herbivores()
-    assert field.herb[0].w == 29
+    added_w = field.herb[0].beta * field.herb[0].F
+    assert field.herb[0].w == init_w + added_w
 
 
 def test_prob_carn_eating_A():
+    """
+    This test checks the probability of a carnivore eating. Here we put fitness for carnivore equal to 1
+    and fitness for herbivore equal to 0.5.
+    If carn.fitness-herb.fitness is over zero but under DeltaPhiMax=10 the probability is calculated by
+    (carn.fitness - herb.fitness) / DeltaPhiMax.
+    We calculated that it would be 0.05 for this instance.
+    """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0.5))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
@@ -56,6 +81,14 @@ def test_prob_carn_eating_A():
 
 
 def test_prob_carn_eating_B():
+    """
+    This test checks the probability of a carnivore eating. Here we put fitness for carnivore equal to 1
+    and fitness for herbivore equal to 0.
+    If carn.fitness-herb.fitness is over zero but under DeltaPhiMax=0 the probability is calculated by
+    (carn.fitness - herb.fitness) / DeltaPhiMax.
+    Here it will not be between 0 and DeltaPhiMax.then we check if carn.fitness > herb.fitness.
+    In this case it is. Then probability is equal to 1.
+    """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
