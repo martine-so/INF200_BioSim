@@ -86,7 +86,6 @@ class Landscape:
                         eaten_weight += herb.w
                         if eaten_weight > carn.F:
                             f = carn.F - (eaten_weight - herb.w)
-                            eaten_weight = carn.F
                         carn.update_weight(f)
                         carn.calculate_fitness()
                         herb.dead = True

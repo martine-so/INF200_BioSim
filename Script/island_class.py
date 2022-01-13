@@ -1,6 +1,7 @@
 from lowland_class import Lowland
 from highland_class import Highland
 from desert_class import Desert
+import random
 import textwrap
 
 
@@ -72,6 +73,7 @@ ini_carns = [{'loc': (2, 3),
                        'weight': 20}
                       for _ in range(20)]}]
 
+random.seed(100)
 geogr = textwrap.dedent(geogr)
 island = Island(geogr)
 island.place_animals(ini_herbs)

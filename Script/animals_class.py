@@ -37,13 +37,13 @@ class Animals:
     #             'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
     #             'omega': cls.omega, 'mu': cls.mu}
 
-    def __init__(self, a=0, w=None):
+    def __init__(self, a=0, w=None, fitness=0):
         """
         :param a: age of an animal. Zero as default value.
         :param w: Weight of an animal.
         """
         self.a = a
-        self.fitness = 0
+        self.fitness = fitness
         self.dead = False
         self.moved = False
 
