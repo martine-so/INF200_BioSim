@@ -37,9 +37,9 @@ class Island:
         self.animals_loc = new_animals_loc
 
 
-        for i in self.animals_loc:
-            print(len(self.animals_loc[i].herb), len(self.animals_loc[i].carn))
-        print(' ')
+        #for i in self.animals_loc:
+        #    print(len(self.animals_loc[i].herb), len(self.animals_loc[i].carn))
+        #print(' ')
 
     def one_year(self):
         for i in self.animals_loc:
