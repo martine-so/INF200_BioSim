@@ -38,7 +38,8 @@ class Island:
 
 
         for i in self.animals_loc:
-            print(len(self.animals_loc[i].herb))
+            print(len(self.animals_loc[i].herb), len(self.animals_loc[i].carn))
+        print(' ')
 
     def one_year(self):
         for i in self.animals_loc:
@@ -66,7 +67,16 @@ ini_herbs = [{'loc': (3, 3),
                        'weight': 20}
                       for _ in range(50)]}]
 
+ini_carns = [{'loc': (2, 3),
+              'pop': [{'species': 'Carnivore',
+                       'age': 5,
+                       'weight': 20}
+                      for _ in range(20)]}]
+
 geogr = textwrap.dedent(geogr)
 island = Island(geogr)
 island.place_animals(ini_herbs)
-island.migrating()
+island.one_year()
+island.place_animals(ini_carns)
+for year in range(10):
+    island.one_year()

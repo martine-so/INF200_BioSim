@@ -19,7 +19,7 @@ class Herbivore(Animals):
     gamma = 0.2
     eta = 0.05
     omega = 0.4
-    mu = 1
+    mu = 0.25
 
     default_params = {'F': F, 'beta': beta, 'phi_age': phi_age, 'phi_weight': phi_weight, 'a_half': a_half,
                       'w_half': w_half, 'zeta': zeta, 'w_birth': w_birth, 'sigma_birth': sigma_birth,

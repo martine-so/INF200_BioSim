@@ -43,7 +43,7 @@ class Animals:
         :param w: Weight of an animal.
         """
         self.a = a
-        self.fitness = 1
+        self.fitness = 0
         self.dead = False
         self.moved = False
 

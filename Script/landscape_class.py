@@ -49,6 +49,9 @@ class Landscape:
         for herb in self.herb:
             herb.moved = False
 
+        for carn in self.carn:
+            carn.moved = False
+
     def eating_herbivores(self):
         self.herb.sort(key=attrgetter('fitness'), reverse=True)
         for herb in self.herb:
@@ -110,14 +113,26 @@ class Landscape:
     def migrating_animal(self, loc, dict_with_land_locs):
         x, y = loc
         spaces_around = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
+
+        removedHerbs = []
         for herb in self.herb:
             if herb.migrating() is True:
                 newloc = random.choice(spaces_around)
                 if newloc in dict_with_land_locs:
                     herb.moved = True
                     dict_with_land_locs[newloc].herb.append(herb)
-                    dict_with_land_locs[loc].herb.remove(herb)
+                    removedHerbs.append(herb)
+        dict_with_land_locs[loc].herb = [herb for herb in self.herb if herb not in removedHerbs]
 
+        removedCarns = []
+        for carn in self.carn:
+            if carn.migrating() is True:
+                newloc = random.choice(spaces_around)
+                if newloc in dict_with_land_locs:
+                    carn.moved = True
+                    dict_with_land_locs[newloc].carn.append(carn)
+                    removedCarns.append(carn)
+        dict_with_land_locs[loc].carn = [carn for carn in self.carn if carn not in removedCarns]
         return dict_with_land_locs
 
 
