@@ -80,9 +80,18 @@ def test_prob_carn_eating_zero():
 
 def test_eating_carnivores():
     field = Highland()
-    field.herb.append(Herbivore(a=5, w=20))
+    field.herb.extend([Herbivore(a=5, w=40), Herbivore(a=5, w=20)])
+
+    field.herb[0].fitness = 0.2
+    field.herb[1].fitness = 0.2
     field.carn.append(Carnivore(a=5, w=20))
-    pass
+    field.deltaPhiMax = 0.2
+    field.carn[0].fitness = 1
+
+    carn_start_weight = field.carn[0].w
+    added_weight = (field.herb[0].w + field.herb[1].w-10) * field.carn[0].beta
+    field.eating_carnivores()
+    assert field.carn[0].w == carn_start_weight + added_weight
 
 
 def test_aging_and_loosing_weight_a():
