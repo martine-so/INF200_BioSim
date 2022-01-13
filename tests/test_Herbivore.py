@@ -175,9 +175,11 @@ def test_breeding_herb_works():
     Probability is gamma * fitness * (num_of_animals in cell - 1) or 1 if the equation is over one.
     """
     herb = Herbivore(a=10, w=40)
-    herb.calculate_fitness()
-    breeding = herb.breeding(20)
-    assert breeding
+    # herb.calculate_fitness()
+    herb.fitness = 1
+    herb.gamma = 1
+    breeding = herb.breeding(2)
+    assert breeding is not None
 
 
 def test_breeding_carn_none():

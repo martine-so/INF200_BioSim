@@ -92,12 +92,14 @@ def test_aging_and_loosing_weight_a():
     for i in range(len(init_a)):
         assert init_a[i] == field.herb[i].a - 1
 
-
-def test_aging_and_loosing_weight_w():
-    pass
-
 def test_breeding():
-    pass
+    field = Lowland()
+    field.herb.extend([Herbivore(a=10, w=40), Herbivore(a=10, w=40)])
+    field.herb[0].fitness = 1
+    field.herb[1].fitness = 1
+    field.gamma = 1
+    field.breeding()
+    assert len(field.herb) == 4
 
 def test_loose_weight():
     pass

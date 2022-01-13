@@ -81,6 +81,8 @@ class Animals:
         if random.random() < prob:
             self.w -= self.xi * newborn.w
             return newborn
+        else:
+            return None
 
     def migrating(self):
         if self.moved is False:
