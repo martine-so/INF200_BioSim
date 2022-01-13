@@ -1,5 +1,6 @@
 from lowland_class import Lowland
-from landscape_class import Landscape
+from highland_class import Highland
+from desert_class import Desert
 from herbivores_class import Herbivore
 from carnivores_class import Carnivore
 
@@ -78,32 +79,37 @@ def test_prob_carn_eating_zero():
 
 
 def test_eating_carnivores():
-    field = Lowland()
+    field = Highland()
     field.herb.append(Herbivore(a=5, w=20))
     field.carn.append(Carnivore(a=5, w=20))
     pass
 
 
 def test_aging_and_loosing_weight_a():
-    field = Lowland()
+    field = Desert()
     field.herb.extend([Herbivore(a=5, w=20), Herbivore(a=5, w=20)])
     init_a = [herb.a for herb in field.herb]
     field.aging_and_loosing_weight()
     for i in range(len(init_a)):
         assert init_a[i] == field.herb[i].a - 1
 
+def test_migrating_animal():
+    field = Lowland()
+    pass
+
 def test_breeding():
     field = Lowland()
     field.herb.extend([Herbivore(a=10, w=40), Herbivore(a=10, w=40)])
     field.herb[0].fitness = 1
     field.herb[1].fitness = 1
-    field.gamma = 1
+    field.herb[0].gamma = 1
+    field.herb[1].gamma = 1
     field.breeding()
     assert len(field.herb) == 4
 
-def test_loose_weight():
-    pass
-
 def test_dying():
-    pass
+    field = Lowland()
+    field.herb.extend([Herbivore(a=5, w=0), Herbivore(a=5, w=0)])
+    field.dying()
+    assert len(field.herb) == 0
 

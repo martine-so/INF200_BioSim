@@ -23,7 +23,8 @@ def test_init_herb_w_default():  # Må se på dette
     """
     Tests that a new herbivore gets default values if nothing else is given.
     """
-    pass
+    herb = Herbivore()
+    assert herb.w is not None
 
 
 def test_init_herb_w_defined():
@@ -73,7 +74,8 @@ def test_init_carn_w_default():  # må se på dette
     """
     Tests that a new carnivore gets default values if nothing else is given.
     """
-    pass
+    carn = Carnivore()
+    assert carn.w is not None
 
 
 def test_init_carn_w_defined():
@@ -143,6 +145,9 @@ def test_calculate_fitness_herb_weight_positive():
 
 
 def test_calculate_fitness_carn_zero():
+    """
+    Checks that fitness for herbivore equals zero if weight is zero or less.
+    """
     carn = Carnivore()
     if carn.w < 0:
         carn.calculate_fitness()
@@ -251,8 +256,14 @@ def test_death_herb_w_zero():
     assert herb.death() is True
 
 
-def test_death_herb_dies():  # se på dette
-    pass
+def test_death_herb_dies():
+    """
+    Checks that herbivores die when probability is set to 1
+    """
+    herb = Herbivore(a=5, w=20)
+    herb.fitness = 0
+    herb.omega = 1
+    assert herb.death() is True
 
 
 def test_death_carn_w_zero():
@@ -263,5 +274,11 @@ def test_death_carn_w_zero():
     assert carn.death() is True
 
 
-def test_death_carn_dies():  # se på dette
-    pass
+def test_death_carn_dies():
+    """
+    Checks that herbivores die when probability is set to 1
+    """
+    carn = Carnivore(a=5, w=20)
+    carn.fitness = 0
+    carn.omega = 1
+    assert carn.death() is True

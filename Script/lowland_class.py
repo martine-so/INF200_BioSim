@@ -15,10 +15,9 @@ class Lowland(Landscape):
         """
 
         for key in new_params:
-            if key not in 'f_max':
+            if key != 'f_max':
                 raise KeyError('Invalid parameter name: ' + key)
 
-        for key in new_params:
             if not 0 <= new_params[key]:
                 raise ValueError('All parameter values must be positive')
             cls.key = new_params[key]
