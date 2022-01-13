@@ -30,11 +30,6 @@ class Desert(Landscape):
 
     def __init__(self):
         self.f_max = 0
-
-        self.DeltaPhiMax = 10 # Carnivore
-
         self.fodder = self.f_max
-        self.herb = []
-        self.carn = []
 
         super().__init__()

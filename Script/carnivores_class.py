@@ -57,7 +57,8 @@ class Carnivore(Animals):
 
     def __init__(self, a=0, w=None, fitness=0):
         """
-        :param a: age of an animal. Zero as default value.
+        :param a: Age of an animal. Zero as default value.
         :param w: Weight of an animal.
+        :param fitness: Animals fitness
         """
         super().__init__(a, w, fitness)

@@ -34,7 +34,7 @@ class Landscape:
 
     def __init__(self):
 
-        self.DeltaPhiMax = 10  # Carnivore
+        self.DeltaPhiMax = 10
 
         self.herb = []
         self.carn = []

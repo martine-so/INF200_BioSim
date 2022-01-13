@@ -1,11 +1,22 @@
 from herbivores_class import Herbivore
 from carnivores_class import Carnivore
+import pytest
 
+
+def test_a_w_fitness_is_negative():
+    """
+    Tests that value error is raised if any the animals attributes initial values
+    is attempted to be set as a negative number
+    """
+    with pytest.raises(ValueError):
+        herb1 = Herbivore(a=-1)
+        herb2 = Herbivore(w=-1)
+        herb3 = Herbivore(fitness=-1)
 
 def test_init_herb_a_default():
     """
     Tests that a new herbivore gets default values if nothing else is given.
-    Default value for herbivore age is zero. Since newborns are zero years.
+    Default value for herbivore age is zero, since newborns are zero years.
     """
     herb = Herbivore()
     assert herb.a == 0
@@ -19,7 +30,7 @@ def test_init_herb_a_defined():
     assert herb.a == 5
 
 
-def test_init_herb_w_default():  # Må se på dette
+def test_init_herb_w_default():
     """
     Tests that a new herbivore gets default values if nothing else is given.
     """
@@ -70,7 +81,7 @@ def test_init_carn_a_defined():
     assert carn.a == 5
 
 
-def test_init_carn_w_default():  # må se på dette
+def test_init_carn_w_default():
     """
     Tests that a new carnivore gets default values if nothing else is given.
     """
