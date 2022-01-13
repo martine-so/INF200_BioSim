@@ -20,7 +20,6 @@ class Island:
                 island_dict[loc] = self.island_map[i][j]
                 if self.island_map[i][j] != 'W':
                     self.animals_loc[loc] = landscapes[self.island_map[i][j]]()
-                    self.migrated_animals[loc] = []
 
     def place_animals(self, pop):
         for i in pop:
