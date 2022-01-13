@@ -59,5 +59,6 @@ class Herbivore(Animals):
         """
         :param a: age of an animal. Zero as default value.
         :param w: Weight of an animal.
+        :param fitness: Animals fitness
         """
         super().__init__(a, w, fitness)
