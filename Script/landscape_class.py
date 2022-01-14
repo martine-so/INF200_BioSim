@@ -11,7 +11,8 @@ class Landscape:
 
     @classmethod
     def set_params(cls, new_params):
-        """Set class parameters
+        """
+        Set class parameters
         """
 
         for key in new_params:
