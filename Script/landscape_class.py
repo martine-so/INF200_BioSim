@@ -69,7 +69,9 @@ class Landscape:
 
     def eating_herbivores(self):
         """
-        ...
+        Sorts list of herbivores after fitness, the strongest first. One after one in the list they eat
+        until they are full as long as there is enough food in the cell. After eating both weight
+        and fitness is recalculated.
         """
         self.herb.sort(key=attrgetter('fitness'), reverse=True)
         for herb in self.herb:
@@ -84,11 +86,17 @@ class Landscape:
 
     def prob_carn_eating(self, carn, herb):
         """
-        ...
+        Checks probability of a carnivore eating a herbivore. If the carnivores fitness minus the herbivores
+        fitness is between zero and DeltaPhiMax parameter (here equal to ten as default) the probability is
+        calculated by (carnivore's fitness - herbivore's fitness) / DeltaPhiMax parameter.
+        If not between zero and DeltaPhiMax it checks if carnivore has higher fitness than herbivore.
+        If that is true probability is equal to 1.
+        If neither is true the probability is zero.
 
         :param carn: A carnivore class element
         :param herb: A Herbivore class element
         :return: provability for carn eating herb. A number between 0 and 1
+        :rtype: float or int
         """
         probability = 0
         if 0 < carn.fitness - herb.fitness < self.DeltaPhiMax:
@@ -99,9 +107,11 @@ class Landscape:
 
     def eating_carnivores(self):
         """
-        Shuffles carnivores in random order, and sorts herbivores by highest to lowest fitness.
-        ...
-
+        Shuffles carnivores in random order, and sorts herbivores by lowest to highest fitness.
+        One carnivore eats until it is full or has tried to kill all herbivores in the cell starting with the
+        weakest one. For every herbivore it eats fitness and weight is updated.
+        Once it is done the next carnivore does the same. Over and over until every carnivore has eaten or tired to eat.
+        If the herbivore gets eaten it dies and is removed from the list of herbivores in the cell.
         """
 
         random.shuffle(self.carn)
@@ -207,6 +217,7 @@ class Landscape:
         that checks if they die, and only place those that do not in the class objects list for said type of animal
 
         :return: Updated list for herbivores and carnivores still alive in class object
+        :rtype: list
         """
         self.herb = [herb for herb in self.herb if not herb.death()]
         self.carn = [carn for carn in self.carn if not carn.death()]
