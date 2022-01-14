@@ -1,5 +1,5 @@
 from island_class import Island
-from herbivores_class import Herbivores
+from herbivores_class import Herbivore
 import textwrap
 import pytest
 
@@ -30,7 +30,7 @@ def set_params(request):
     yield
     Island.set_params(Island.default_params)
 
-@pytest.mark.parameterize('set_params', [{'mu': 1], indirect=True)
+@pytest.mark.parameterize('set_params', [{'mu': 1}] , indirect=True)
 def test_migrating():
     geogr = """\
                    WWWWW
@@ -51,7 +51,7 @@ def test_migrating():
     island.migrating()
     for loc in initial_loc:
     #assert len(initial_loc[loc].herb) != len(island.animals_loc[loc].herb)
-    pass
+     pass
 
 
 def test_one_year():
