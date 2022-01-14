@@ -3,7 +3,7 @@ from animals_class import Animals
 
 
 class Herbivore(Animals):
-    """How Herbivores work"""
+    """How Herbivores behave"""
 
     # Parameters defined at class level
     F = 10
