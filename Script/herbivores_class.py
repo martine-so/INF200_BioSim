@@ -58,6 +58,7 @@ class Herbivore(Animals):
     def __init__(self, a=0, w=None, fitness=0):
         """
         :param a: age of an animal. Zero as default value.
+        :type a: int
         :param w: Weight of an animal.
         :param fitness: Animals fitness
         """
