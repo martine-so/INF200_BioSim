@@ -71,17 +71,18 @@ class Graphics:
         self._histWeight_ax = None
         self._histFitness_ax = None
 
-    def update(self, step, sys_map, sys_mean):
+    def update(self, step, herb_matrix, carn_matrix, sys_mean):
         """
         Updates graphics with current data and save to file if necessary.
 
         :param step: current time step
-        :param sys_map: current system status (2d array)
+        :param herb_matrix: array with numbers of herbivores in each island cell (2d array)
+        :param carn_matrix: array with numbers of carnivores in each island cell (2d array)
         :param sys_mean: current mean value of system
         """
 
-        self._update_heat_plot_herb(...)
-        self._update_heat_plot_carn(...)
+        self._update_heat_plot_herb(herb_matrix)
+        self._update_heat_plot_carn(carn_matrix)
         self.count_plot(...)
         self._update_animal_graph(step, sys_mean)
         self._update_hist_age(...)
@@ -247,16 +248,16 @@ class Graphics:
             ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
             ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
-    def _update_heat_plot_herb(self, sys_map):
+    def _update_heat_plot_herb(self, herb_matrix):
         """
         Update heat plot for herbivores
 
-        :param sys_map: ...
+        :param herb_matrix: ...
         """
         if self._img_heatPlot_herb_axis is not None:
-            self._img_heatPlot_herb_axis.set_data(sys_map)
+            self._img_heatPlot_herb_axis.set_data(herb_matrix)
         else:
-            self._img_heatPlot_herb_axis = self._heatPlot_herb_ax.imshow(sys_map,
+            self._img_heatPlot_herb_axis = self._heatPlot_herb_ax.imshow(herb_matrix,
                                                                          interpolation='nearest',
                                                                          vmin=-0.25, vmax=0.25)
             plt.colorbar(self._img_heatPlot_herb_axis, ax=self._heatPlot_herb_ax,
@@ -271,15 +272,15 @@ class Graphics:
         #     plt.colorbar(self._img_axis, ax=self._map_ax,
         #                  orientation='horizontal')
 
-    def _update_heat_plot_carn(self, sys_map):
+    def _update_heat_plot_carn(self, carn_matrix):
         """
         Updates heat plot for carnivores
         :param sys_map: ...
         """
         if self._img_heatPlot_carn_axis is not None:
-            self._img_heatPlot_carn_axis.set_data(sys_map)
+            self._img_heatPlot_carn_axis.set_data(carn_matrix)
         else:
-            self._img_heatPlot_carn_axis = self._heatPlot_carn_ax.imshow(sys_map,
+            self._img_heatPlot_carn_axis = self._heatPlot_carn_ax.imshow(carn_matrix,
                                                                          interpolation='nearest',
                                                                          vmin=-0.25, vmax=0.25)
             plt.colorbar(self._img_heatPlot_carn_axis, ax=self._heatPlot_carn_ax,
