@@ -72,7 +72,8 @@ class Graphics:
         self._histWeight_ax = None
         self._histFitness_ax = None
 
-    def update(self, step, herb_matrix, carn_matrix, cmax_herb, cmax_carn):
+    def update(self, year, herb_matrix, carn_matrix, cmax_herb, cmax_carn,
+               island):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -81,18 +82,20 @@ class Graphics:
         :param carn_matrix: array with numbers of carnivores in each island cell (2d array)
         :param sys_mean: current mean value of system
         """
+        age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
+        age_carn, weight_carn, fitness_carn = island.age_fitness_weigth_carn()
 
         self._update_heat_plot_herb(herb_matrix, cmax_herb)
         self._update_heat_plot_carn(carn_matrix, cmax_carn)
-        # self.count_plot(...)
+        self.count_plot(year)
         # self._update_animal_graph(step, sys_mean)
-        # self._update_hist_age(...)
-        # self._update_hist_weight(...)
+        self._update_hist_age(age_herb, age_carn)
+        self._update_hist_weight(weight_herb, weight_carn)
         # self._update_hist_fitness(...)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
-        self._save_graphics(step)
+        self._save_graphics(year)
 
     def make_movie(self, movie_fmt=None):
         """
@@ -137,7 +140,7 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def setup(self, final_step, img_step):
+    def setup(self, final_year, img_step):
         """
         Prepare graphics.
 
@@ -161,7 +164,17 @@ class Graphics:
             self._map_ax = self._fig.add_subplot(3, 3, 1)
             self._map_ax.title.set_text('Island')
             self._map_ax.axis('off')
-            self._map_ax = self.plot_map(self._map_ax, self.island_map)  # MÅ LEGGE TIL MAPPET HER!!!!
+            self._map_ax = self.plot_map(self._map_ax, self.island_map)
+
+            # axes for text
+            axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
+            axt.axis('off')  # turn off coordinate system
+
+            self.template = 'Year: {:5d}'
+            self.txt = axt.text(0.5, 0.5, self.template.format(0),
+                           horizontalalignment='center',
+                           verticalalignment='center',
+                           transform=axt.transAxes)  # relative coordinates
 
         # Add right subplot for line graph of mean.
         if self._animals_graph_ax is None:
@@ -194,36 +207,36 @@ class Graphics:
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
 
-        # self._animals_graph_ax.set_xlim(0, final_step+1)
+        # self._animals_graph_ax.set_xlim(0, final_year+1)
         #
         # if self._animals_graph_line is None:
-        #     animals_plot = self._animals_graph_ax.plot(np.arange(0, final_step+1),
-        #                                    np.full(final_step+1, np.nan))
+        #     animals_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
+        #                                    np.full(final_year+1, np.nan))
         #     self._animals_graph_line = animals_plot[0]
         # else:
         #     x_data, y_data = self._animals_graph_line.get_data()
-        #     x_new = np.arange(x_data[-1] + 1, final_step+1)
+        #     x_new = np.arange(x_data[-1] + 1, final_year+1)
         #     if len(x_new) > 0:
         #         y_new = np.full(x_new.shape, np.nan)
         #         self._animals_graph_line.set_data(np.hstack((x_data, x_new)),
         #                                  np.hstack((y_data, y_new)))
 
-    def count_plot(self):
+    def count_plot(self, year):
         # axes for text
-        axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-        axt.axis('off')  # turn off coordinate system
+        # axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
+        # axt.axis('off')  # turn off coordinate system
 
-        template = 'Count: {:5d}'
-        txt = axt.text(0.5, 0.5, template.format(0),
-                       horizontalalignment='center',
-                       verticalalignment='center',
-                       transform=axt.transAxes)  # relative coordinates
+        # template = 'Year: {:5d}'
+        # txt = axt.text(0.5, 0.5, template.format(0),
+        #               horizontalalignment='center',
+        #               verticalalignment='center',
+        #               transform=axt.transAxes)  # relative coordinates
 
         plt.pause(0.01)  # pause required to make figure visible
 
-        # for k in range(years):
-        #     txt.set_text(template.format(k))
-        #     plt.pause(0.1)  # pause required to make update visible
+
+        self.txt.set_text(self.template.format(year))
+        plt.pause(0.1)  # pause required to make update visible
         #
         # plt.show()
 
@@ -310,11 +323,33 @@ class Graphics:
         # y_data[step] = mean
         # self._animals_graph_line.set_ydata(y_data)
 
-    def _update_hist_age(self):
-        pass
+    def _update_hist_age(self, age_herb, age_carn):
+        self._histAge_ax.clear()
+        self._histAge_ax.title.set_text('Age')
 
-    def _update_hist_weight(self):
-        pass
+        # Herbs:
+        age = [age for age in sorted(age_herb.keys())]
+        num = [age_herb[key] for key in sorted(age_herb.keys())]
+        self._histAge_ax.step(age, num)
+
+        # Carns
+        age = [age for age in sorted(age_carn.keys())]
+        num = [age_carn[key] for key in sorted(age_carn.keys())]
+        self._histAge_ax.step(age, num)
+
+    def _update_hist_weight(self, weight_herb, weight_carn):
+        self._histWeight_ax.clear()
+        self._histWeight_ax.title.set_text('Weight')
+
+        # Herbs:
+        weight = [weight for weight in sorted(weight_herb.keys())]
+        num = [weight_herb[key] for key in sorted(weight_herb.keys())]
+        self._histWeight_ax.step(weight, num)
+
+        # Carns
+        weight = [weight for weight in sorted(weight_carn.keys())]
+        num = [weight_carn[key] for key in sorted(weight_carn.keys())]
+        self._histWeight_ax.step(weight, num)
 
     def _update_hist_fitness(self):
         pass

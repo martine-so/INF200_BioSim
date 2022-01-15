@@ -1,8 +1,10 @@
 from lowland_class import Lowland
 from highland_class import Highland
 from desert_class import Desert
+from operator import attrgetter
 import random
 import textwrap
+
 
 
 class Island:
@@ -100,6 +102,48 @@ class Island:
             carn_matrix[i-1][j-1] = val
 
         return herb_matrix, carn_matrix
+
+    def age_fitness_weigth_herb(self):
+        age_herb = {}
+        weight_herb = {}
+        fitness_herb = {}
+        for coord in self.animals_loc:
+            for herb in self.animals_loc[coord].herb:
+                if herb.a not in age_herb:
+                    age_herb[herb.a] = 1
+                else:
+                    age_herb[herb.a] += 1
+                if round(herb.w) not in weight_herb:
+                    weight_herb[round(herb.w)] = 1
+                else:
+                    weight_herb[round(herb.w)] += 1
+                if herb.fitness not in fitness_herb:
+                    fitness_herb[herb.fitness] = 1
+                else:
+                    fitness_herb[herb.fitness] += 1
+        return age_herb, weight_herb, fitness_herb
+
+    def age_fitness_weigth_carn(self):
+        age_carn = {}
+        weight_carn = {}
+        fitness_carn = {}
+        for coord in self.animals_loc:
+            for carn in self.animals_loc[coord].carn:
+                if carn.a not in age_carn:
+                    age_carn[carn.a] = 1
+                else:
+                    age_carn[carn.a] += 1
+                if round(carn.w) not in weight_carn:
+                    weight_carn[round(carn.w)] = 1
+                else:
+                    weight_carn[round(carn.w)] += 1
+                if carn.fitness not in fitness_carn:
+                    fitness_carn[carn.fitness] = 1
+                else:
+                    fitness_carn[carn.fitness] += 1
+        return age_carn, weight_carn, fitness_carn
+
+
 
 geogr = """\
            WWWWW

@@ -37,7 +37,7 @@ class BioSim:
                 self.cmax_carn = cmax_animals['Carnivore']
 
         self.year = 0
-        self._final_step = None
+        self._final_year = None
         self.herb = []
         self.carn = []
 
@@ -179,17 +179,17 @@ class BioSim:
         if self.img_years % self.vis_years != 0:
             raise ValueError('img_steps must be multiple of vis_steps')
 
-        self._final_step = self.year + num_years
-        self._graphics.setup(self._final_step, self.img_years)
+        self._final_year = self.year + num_years
+        self._graphics.setup(self._final_year, self.img_years)
 
-        while self.year < self._final_step:
+        while self.year < self._final_year:
             self.island.one_year()
             self.year += 1
             herb_matrix, carn_matrix = self.island.matrix()
 
             if self.year % self.vis_years == 0:
-                self._graphics.update(self.year,
-                                      herb_matrix, carn_matrix, self.cmax_herb, self.cmax_carn)
+                self._graphics.update(self.year, herb_matrix, carn_matrix, self.cmax_herb, self.cmax_carn,
+                                      self.island)
 
 
 
