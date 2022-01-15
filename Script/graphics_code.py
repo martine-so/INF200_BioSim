@@ -35,7 +35,7 @@ _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 class Graphics:
     """Provides graphics support for RandVis."""
 
-    def __init__(self, img_dir=None, img_name=None, img_fmt=None):
+    def __init__(self, img_dir=None, img_name=None, img_fmt=None, island_map=None):
         """
         :param img_dir: directory for image files; no images if None
         :type img_dir: str
@@ -60,6 +60,7 @@ class Graphics:
 
         # the following will be initialized by _setup_graphics
         self._fig = None
+        self.island_map = island_map
         self._map_ax = None
         self._animals_graph_ax = None
         self._animals_graph_line = None
@@ -71,7 +72,7 @@ class Graphics:
         self._histWeight_ax = None
         self._histFitness_ax = None
 
-    def update(self, step, herb_matrix, carn_matrix, sys_mean):
+    def update(self, step, herb_matrix, carn_matrix, cmax_herb, cmax_carn):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -81,13 +82,13 @@ class Graphics:
         :param sys_mean: current mean value of system
         """
 
-        self._update_heat_plot_herb(herb_matrix)
-        self._update_heat_plot_carn(carn_matrix)
-        self.count_plot(...)
-        self._update_animal_graph(step, sys_mean)
-        self._update_hist_age(...)
-        self._update_hist_weight(...)
-        self._update_hist_fitness(...)
+        self._update_heat_plot_herb(herb_matrix, cmax_herb)
+        self._update_heat_plot_carn(carn_matrix, cmax_carn)
+        # self.count_plot(...)
+        # self._update_animal_graph(step, sys_mean)
+        # self._update_hist_age(...)
+        # self._update_hist_weight(...)
+        # self._update_hist_fitness(...)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
@@ -158,29 +159,37 @@ class Graphics:
         # the size of the image, so we delay its creation.
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(3, 3, 1)
-            self._map_ax.plot_map(self._map_ax, map)  # MÅ LEGGE TIL MAPPET HER!!!!
+            self._map_ax.title.set_text('Island')
+            self._map_ax.axis('off')
+            self._map_ax = self.plot_map(self._map_ax, self.island_map)  # MÅ LEGGE TIL MAPPET HER!!!!
 
         # Add right subplot for line graph of mean.
         if self._animals_graph_ax is None:
             self._animals_graph_ax = self._fig.add_subplot(3, 3, 3)
+            self._animals_graph_ax.title.set_text('Animal count')
             # self._animals_graph_ax.set_ylim(-0.05, 0.05)
 
         if self._heatPlot_herb_ax is None:
             self._heatPlot_herb_ax = self._fig.add_subplot(3, 3, 4)
+            self._heatPlot_herb_ax.title.set_text('Herbivore distribution')
             self._img_heatPlot_herb_axis = None
 
         if self._heatPlot_carn_ax is None:
             self._heatPlot_carn_ax = self._fig.add_subplot(3, 3, 6)
+            self._heatPlot_carn_ax.title.set_text('Carnivore distribution')
             self._img_heatPlot_herb_axis = None
 
         if self._histAge_ax is None:
             self._histAge_ax = self._fig.add_subplot(3, 3, 7)
+            self._histAge_ax.title.set_text('Age')
 
         if self._histWeight_ax is None:
             self._histWeight_ax = self._fig.add_subplot(3, 3, 8)
+            self._histWeight_ax.title.set_text('Weight')
 
         if self._histFitness_ax is None:
             self._histFitness_ax = self._fig.add_subplot(3, 3, 9)
+            self._histFitness_ax.title.set_text('Fitness')
 
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
@@ -248,7 +257,7 @@ class Graphics:
             ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
             ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
-    def _update_heat_plot_herb(self, herb_matrix):
+    def _update_heat_plot_herb(self, herb_matrix, cmax):
         """
         Update heat plot for herbivores
 
@@ -259,9 +268,9 @@ class Graphics:
         else:
             self._img_heatPlot_herb_axis = self._heatPlot_herb_ax.imshow(herb_matrix,
                                                                          interpolation='nearest',
-                                                                         vmin=-0.25, vmax=0.25)
+                                                                         vmin=0, vmax=cmax)
             plt.colorbar(self._img_heatPlot_herb_axis, ax=self._heatPlot_herb_ax,
-                         orientation='horisontal')
+                         orientation='vertical')
 
         # if self._img_axis is not None:
         #     self._img_axis.set_data(sys_map)
@@ -272,7 +281,7 @@ class Graphics:
         #     plt.colorbar(self._img_axis, ax=self._map_ax,
         #                  orientation='horizontal')
 
-    def _update_heat_plot_carn(self, carn_matrix):
+    def _update_heat_plot_carn(self, carn_matrix, cmax):
         """
         Updates heat plot for carnivores
         :param sys_map: ...
@@ -282,9 +291,9 @@ class Graphics:
         else:
             self._img_heatPlot_carn_axis = self._heatPlot_carn_ax.imshow(carn_matrix,
                                                                          interpolation='nearest',
-                                                                         vmin=-0.25, vmax=0.25)
+                                                                         vmin=0, vmax=cmax)
             plt.colorbar(self._img_heatPlot_carn_axis, ax=self._heatPlot_carn_ax,
-                         orientation='horisontal')
+                         orientation='vertical')
 
         # if self._img_axis is not None:
         #     self._img_axis.set_data(sys_map)

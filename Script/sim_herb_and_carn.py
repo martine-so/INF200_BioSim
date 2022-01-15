@@ -7,6 +7,7 @@ Template for BioSim class.
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 from island_class import Island
 import matplotlib.pyplot as plt
+from graphics_code import Graphics
 import random
 
 class BioSim:
@@ -20,7 +21,6 @@ class BioSim:
         self.seed = seed                    # In use on graph
         self.vis_years = vis_years
         self.ymax_animals = ymax_animals    # In use on graph
-        self.cmax_aminals = cmax_animals
         self.hist_specs = hist_specs
         self.img_dir = img_dir
         self.img_base = img_base
@@ -28,10 +28,20 @@ class BioSim:
         self.img_years = img_years
         self.log_file = log_file
 
-        self.years = 0
+        self.cmax_herb = 200
+        self.cmax_carn = 50
+        if cmax_animals is not None:
+            if 'Herbivore' in cmax_animals:
+                self.cmax_herb = cmax_animals['Herbivore']
+            if 'Carnivore' in cmax_animals:
+                self.cmax_carn = cmax_animals['Carnivore']
+
+        self.year = 0
+        self._final_step = None
         self.herb = []
         self.carn = []
 
+        self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, island_map=self.island_map)
         self.island = Island(self.island_map)
         self.island.place_animals(self.ini_pop)
         self.coordinates = [i['loc'] for i in self.ini_pop]
@@ -120,35 +130,35 @@ class BioSim:
         """
         pass
 
-    def plot_map(self, plot):
-        """
-        Plots island map
-
-        Code authored by: Hans Ekkehard Plesser
-        """
-        # #                   R    G    B
-        rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
-                     'L': (0.0, 0.6, 0.0),  # dark green
-                     'H': (0.5, 1.0, 0.5),  # light green
-                     'D': (1.0, 1.0, 0.5)}  # light yellow
-
-        map_rgb = [[rgb_value[column] for column in row]
-                   for row in self.island_map.splitlines()]
-
-        ax_im = plot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
-
-        ax_im.imshow(map_rgb)
-
-        ax_im.set_xticks(range(len(map_rgb[0])))
-        ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
-        ax_im.set_yticks(range(len(map_rgb)))
-        ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
-
-        ax_lg = plot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
-        ax_lg.axis('off')
-        for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
-            ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
-            ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
+    # def plot_map(self, plot):
+    #     """
+    #     Plots island map
+    #
+    #     Code authored by: Hans Ekkehard Plesser
+    #     """
+    #     # #                   R    G    B
+    #     rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
+    #                  'L': (0.0, 0.6, 0.0),  # dark green
+    #                  'H': (0.5, 1.0, 0.5),  # light green
+    #                  'D': (1.0, 1.0, 0.5)}  # light yellow
+    #
+    #     map_rgb = [[rgb_value[column] for column in row]
+    #                for row in self.island_map.splitlines()]
+    #
+    #     ax_im = plot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
+    #
+    #     ax_im.imshow(map_rgb)
+    #
+    #     ax_im.set_xticks(range(len(map_rgb[0])))
+    #     ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
+    #     ax_im.set_yticks(range(len(map_rgb)))
+    #     ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
+    #
+    #     ax_lg = plot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
+    #     ax_lg.axis('off')
+    #     for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
+    #         ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
+    #         ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
     def num_animals_plot(self):
         numHerbs = 0
@@ -157,49 +167,69 @@ class BioSim:
             numCarns += len(loc.carn)
             numHerbs += len(loc.herb)
 
-
-
     def simulate(self, num_years):
         """
         Run simulation while visualizing the result.
 
         :param num_years: number of years to simulate
         """
-        # self.plot_map()
-        random.seed(self.seed)
+        if self.img_years is None:
+            self.img_years = self.vis_years
 
-        fig = plt.figure()
+        if self.img_years % self.vis_years != 0:
+            raise ValueError('img_steps must be multiple of vis_steps')
 
-        # normal subplots
-        ax1 = fig.add_subplot(3, 3, 1)
-        ax1.axis('off')
-        ax1 = self.plot_map(ax1)
-        ax2 = fig.add_subplot(3, 3, 3)
-        ax3 = fig.add_subplot(3, 3, 4)
-        ax4 = fig.add_subplot(3, 3, 6)
-        ax5 = fig.add_subplot(3, 3, 7)
-        ax6 = fig.add_subplot(3, 3, 8)
-        ax7 = fig.add_subplot(3, 3, 9)
+        self._final_step = self.year + num_years
+        self._graphics.setup(self._final_step, self.img_years)
 
-        # axes for text
-        axt = fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-        axt.axis('off')  # turn off coordinate system
+        while self.year < self._final_step:
+            self.island.one_year()
+            self.year += 1
+            herb_matrix, carn_matrix = self.island.matrix()
 
-        template = 'Count: {:5d}'
-        txt = axt.text(0.5, 0.5, template.format(0),
-                       horizontalalignment='center',
-                       verticalalignment='center',
-                       transform=axt.transAxes)  # relative coordinates
+            if self.year % self.vis_years == 0:
+                self._graphics.update(self.year,
+                                      herb_matrix, carn_matrix, self.cmax_herb, self.cmax_carn)
 
-        plt.pause(0.01)  # pause required to make figure visible
 
-        input('Press ENTER to begin counting')
 
-        for k in range(self.years, num_years):
-            txt.set_text(template.format(k))
-            plt.pause(0.1)  # pause required to make update visible
 
-        plt.show()
+
+        # # self.plot_map()
+        # random.seed(self.seed)
+        #
+        # fig = plt.figure()
+        #
+        # # normal subplots
+        # ax1 = fig.add_subplot(3, 3, 1)
+        # ax1.axis('off')
+        # ax1 = self.plot_map(ax1)
+        # ax2 = fig.add_subplot(3, 3, 3)
+        # ax3 = fig.add_subplot(3, 3, 4)
+        # ax4 = fig.add_subplot(3, 3, 6)
+        # ax5 = fig.add_subplot(3, 3, 7)
+        # ax6 = fig.add_subplot(3, 3, 8)
+        # ax7 = fig.add_subplot(3, 3, 9)
+        #
+        # # axes for text
+        # axt = fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
+        # axt.axis('off')  # turn off coordinate system
+        #
+        # template = 'Count: {:5d}'
+        # txt = axt.text(0.5, 0.5, template.format(0),
+        #                horizontalalignment='center',
+        #                verticalalignment='center',
+        #                transform=axt.transAxes)  # relative coordinates
+        #
+        # plt.pause(0.01)  # pause required to make figure visible
+        #
+        # input('Press ENTER to begin counting')
+        #
+        # for k in range(self.years, num_years):
+        #     txt.set_text(template.format(k))
+        #     plt.pause(0.1)  # pause required to make update visible
+        #
+        # plt.show()
 
         # num_herbs = [len(self.herb)]
         # num_carns = []
@@ -226,7 +256,7 @@ class BioSim:
         # plt.ylim(0, self.ymax_animals)
         # plt.show()
         #
-        self.years += num_years
+        # self.years += num_years
 
 
     def add_population(self, population):
@@ -253,4 +283,13 @@ class BioSim:
     #   return num_animals_per_species = {'Herbivores': len(self.herb), 'Carnivore': len(self.carn)
     #
     # def make_movie(self):
-    #     """Create MPEG4 movie from visualization images saved."""
+    #     """
+    #             Creates MPEG4 movie from visualization images saved.
+    #
+    #             .. :note:
+    #                 Requires ffmpeg for MP4 and magick for GIF
+    #
+    #             The movie is stored as img_base + movie_fmt.
+    #             """
+    #
+    #     self._graphics.make_movie(movie_fmt)
