@@ -117,10 +117,10 @@ class Island:
                     weight_herb[round(herb.w)] = 1
                 else:
                     weight_herb[round(herb.w)] += 1
-                if herb.fitness not in fitness_herb:
-                    fitness_herb[herb.fitness] = 1
+                if round(herb.fitness, 2) not in fitness_herb:
+                    fitness_herb[round(herb.fitness, 2)] = 1
                 else:
-                    fitness_herb[herb.fitness] += 1
+                    fitness_herb[round(herb.fitness, 2)] += 1
         return age_herb, weight_herb, fitness_herb
 
     def age_fitness_weigth_carn(self):
@@ -137,10 +137,10 @@ class Island:
                     weight_carn[round(carn.w)] = 1
                 else:
                     weight_carn[round(carn.w)] += 1
-                if carn.fitness not in fitness_carn:
-                    fitness_carn[carn.fitness] = 1
+                if round(carn.fitness, 2) not in fitness_carn:
+                    fitness_carn[round(carn.fitness, 2)] = 1
                 else:
-                    fitness_carn[carn.fitness] += 1
+                    fitness_carn[round(carn.fitness, 2)] += 1
         return age_carn, weight_carn, fitness_carn
 
 

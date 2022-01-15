@@ -91,7 +91,7 @@ class Graphics:
         # self._update_animal_graph(step, sys_mean)
         self._update_hist_age(age_herb, age_carn)
         self._update_hist_weight(weight_herb, weight_carn)
-        # self._update_hist_fitness(...)
+        self._update_hist_fitness(fitness_herb, fitness_carn)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
@@ -152,10 +152,22 @@ class Graphics:
         """
 
         self._img_step = img_step
+        plt.style.use('default')
 
         # create new figure window
         if self._fig is None:
             self._fig = plt.figure()
+
+            # axes for text
+            axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
+            axt.axis('off')  # turn off coordinate system
+
+            self.template = 'Year: {:5d}'
+            self.txt = axt.text(0.5, 0.5, self.template.format(0),
+                                horizontalalignment='center',
+                                verticalalignment='center',
+                                transform=axt.transAxes)  # relative coordinates
+
 
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
@@ -166,15 +178,6 @@ class Graphics:
             self._map_ax.axis('off')
             self._map_ax = self.plot_map(self._map_ax, self.island_map)
 
-            # axes for text
-            axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-            axt.axis('off')  # turn off coordinate system
-
-            self.template = 'Year: {:5d}'
-            self.txt = axt.text(0.5, 0.5, self.template.format(0),
-                           horizontalalignment='center',
-                           verticalalignment='center',
-                           transform=axt.transAxes)  # relative coordinates
 
         # Add right subplot for line graph of mean.
         if self._animals_graph_ax is None:
@@ -204,6 +207,8 @@ class Graphics:
             self._histFitness_ax = self._fig.add_subplot(3, 3, 9)
             self._histFitness_ax.title.set_text('Fitness')
 
+        plt.pause(0.01)  # pause required to make figure visible
+
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
 
@@ -222,19 +227,6 @@ class Graphics:
         #                                  np.hstack((y_data, y_new)))
 
     def count_plot(self, year):
-        # axes for text
-        # axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-        # axt.axis('off')  # turn off coordinate system
-
-        # template = 'Year: {:5d}'
-        # txt = axt.text(0.5, 0.5, template.format(0),
-        #               horizontalalignment='center',
-        #               verticalalignment='center',
-        #               transform=axt.transAxes)  # relative coordinates
-
-        plt.pause(0.01)  # pause required to make figure visible
-
-
         self.txt.set_text(self.template.format(year))
         plt.pause(0.1)  # pause required to make update visible
         #
@@ -285,15 +277,6 @@ class Graphics:
             plt.colorbar(self._img_heatPlot_herb_axis, ax=self._heatPlot_herb_ax,
                          orientation='vertical')
 
-        # if self._img_axis is not None:
-        #     self._img_axis.set_data(sys_map)
-        # else:
-        #     self._img_axis = self._map_ax.imshow(sys_map,
-        #                                          interpolation='nearest',
-        #                                          vmin=-0.25, vmax=0.25)
-        #     plt.colorbar(self._img_axis, ax=self._map_ax,
-        #                  orientation='horizontal')
-
     def _update_heat_plot_carn(self, carn_matrix, cmax):
         """
         Updates heat plot for carnivores
@@ -308,15 +291,6 @@ class Graphics:
             plt.colorbar(self._img_heatPlot_carn_axis, ax=self._heatPlot_carn_ax,
                          orientation='vertical')
 
-        # if self._img_axis is not None:
-        #     self._img_axis.set_data(sys_map)
-        # else:
-        #     self._img_axis = self._map_ax.imshow(sys_map,
-        #                                          interpolation='nearest',
-        #                                          vmin=-0.25, vmax=0.25)
-        #     plt.colorbar(self._img_axis, ax=self._map_ax,
-        #                  orientation='horizontal')
-
     def _update_animal_graph(self, step, mean):
         pass
         # y_data = self._animals_graph_line.get_ydata()
@@ -330,12 +304,12 @@ class Graphics:
         # Herbs:
         age = [age for age in sorted(age_herb.keys())]
         num = [age_herb[key] for key in sorted(age_herb.keys())]
-        self._histAge_ax.step(age, num)
+        self._histAge_ax.step(age, num, label='Herbivores')
 
         # Carns
         age = [age for age in sorted(age_carn.keys())]
         num = [age_carn[key] for key in sorted(age_carn.keys())]
-        self._histAge_ax.step(age, num)
+        self._histAge_ax.step(age, num, label='Carnivores')
 
     def _update_hist_weight(self, weight_herb, weight_carn):
         self._histWeight_ax.clear()
@@ -344,15 +318,28 @@ class Graphics:
         # Herbs:
         weight = [weight for weight in sorted(weight_herb.keys())]
         num = [weight_herb[key] for key in sorted(weight_herb.keys())]
-        self._histWeight_ax.step(weight, num)
+        self._histWeight_ax.step(weight, num, label='Herbivores')
 
         # Carns
         weight = [weight for weight in sorted(weight_carn.keys())]
         num = [weight_carn[key] for key in sorted(weight_carn.keys())]
-        self._histWeight_ax.step(weight, num)
+        self._histWeight_ax.step(weight, num, label='Carnivores')
 
-    def _update_hist_fitness(self):
-        pass
+    def _update_hist_fitness(self, fitness_herb, fitness_carn):
+        self._histFitness_ax.clear()
+        self._histFitness_ax.title.set_text('Fitness')
+
+        # Herbs:
+        fitness = [fitness for fitness in sorted(fitness_herb.keys())]
+        num = [fitness_herb[key] for key in sorted(fitness_herb.keys())]
+        self._histFitness_ax.step(fitness, num, label='Herbivores')
+
+        # Carns
+        fitness = [fitness for fitness in sorted(fitness_carn.keys())]
+        num = [fitness_carn[key] for key in sorted(fitness_carn.keys())]
+        self._histFitness_ax.step(fitness, num, label='Carnivores')
+        self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
+                                    fancybox=True, shadow=True)
 
     def _save_graphics(self, step):
         """
