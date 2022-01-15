@@ -39,14 +39,14 @@ class Animals:
 
     def __init__(self, a=0, w=None, fitness=0):
         """
+        When object i created, if no initial weight is given, a random weight within set values is given
+        the new animal. If initial age, weight or fitness is attempted to be set as negative,
+        value error is raised.
+
         :param a: age of an animal. Zero as default value.
         :param w: Weight of an animal.
         :param fitness: Animals fitness with zero as default value.
                         Used mostly when running tests
-
-        When object i created, if no initial weight is given, a random weight within set values is given
-        the new animal. If initial age, weight or fitness is attempted to be set as negative,
-        value error is raised.
         """
         self.a = a
         self.fitness = fitness
