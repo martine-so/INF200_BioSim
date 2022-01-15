@@ -120,7 +120,7 @@ class BioSim:
         """
         pass
 
-    def plot_map(self):
+    def plot_map(self, plot):
         """
         Plots island map
 
@@ -135,9 +135,7 @@ class BioSim:
         map_rgb = [[rgb_value[column] for column in row]
                    for row in self.island_map.splitlines()]
 
-        map = plt.figure()
-
-        ax_im = map.add_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
+        ax_im = plot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
 
         ax_im.imshow(map_rgb)
 
@@ -146,13 +144,20 @@ class BioSim:
         ax_im.set_yticks(range(len(map_rgb)))
         ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
 
-        ax_lg = map.add_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
+        ax_lg = plot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
         ax_lg.axis('off')
         for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
             ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
             ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
-        plt.show()
+    def num_animals_plot(self):
+        numHerbs = 0
+        numCarns = 0
+        for loc in self.island.animals_loc:
+            numCarns += len(loc.carn)
+            numHerbs += len(loc.herb)
+
+
 
     def simulate(self, num_years):
         """
@@ -160,34 +165,67 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
-        self.plot_map()
+        # self.plot_map()
         random.seed(self.seed)
 
-        num_herbs = [len(self.herb)]
-        num_carns = []
-        num_years_list = list(range(self.years, self.years + num_years+1))
-        field = self.island.animals_loc[self.coordinates[0]]
+        fig = plt.figure()
 
-        for year in range(num_years):
-            field.reset_fodder()
-            field.eating_herbivores()
-            field.eating_carnivores()
-            field.breeding()
-            # print(len(animals))
-            field.aging_and_loosing_weight()
-            field.dying()
-            self.herb = field.herb
-            self.carn = field.carn
+        # normal subplots
+        ax1 = fig.add_subplot(3, 3, 1)
+        ax1.axis('off')
+        ax1 = self.plot_map(ax1)
+        ax2 = fig.add_subplot(3, 3, 3)
+        ax3 = fig.add_subplot(3, 3, 4)
+        ax4 = fig.add_subplot(3, 3, 6)
+        ax5 = fig.add_subplot(3, 3, 7)
+        ax6 = fig.add_subplot(3, 3, 8)
+        ax7 = fig.add_subplot(3, 3, 9)
 
-            num_herbs.append(len(self.herb))
-            num_carns.append(len(self.carn))
-            print(len(self.herb), len(self.carn))
+        # axes for text
+        axt = fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
+        axt.axis('off')  # turn off coordinate system
 
-        plt.figure()
-        plt.plot(num_years_list, num_herbs)
-        plt.ylim(0, self.ymax_animals)
+        template = 'Count: {:5d}'
+        txt = axt.text(0.5, 0.5, template.format(0),
+                       horizontalalignment='center',
+                       verticalalignment='center',
+                       transform=axt.transAxes)  # relative coordinates
+
+        plt.pause(0.01)  # pause required to make figure visible
+
+        input('Press ENTER to begin counting')
+
+        for k in range(self.years, num_years):
+            txt.set_text(template.format(k))
+            plt.pause(0.1)  # pause required to make update visible
+
         plt.show()
 
+        # num_herbs = [len(self.herb)]
+        # num_carns = []
+        # num_years_list = list(range(self.years, self.years + num_years+1))
+        # field = self.island.animals_loc[self.coordinates[0]]
+        #
+        # for year in range(num_years):
+        #     field.reset_fodder()
+        #     field.eating_herbivores()
+        #     field.eating_carnivores()
+        #     field.breeding()
+        #     # print(len(animals))
+        #     field.aging_and_loosing_weight()
+        #     field.dying()
+        #     self.herb = field.herb
+        #     self.carn = field.carn
+        #
+        #     num_herbs.append(len(self.herb))
+        #     num_carns.append(len(self.carn))
+        #     print(len(self.herb), len(self.carn))
+        #
+        # plt.figure()
+        # plt.plot(num_years_list, num_herbs)
+        # plt.ylim(0, self.ymax_animals)
+        # plt.show()
+        #
         self.years += num_years
 
 

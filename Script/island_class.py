@@ -54,6 +54,33 @@ class Island:
             self.animals_loc[i].aging_and_loosing_weight()
             self.animals_loc[i].dying()
 
+    def matrix(self):
+        herb_dict = {}
+        carn_dict = {}
+        for i in range(len(self.island_map)):
+            for j in range(len(self.island_map[0])):
+                loc = (i+1, j+1)
+                herb_dict[loc] = 0
+                carn_dict[loc] = 0
+
+
+        for coord in self.animals_loc:
+            herb_dict[coord] = len(self.animals_loc[coord].herb)
+            carn_dict[coord] = len(self.animals_loc[coord].carn)
+
+        temp_x = max([cord[0] for cord in herb_dict.keys()])
+        temp_y = max([cord[1] for cord in herb_dict.keys()])
+        herb_matrix = [[0] * (temp_y) for ele in range(temp_x)]
+        carn_matrix = [[0] * (temp_y) for ele in range(temp_x)]
+
+        for (i, j), val in herb_dict.items():
+            herb_matrix[i-1][j-1] = val
+
+        for (i, j), val in carn_dict.items():
+            carn_matrix[i-1][j-1] = val
+
+        return herb_matrix, carn_matrix
+
 geogr = """\
            WWWWW
            WWLWW
@@ -79,5 +106,7 @@ island = Island(geogr)
 island.place_animals(ini_herbs)
 island.one_year()
 island.place_animals(ini_carns)
-for year in range(10):
-    island.one_year()
+island.one_year()
+island.matrix()
+# for year in range(10):
+#     island.one_year()

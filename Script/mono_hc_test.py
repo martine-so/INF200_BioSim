@@ -10,17 +10,19 @@ import textwrap
 from sim_herb_and_carn import BioSim
 
 geogr = """\
-           WWW
-           WLW
-           WWW"""
+           WWWWW
+           WWLWW
+           WLDLW
+           WWLLW
+           WWWWW"""
 geogr = textwrap.dedent(geogr)
 
-ini_herbs = [{'loc': (2, 2),
+ini_herbs = [{'loc': (3, 3),
               'pop': [{'species': 'Herbivore',
                        'age': 5,
                        'weight': 20}
                       for _ in range(50)]}]
-ini_carns = [{'loc': (2, 2),
+ini_carns = [{'loc': (3, 3),
               'pop': [{'species': 'Carnivore',
                        'age': 5,
                        'weight': 20}
