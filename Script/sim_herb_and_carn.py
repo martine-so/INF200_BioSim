@@ -20,13 +20,12 @@ class BioSim:
         self.ini_pop = ini_pop              # In use on graph
         self.seed = seed                    # In use on graph
         self.vis_years = vis_years
-        self.ymax_animals = ymax_animals    # In use on graph
-        self.hist_specs = hist_specs
         self.img_dir = img_dir
         self.img_base = img_base
         self.img_fmt = img_fmt
         self.img_years = img_years
         self.log_file = log_file
+        self.hist_specs = hist_specs
 
         self.cmax_herb = 200
         self.cmax_carn = 50
@@ -40,6 +39,11 @@ class BioSim:
         self._final_year = None
         self.herb = []
         self.carn = []
+
+        if ymax_animals is None:
+            self.ymax_animals = 6000
+        else:
+            self.ymax_animals = ymax_animals  # In use on graph
 
         self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, island_map=self.island_map)
         self.island = Island(self.island_map)
@@ -80,46 +84,20 @@ class BioSim:
         img_dir and img_base must either be both None or both strings.
         """
 
-    # def set_animal_parameters(self, species, params):
-    #     """
-    #     Set parameters for animal species.
-    #
-    #     :param species: String, name of animal species
-    #     :param params: Dict with valid parameter specification for species
-    #     """
-    #
-    #     @classmethod
-    #     def set_params(cls, new_params):
-    #         """Set class parameters
-    #         """
-    #
-    #         for key in new_params:
-    #             if key not in ('???', '???'):
-    #                 raise KeyError('Invalid parameter name: ' + key)
-    #
-    #         for key in new_params:
-    #             if not 0 <= new_params[key]:
-    #                 raise ValueError('All parametervalues must be positiv')
-    #             cls.key = new_params[key]
-    #
-    #         if 'eta' in new_params:
-    #             if not new_params['eta'] <= 1:
-    #                 raise ValueError('eta must be in [0, 1].')
-    #             cls.eta = new_params['eta']
-    #
-    #         if 'DeltaPhiMax' in new_params:
-    #             if not 0 < new_params['DeltaPhiMax']:
-    #                 raise ValueError('DeltaPhiMax must be higher than 0')
-    #             cls.DeltaPhiMax = new_params['DeltaPhiMax']
-    #
-    #     @classmethod
-    #     def get_params(cls):
-    #         """Get class parameters"""
-    #         return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
-    #                 'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zigma, 'w_birth': cls.w_birth,
-    #                 'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
-    #                 'omega': cls.omega}
-    #         # mu skal også inn her når de beveger seg
+    def set_animal_parameters(self, species, params):
+        """
+        Set parameters for animal species.
+
+        :param species: String, name of animal species
+        :param params: Dict with valid parameter specification for species
+        """
+
+        # if species == 'Herbivore':
+        #     Herbivore.set_params(params)
+        # elif species == 'Carnivore':
+        #     Carnivore.set_params(params)
+        pass
+
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -128,7 +106,14 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        # if landscape == 'L':
+        #     Lowland.set_params(params)
+        # elif landscape == 'H':
+        #     Highland.set_params(params)
+        # elif landscape == 'D':
+        #     Desert.set_params(params)
         pass
+
 
 
     def num_animals_plot(self):
@@ -153,7 +138,7 @@ class BioSim:
             raise ValueError('img_steps must be multiple of vis_steps')
 
         self._final_year = self.year + num_years
-        self._graphics.setup(self._final_year, self.img_years)
+        self._graphics.setup(self.ymax_animals, self._final_year, self.img_years)
 
         while self.year < self._final_year:
             self.island.one_year()
@@ -161,7 +146,7 @@ class BioSim:
             numHerbs, numCarns = self.num_animals_plot()
 
             if self.year % self.vis_years == 0:
-                self._graphics.update(self.year, self.cmax_herb, self.cmax_carn,
+                self._graphics.update(self.hist_specs, self.year, self.cmax_herb, self.cmax_carn,
                                       self.island, numHerbs, numCarns)
 
 

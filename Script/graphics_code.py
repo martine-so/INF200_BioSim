@@ -56,14 +56,15 @@ class Graphics:
         self._img_fmt = img_fmt if img_fmt is not None else _DEFAULT_IMG_FORMAT
 
         self._img_ctr = 0
-        self._img_step = 1
+        self._img_year = 1
 
         # the following will be initialized by _setup_graphics
         self._fig = None
         self.island_map = island_map
         self._map_ax = None
         self._animals_graph_ax = None
-        self._animals_graph_line = None
+        self._herb_graph_line = None
+        self._carn_graph_line = None
         self._heatPlot_herb_ax = None
         self._img_heatPlot_herb_axis = None
         self._heatPlot_carn_ax = None
@@ -72,15 +73,18 @@ class Graphics:
         self._histWeight_ax = None
         self._histFitness_ax = None
 
-    def update(self, year, cmax_herb, cmax_carn,
+    def update(self, hist_specs, year, cmax_herb, cmax_carn,
                island, numHerbs, numCarns):
         """
         Updates graphics with current data and save to file if necessary.
 
-        :param step: current time step
-        :param herb_matrix: array with numbers of herbivores in each island cell (2d array)
-        :param carn_matrix: array with numbers of carnivores in each island cell (2d array)
-        :param sys_mean: current mean value of system
+        :param hist_specs:
+        :param year: current year
+        :param cmax_herb:
+        :param cmax_carn:
+        :param island:
+        :param numHerbs: array with numbers of herbivores in each island cell (2d array)
+        :param numCarns: array with numbers of carnivores in each island cell (2d array)
         """
         herb_matrix, carn_matrix = island.matrix()
         age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
@@ -90,9 +94,9 @@ class Graphics:
         self._update_heat_plot_carn(carn_matrix, cmax_carn)
         self.count_plot(year)
         self._update_animal_graph(year, numHerbs, numCarns)
-        self._update_hist_age(age_herb, age_carn)
-        self._update_hist_weight(weight_herb, weight_carn)
-        self._update_hist_fitness(fitness_herb, fitness_carn)
+        self._update_hist_age(hist_specs, age_herb, age_carn)
+        self._update_hist_weight(hist_specs, weight_herb, weight_carn)
+        self._update_hist_fitness(hist_specs, fitness_herb, fitness_carn)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
@@ -141,14 +145,15 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def setup(self, final_year, img_step):
+    def setup(self, ymax_animals, final_year, img_step):
         """
         Prepare graphics.
 
         Call this before calling :meth:`update()` for the first time after
         the final time step has changed.
 
-        :param final_step: last time step to be visualised (upper limit of x-axis)
+        :param ymax_animals: y-limit on animal count graph
+        :param final_year: last time step to be visualised (upper limit of x-axis)
         :param img_step: interval between saving image to file
         """
 
@@ -157,7 +162,7 @@ class Graphics:
 
         # create new figure window
         if self._fig is None:
-            self._fig = plt.figure()
+            self._fig = plt.figure(figsize=(12,8))
 
             # axes for text
             axt = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
@@ -184,15 +189,18 @@ class Graphics:
         if self._animals_graph_ax is None:
             self._animals_graph_ax = self._fig.add_subplot(3, 3, 3)
             self._animals_graph_ax.title.set_text('Animal count')
-            # self._animals_graph_ax.set_ylim(-0.05, 0.05)
+            self._animals_graph_ax.set_xlim(0, final_year + 1)
+            self._animals_graph_ax.set_ylim(0, ymax_animals)
+        elif self._animals_graph_ax is not None:
+            self._animals_graph_ax.set_xlim(0, final_year + 1)
 
         if self._heatPlot_herb_ax is None:
-            self._heatPlot_herb_ax = self._fig.add_subplot(3, 3, 4)
+            self._heatPlot_herb_ax = self._fig.add_subplot(3, 2, 3)
             self._heatPlot_herb_ax.title.set_text('Herbivore distribution')
             self._img_heatPlot_herb_axis = None
 
         if self._heatPlot_carn_ax is None:
-            self._heatPlot_carn_ax = self._fig.add_subplot(3, 3, 6)
+            self._heatPlot_carn_ax = self._fig.add_subplot(3, 2, 4)
             self._heatPlot_carn_ax.title.set_text('Carnivore distribution')
             self._img_heatPlot_herb_axis = None
 
@@ -213,19 +221,33 @@ class Graphics:
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
 
-        self._animals_graph_ax.set_xlim(0, final_year+1)
+        # self._animals_graph_ax.set_xlim(0, final_year+1)
 
-        if self._animals_graph_line is None:
-            animals_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
-                                           np.full(final_year+1, np.nan))
-            self._animals_graph_line = animals_plot[0]
+        # Graph for Herbivores
+        if self._herb_graph_line is None:
+            herb_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
+                                           np.full(final_year+1, np.nan), label='Herbivores')
+            self._herb_graph_line = herb_plot[0]
         else:
-            x_data, y_data = self._animals_graph_line.get_data()
+            x_data, y_data = self._herb_graph_line.get_data()
             x_new = np.arange(x_data[-1] + 1, final_year+1)
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
-                self._animals_graph_line.set_data(np.hstack((x_data, x_new)),
-                                         np.hstack((y_data, y_new)))
+                self._herb_graph_line.set_data(np.hstack((x_data, x_new)),
+                                                np.hstack((y_data, y_new)))
+
+        # Graph for Herbivores
+        if self._carn_graph_line is None:
+            carn_plot = self._animals_graph_ax.plot(np.arange(0, final_year + 1),
+                                                       np.full(final_year + 1, np.nan), label='Carnivores')
+            self._carn_graph_line = carn_plot[0]
+        else:
+            x_data, y_data = self._carn_graph_line.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_year + 1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._carn_graph_line.set_data(np.hstack((x_data, x_new)),
+                                                  np.hstack((y_data, y_new)))
 
     def count_plot(self, year):
         self.txt.set_text(self.template.format(year))
@@ -233,11 +255,14 @@ class Graphics:
         #
         # plt.show()
 
-    def plot_map(self, plot, island_map):
+    def plot_map(self, subplot, island_map):
         """
         Plots island map
 
         Code authored by: Hans Ekkehard Plesser
+
+        :param subplot: subplot to plot map in
+        :param island_map: ...
         """
         # #                   R    G    B
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
@@ -248,7 +273,7 @@ class Graphics:
         map_rgb = [[rgb_value[column] for column in row]
                    for row in island_map.splitlines()]
 
-        ax_im = plot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
+        ax_im = subplot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
 
         ax_im.imshow(map_rgb)
 
@@ -257,7 +282,7 @@ class Graphics:
         ax_im.set_yticks(range(len(map_rgb)))
         ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
 
-        ax_lg = plot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
+        ax_lg = subplot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
         ax_lg.axis('off')
         for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
             ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
@@ -268,6 +293,7 @@ class Graphics:
         Update heat plot for herbivores
 
         :param herb_matrix: ...
+        :param cmax: ...
         """
         if self._img_heatPlot_herb_axis is not None:
             self._img_heatPlot_herb_axis.set_data(herb_matrix)
@@ -281,7 +307,8 @@ class Graphics:
     def _update_heat_plot_carn(self, carn_matrix, cmax):
         """
         Updates heat plot for carnivores
-        :param sys_map: ...
+        :param carn_matrix: ...
+        :param cmax: ...
         """
         if self._img_heatPlot_carn_axis is not None:
             self._img_heatPlot_carn_axis.set_data(carn_matrix)
@@ -293,46 +320,77 @@ class Graphics:
                          orientation='vertical')
 
     def _update_animal_graph(self, year, numHerbs, numCarns):
-        y_data = self._animals_graph_line.get_ydata()
-        y_data[year] = numHerbs
-        self._animals_graph_line.set_ydata(y_data)
+        y_data_herb = self._herb_graph_line.get_ydata()
+        y_data_herb[year] = numHerbs
+        self._herb_graph_line.set_ydata(y_data_herb)
 
-    def _update_hist_age(self, age_herb, age_carn):
+        y_data_carn = self._carn_graph_line.get_ydata()
+        y_data_carn[year] = numCarns
+        self._carn_graph_line.set_ydata(y_data_carn)
+
+    def _update_hist_age(self, hist_specs, age_herb, age_carn):
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
+        if 'age' in hist_specs:
+            x_lim = hist_specs['age']['max']
+            width = hist_specs['age']['delta']
+        else:
+            x_lim = 40
+            width = 2
 
+        n = int(x_lim / width)
         # Herbs:
-        self._histAge_ax.hist(age_herb, label='Herbivores', histtype='step')
+        self._histAge_ax.set_xlim(0, x_lim)
+        self._histAge_ax.hist(age_herb, n, label='Herbivores', histtype='step')
         # Carns
-        self._histAge_ax.hist(age_carn, label='Carnivores', histtype='step')
+        self._histAge_ax.hist(age_carn, n,  label='Carnivores', histtype='step')
 
-    def _update_hist_weight(self, weight_herb, weight_carn):
+    def _update_hist_weight(self, hist_specs, weight_herb, weight_carn):
         self._histWeight_ax.clear()
         self._histWeight_ax.title.set_text('Weight')
+        if 'weight' in hist_specs:
+            x_lim = hist_specs['weight']['max']
+            width = hist_specs['weight']['delta']
+        else:
+            x_lim = 100
+            width = 2
 
+        n = int(x_lim/width)
         # Herbs:
-        self._histWeight_ax.hist(weight_herb, label='Herbivores', histtype='step')
+        self._histWeight_ax.set_xlim(0, x_lim)
+        self._histWeight_ax.hist(weight_herb, n, label='Herbivores', histtype='step')
         # Carns
-        self._histWeight_ax.hist(weight_carn, label='Carnivores', histtype='step')
+        self._histWeight_ax.hist(weight_carn, n, label='Carnivores', histtype='step')
 
-    def _update_hist_fitness(self, fitness_herb, fitness_carn):
+    def _update_hist_fitness(self, hist_specs, fitness_herb, fitness_carn):
         self._histFitness_ax.clear()
         self._histFitness_ax.title.set_text('Fitness')
+        if 'fitness' in hist_specs:
+            x_lim = hist_specs['fitness']['max']
+            width = hist_specs['fitness']['delta']
+        else:
+            x_lim = 1
+            width = 0.05
+
+        n = int(x_lim / width)
 
         # Herbs:
-        self._histFitness_ax.hist(fitness_herb, label='Herbivores', histtype='step')
+        self._histFitness_ax.set_xlim(0, x_lim)
+        self._histFitness_ax.hist(fitness_herb, n, label='Herbivores', histtype='step')
         # Carns
-        self._histFitness_ax.hist(fitness_carn, label='Carnivores', histtype='step')
+        self._histFitness_ax.hist(fitness_carn, n,  label='Carnivores', histtype='step')
         self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
                                     fancybox=True, shadow=True)
 
-    def _save_graphics(self, step):
+    def _save_graphics(self, year):
         """
         Saves graphics to file if file name given.
         Code authored by: Hans Ekkehard Plesser
+
+        :param:
         """
 
-        if self._img_base is None or step % self._img_step != 0:
+        if self._img_base is None or year % self._img_year != 0:
             return
 
         plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
