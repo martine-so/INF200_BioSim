@@ -50,8 +50,8 @@ def test_migrating():
 
     island.migrating()
     for loc in initial_loc:
-    #assert len(initial_loc[loc].herb) != len(island.animals_loc[loc].herb)
-     pass
+    # assert len(initial_loc[loc].herb) != len(island.animals_loc[loc].herb)
+        pass
 
 
 def test_one_year():
