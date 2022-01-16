@@ -1,5 +1,5 @@
-from herbivores_class import Herbivore
-from carnivores_class import Carnivore
+from animals_class import Herbivore
+from animals_class import Carnivore
 import pytest
 
 

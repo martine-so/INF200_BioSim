@@ -1,6 +1,6 @@
-from lowland_class import Lowland
-from highland_class import Highland
-from desert_class import Desert
+from landscape_class import Lowland
+from landscape_class import Highland
+from landscape_class import Desert
 from operator import attrgetter
 import random
 import textwrap

@@ -1,5 +1,5 @@
 from island_class import Island
-from herbivores_class import Herbivore
+from animals_class import Herbivore
 import textwrap
 import pytest
 

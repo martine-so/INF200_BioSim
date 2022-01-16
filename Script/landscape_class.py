@@ -1,6 +1,6 @@
 from operator import attrgetter
-from herbivores_class import Herbivore
-from carnivores_class import Carnivore
+from animals_class import Herbivore
+from animals_class import Carnivore
 import random
 
 
@@ -28,17 +28,10 @@ class Landscape:
                     raise ValueError('DeltaPhiMax must be higher than 0')
             cls.key = new_params[key]
 
-    @classmethod
-    def get_params(cls):
-        """Get class parameters"""
-        return {'f_max': cls.f_max}
-
     def __init__(self):
         """
         When class object is created, it is given two empty lists for herbivores and carnivores
         """
-
-        self.DeltaPhiMax = 10
 
         self.herb = []
         self.carn = []
@@ -99,8 +92,8 @@ class Landscape:
         :rtype: float or int
         """
         probability = 0
-        if 0 < carn.fitness - herb.fitness < self.DeltaPhiMax:
-            probability = (carn.fitness - herb.fitness) / self.DeltaPhiMax
+        if 0 < carn.fitness - herb.fitness < carn.DeltaPhiMax:
+            probability = (carn.fitness - herb.fitness) / carn.DeltaPhiMax
         elif carn.fitness > herb.fitness:
             probability = 1
         return probability

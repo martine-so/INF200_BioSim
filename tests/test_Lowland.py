@@ -1,8 +1,8 @@
-from lowland_class import Lowland
-from highland_class import Highland
-from desert_class import Desert
-from herbivores_class import Herbivore
-from carnivores_class import Carnivore
+from landscape_class import Lowland
+from landscape_class import Highland
+from landscape_class import Desert
+from animals_class import Herbivore
+from animals_class import Carnivore
 
 
 def test_add_animals_herb():
