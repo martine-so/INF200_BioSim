@@ -104,43 +104,25 @@ class Island:
         return herb_matrix, carn_matrix
 
     def age_fitness_weigth_herb(self):
-        age_herb = {}
-        weight_herb = {}
-        fitness_herb = {}
+        age_herb = []
+        weight_herb = []
+        fitness_herb = []
         for coord in self.animals_loc:
             for herb in self.animals_loc[coord].herb:
-                if herb.a not in age_herb:
-                    age_herb[herb.a] = 1
-                else:
-                    age_herb[herb.a] += 1
-                if round(herb.w) not in weight_herb:
-                    weight_herb[round(herb.w)] = 1
-                else:
-                    weight_herb[round(herb.w)] += 1
-                if round(herb.fitness, 2) not in fitness_herb:
-                    fitness_herb[round(herb.fitness, 2)] = 1
-                else:
-                    fitness_herb[round(herb.fitness, 2)] += 1
+                age_herb.append(herb.a)
+                weight_herb.append(round(herb.w))
+                fitness_herb.append(round(herb.fitness, 2))
         return age_herb, weight_herb, fitness_herb
 
     def age_fitness_weigth_carn(self):
-        age_carn = {}
-        weight_carn = {}
-        fitness_carn = {}
+        age_carn = []
+        weight_carn = []
+        fitness_carn = []
         for coord in self.animals_loc:
             for carn in self.animals_loc[coord].carn:
-                if carn.a not in age_carn:
-                    age_carn[carn.a] = 1
-                else:
-                    age_carn[carn.a] += 1
-                if round(carn.w) not in weight_carn:
-                    weight_carn[round(carn.w)] = 1
-                else:
-                    weight_carn[round(carn.w)] += 1
-                if round(carn.fitness, 2) not in fitness_carn:
-                    fitness_carn[round(carn.fitness, 2)] = 1
-                else:
-                    fitness_carn[round(carn.fitness, 2)] += 1
+                age_carn.append(carn.a)
+                weight_carn.append(round(carn.w))
+                fitness_carn.append(round(carn.fitness, 2))
         return age_carn, weight_carn, fitness_carn
 
 

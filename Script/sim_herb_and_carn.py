@@ -130,42 +130,15 @@ class BioSim:
         """
         pass
 
-    # def plot_map(self, plot):
-    #     """
-    #     Plots island map
-    #
-    #     Code authored by: Hans Ekkehard Plesser
-    #     """
-    #     # #                   R    G    B
-    #     rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
-    #                  'L': (0.0, 0.6, 0.0),  # dark green
-    #                  'H': (0.5, 1.0, 0.5),  # light green
-    #                  'D': (1.0, 1.0, 0.5)}  # light yellow
-    #
-    #     map_rgb = [[rgb_value[column] for column in row]
-    #                for row in self.island_map.splitlines()]
-    #
-    #     ax_im = plot.inset_axes([0.1, 0.1, 0.7, 0.8])  # llx, lly, w, h
-    #
-    #     ax_im.imshow(map_rgb)
-    #
-    #     ax_im.set_xticks(range(len(map_rgb[0])))
-    #     ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
-    #     ax_im.set_yticks(range(len(map_rgb)))
-    #     ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
-    #
-    #     ax_lg = plot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
-    #     ax_lg.axis('off')
-    #     for ix, name in enumerate(('Water', 'Lowland', 'Highland', 'Desert')):
-    #         ax_lg.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1, edgecolor='none', facecolor=rgb_value[name[0]]))
-    #         ax_lg.text(0.35, ix * 0.2, name, transform=ax_lg.transAxes)
 
     def num_animals_plot(self):
         numHerbs = 0
         numCarns = 0
         for loc in self.island.animals_loc:
-            numCarns += len(loc.carn)
-            numHerbs += len(loc.herb)
+            numCarns += len(self.island.animals_loc[loc].carn)
+            numHerbs += len(self.island.animals_loc[loc].herb)
+
+        return numHerbs, numCarns
 
     def simulate(self, num_years):
         """
@@ -185,51 +158,13 @@ class BioSim:
         while self.year < self._final_year:
             self.island.one_year()
             self.year += 1
-            herb_matrix, carn_matrix = self.island.matrix()
+            numHerbs, numCarns = self.num_animals_plot()
 
             if self.year % self.vis_years == 0:
-                self._graphics.update(self.year, herb_matrix, carn_matrix, self.cmax_herb, self.cmax_carn,
-                                      self.island)
+                self._graphics.update(self.year, self.cmax_herb, self.cmax_carn,
+                                      self.island, numHerbs, numCarns)
 
 
-
-
-
-        # # self.plot_map()
-        # random.seed(self.seed)
-        #
-        # fig = plt.figure()
-        #
-        # # normal subplots
-        # ax1 = fig.add_subplot(3, 3, 1)
-        # ax1.axis('off')
-        # ax1 = self.plot_map(ax1)
-        # ax2 = fig.add_subplot(3, 3, 3)
-        # ax3 = fig.add_subplot(3, 3, 4)
-        # ax4 = fig.add_subplot(3, 3, 6)
-        # ax5 = fig.add_subplot(3, 3, 7)
-        # ax6 = fig.add_subplot(3, 3, 8)
-        # ax7 = fig.add_subplot(3, 3, 9)
-        #
-        # # axes for text
-        # axt = fig.add_axes([0.4, 0.8, 0.2, 0.2])  # llx, lly, w, h
-        # axt.axis('off')  # turn off coordinate system
-        #
-        # template = 'Count: {:5d}'
-        # txt = axt.text(0.5, 0.5, template.format(0),
-        #                horizontalalignment='center',
-        #                verticalalignment='center',
-        #                transform=axt.transAxes)  # relative coordinates
-        #
-        # plt.pause(0.01)  # pause required to make figure visible
-        #
-        # input('Press ENTER to begin counting')
-        #
-        # for k in range(self.years, num_years):
-        #     txt.set_text(template.format(k))
-        #     plt.pause(0.1)  # pause required to make update visible
-        #
-        # plt.show()
 
         # num_herbs = [len(self.herb)]
         # num_carns = []
@@ -271,6 +206,7 @@ class BioSim:
     # @property
     # def year(self):
     #     """Last year simulated."""
+    #       return self._final.year
     #
     # @property
     # def num_animals(self):

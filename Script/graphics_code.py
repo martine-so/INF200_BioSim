@@ -72,8 +72,8 @@ class Graphics:
         self._histWeight_ax = None
         self._histFitness_ax = None
 
-    def update(self, year, herb_matrix, carn_matrix, cmax_herb, cmax_carn,
-               island):
+    def update(self, year, cmax_herb, cmax_carn,
+               island, numHerbs, numCarns):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -82,13 +82,14 @@ class Graphics:
         :param carn_matrix: array with numbers of carnivores in each island cell (2d array)
         :param sys_mean: current mean value of system
         """
+        herb_matrix, carn_matrix = island.matrix()
         age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
         age_carn, weight_carn, fitness_carn = island.age_fitness_weigth_carn()
 
         self._update_heat_plot_herb(herb_matrix, cmax_herb)
         self._update_heat_plot_carn(carn_matrix, cmax_carn)
         self.count_plot(year)
-        # self._update_animal_graph(step, sys_mean)
+        self._update_animal_graph(year, numHerbs, numCarns)
         self._update_hist_age(age_herb, age_carn)
         self._update_hist_weight(weight_herb, weight_carn)
         self._update_hist_fitness(fitness_herb, fitness_carn)
@@ -212,19 +213,19 @@ class Graphics:
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
 
-        # self._animals_graph_ax.set_xlim(0, final_year+1)
-        #
-        # if self._animals_graph_line is None:
-        #     animals_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
-        #                                    np.full(final_year+1, np.nan))
-        #     self._animals_graph_line = animals_plot[0]
-        # else:
-        #     x_data, y_data = self._animals_graph_line.get_data()
-        #     x_new = np.arange(x_data[-1] + 1, final_year+1)
-        #     if len(x_new) > 0:
-        #         y_new = np.full(x_new.shape, np.nan)
-        #         self._animals_graph_line.set_data(np.hstack((x_data, x_new)),
-        #                                  np.hstack((y_data, y_new)))
+        self._animals_graph_ax.set_xlim(0, final_year+1)
+
+        if self._animals_graph_line is None:
+            animals_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
+                                           np.full(final_year+1, np.nan))
+            self._animals_graph_line = animals_plot[0]
+        else:
+            x_data, y_data = self._animals_graph_line.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_year+1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._animals_graph_line.set_data(np.hstack((x_data, x_new)),
+                                         np.hstack((y_data, y_new)))
 
     def count_plot(self, year):
         self.txt.set_text(self.template.format(year))
@@ -291,53 +292,37 @@ class Graphics:
             plt.colorbar(self._img_heatPlot_carn_axis, ax=self._heatPlot_carn_ax,
                          orientation='vertical')
 
-    def _update_animal_graph(self, step, mean):
-        pass
-        # y_data = self._animals_graph_line.get_ydata()
-        # y_data[step] = mean
-        # self._animals_graph_line.set_ydata(y_data)
+    def _update_animal_graph(self, year, numHerbs, numCarns):
+        y_data = self._animals_graph_line.get_ydata()
+        y_data[year] = numHerbs
+        self._animals_graph_line.set_ydata(y_data)
 
     def _update_hist_age(self, age_herb, age_carn):
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
 
         # Herbs:
-        age = [age for age in sorted(age_herb.keys())]
-        num = [age_herb[key] for key in sorted(age_herb.keys())]
-        self._histAge_ax.step(age, num, label='Herbivores')
-
+        self._histAge_ax.hist(age_herb, label='Herbivores', histtype='step')
         # Carns
-        age = [age for age in sorted(age_carn.keys())]
-        num = [age_carn[key] for key in sorted(age_carn.keys())]
-        self._histAge_ax.step(age, num, label='Carnivores')
+        self._histAge_ax.hist(age_carn, label='Carnivores', histtype='step')
 
     def _update_hist_weight(self, weight_herb, weight_carn):
         self._histWeight_ax.clear()
         self._histWeight_ax.title.set_text('Weight')
 
         # Herbs:
-        weight = [weight for weight in sorted(weight_herb.keys())]
-        num = [weight_herb[key] for key in sorted(weight_herb.keys())]
-        self._histWeight_ax.step(weight, num, label='Herbivores')
-
+        self._histWeight_ax.hist(weight_herb, label='Herbivores', histtype='step')
         # Carns
-        weight = [weight for weight in sorted(weight_carn.keys())]
-        num = [weight_carn[key] for key in sorted(weight_carn.keys())]
-        self._histWeight_ax.step(weight, num, label='Carnivores')
+        self._histWeight_ax.hist(weight_carn, label='Carnivores', histtype='step')
 
     def _update_hist_fitness(self, fitness_herb, fitness_carn):
         self._histFitness_ax.clear()
         self._histFitness_ax.title.set_text('Fitness')
 
         # Herbs:
-        fitness = [fitness for fitness in sorted(fitness_herb.keys())]
-        num = [fitness_herb[key] for key in sorted(fitness_herb.keys())]
-        self._histFitness_ax.step(fitness, num, label='Herbivores')
-
+        self._histFitness_ax.hist(fitness_herb, label='Herbivores', histtype='step')
         # Carns
-        fitness = [fitness for fitness in sorted(fitness_carn.keys())]
-        num = [fitness_carn[key] for key in sorted(fitness_carn.keys())]
-        self._histFitness_ax.step(fitness, num, label='Carnivores')
+        self._histFitness_ax.hist(fitness_carn, label='Carnivores', histtype='step')
         self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
                                     fancybox=True, shadow=True)
 
