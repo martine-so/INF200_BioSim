@@ -15,6 +15,14 @@ class BioSim:
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
 
+        row_len = len(island_map.split()[0])
+        for row in island_map.split():
+            if len(row) != row_len:
+                raise ValueError('Inconsistent length on map rows')
+            for col in row:
+                if col not in {'L', 'W', 'D', 'H'}:
+                    raise ValueError('Invalid landscape type')
+
         self.island_map = island_map        # In use on graph
         self.ini_pop = ini_pop              # In use on graph
         self.seed = seed                    # In use on graph
@@ -34,7 +42,7 @@ class BioSim:
             if 'Carnivore' in cmax_animals:
                 self.cmax_carn = cmax_animals['Carnivore']
 
-        self.year = 0
+        self.years = 0
         self._final_year = None
         self.herb = []
         self.carn = []
@@ -136,16 +144,16 @@ class BioSim:
         if self.img_years % self.vis_years != 0:
             raise ValueError('img_steps must be multiple of vis_steps')
 
-        self._final_year = self.year + num_years
+        self._final_year = self.years + num_years
         self._graphics.setup(self.ymax_animals, self._final_year, self.img_years)
 
-        while self.year < self._final_year:
+        while self.years < self._final_year:
             self.island.one_year()
-            self.year += 1
+            self.years += 1
             numHerbs, numCarns = self.num_animals_plot()
 
-            if self.year % self.vis_years == 0:
-                self._graphics.update(self.hist_specs, self.year, self.cmax_herb, self.cmax_carn,
+            if self.years % self.vis_years == 0:
+                self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
                                       self.island, numHerbs, numCarns)
 
 
@@ -187,21 +195,22 @@ class BioSim:
         self.island.place_animals(population)
 
 
-    # @property
-    # def year(self):
-    #     """Last year simulated."""
-    #       return self._final.year
-    #
-    # @property
-    # def num_animals(self):
-    #     """Total number of animals on island."""
-    #   num_animals = len(herb) + len(carn)
-    #
-    # @property
-    # def num_animals_per_species(self):
-    #     """Number of animals per species in island, as dictionary."""
-    #   return num_animals_per_species = {'Herbivores': len(self.herb), 'Carnivore': len(self.carn)
-    #
+    @property
+    def year(self):
+        """Last year simulated."""
+        return self._final.year
+
+    @property
+    def num_animals(self):
+        """Total number of animals on island."""
+        numHerbs, numCarns = self.num_animals_plot()
+        return numHerbs + numCarns
+
+    @property
+    def num_animals_per_species(self):
+        """Number of animals per species in island, as dictionary."""
+        return {'Herbivore': len(self.herb), 'Carnivore': len(self.carn)}
+
     # def make_movie(self):
     #     """
     #             Creates MPEG4 movie from visualization images saved.

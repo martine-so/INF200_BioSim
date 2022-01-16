@@ -1,8 +1,8 @@
-from landscape_class import Lowland
-from landscape_class import Highland
-from landscape_class import Desert
-from animals_class import Herbivore
-from animals_class import Carnivore
+from biosim.landscape_class import Lowland
+from biosim.landscape_class import Highland
+from biosim.landscape_class import Desert
+from biosim.animals_class import Herbivore
+from biosim.animals_class import Carnivore
 
 
 def test_add_animals_herb():
