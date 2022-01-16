@@ -221,3 +221,45 @@ class Landscape:
         """
         self.herb = [herb for herb in self.herb if not herb.death()]
         self.carn = [carn for carn in self.carn if not carn.death()]
+
+
+class Lowland(Landscape):
+    """Lowland"""
+
+    # parameters defined at class level
+    f_max = 800
+
+    default_params = {'f_max': f_max}
+
+    def __init__(self):
+        self.fodder = self.f_max
+
+        super().__init__()
+
+
+class Highland(Landscape):
+    """Highland"""
+
+    # parameters defined at class level
+    f_max = 300
+
+    default_params = {'f_max': f_max}
+
+    def __init__(self):
+        self.fodder = self.f_max
+
+        super().__init__()
+
+
+class Desert(Landscape):
+    """Desert"""
+
+    # parameters defined at class level
+    f_max = 0
+
+    default_params = {'f_max': f_max}
+
+    def __init__(self):
+        self.fodder = self.f_max
+
+        super().__init__()

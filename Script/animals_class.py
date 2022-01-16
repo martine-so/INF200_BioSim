@@ -133,3 +133,68 @@ class Animals:
         prob = self.omega * (1 - self.fitness)
         if random.random() < prob or self.w == 0:
             return True
+
+
+class Herbivore(Animals):
+    """How Herbivores behave"""
+
+    # Parameters defined at class level
+    F = 10
+    beta = 0.9
+    phi_age = 0.6
+    phi_weight = 0.1
+    a_half = 40
+    w_half = 10
+    zeta = 3.5
+    w_birth = 8
+    sigma_birth = 1.5
+    xi = 1.2
+    gamma = 0.2
+    eta = 0.05
+    omega = 0.4
+    mu = 0.25
+
+    default_params = {'F': F, 'beta': beta, 'phi_age': phi_age, 'phi_weight': phi_weight, 'a_half': a_half,
+                      'w_half': w_half, 'zeta': zeta, 'w_birth': w_birth, 'sigma_birth': sigma_birth,
+                      'xi': xi, 'gamma': gamma, 'eta': eta, 'omega': omega, 'mu': mu}
+
+    def __init__(self, a=0, w=None, fitness=0):
+        """
+        :param a: age of an animal. Zero as default value.
+        :type a: int
+        :param w: Weight of an animal.
+        :param fitness: Animals fitness
+        """
+        super().__init__(a, w, fitness)
+
+
+class Carnivore(Animals):
+    """How Carnivores behave"""
+
+    # Parameters defined at class level
+    F = 50
+    beta = 0.75
+    phi_age = 0.3
+    phi_weight = 0.4
+    a_half = 40
+    w_half = 4
+    zeta = 3.5
+    w_birth = 6
+    sigma_birth = 1
+    xi = 1.1
+    gamma = 0.8
+    eta = 0.125
+    omega = 0.8
+    mu = 0.4
+
+    default_params = {'F': F, 'beta': beta, 'phi_age': phi_age, 'phi_weight': phi_weight, 'a_half': a_half,
+                      'w_half': w_half, 'zeta': zeta, 'w_birth': w_birth, 'sigma_birth': sigma_birth,
+                      'xi': xi, 'gamma': gamma, 'eta': eta, 'omega': omega, 'mu': mu}
+
+    def __init__(self, a=0, w=None, fitness=0):
+        """
+        :param a: Age of an animal. Zero as default value.
+        :param w: Weight of an animal.
+        :param fitness: Animals fitness
+        """
+        super().__init__(a, w, fitness)
