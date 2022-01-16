@@ -16,6 +16,7 @@ def test_add_animals_herb():
     field.add_animals(pop)
     assert len(field.herb) == init_length + 1
 
+
 def test_add_animals_carn():
     """
     Checks that the method add_animals actually adds animals. Here it does so by adding one carnivore and
@@ -65,7 +66,7 @@ def test_eating_herbivores():
     assert field.herb[0].w == init_w + added_w
 
 
-def test_prob_carn_eating_A():
+def test_prob_carn_eating_a():
     """
     This test checks the probability of a carnivore eating. Here we put fitness for carnivore equal to 1
     and fitness for herbivore equal to 0.5.
@@ -80,7 +81,7 @@ def test_prob_carn_eating_A():
     assert prob == 0.05
 
 
-def test_prob_carn_eating_B():
+def test_prob_carn_eating_b():
     """
     This test checks the probability of a carnivore eating. Here we put fitness for carnivore equal to 1
     and fitness for herbivore equal to 0.
@@ -98,6 +99,15 @@ def test_prob_carn_eating_B():
 
 
 def test_prob_carn_eating_zero():
+    """
+    This test checks the probability of a carnivore eating. Here we put fitness for carnivore equal to 0.5
+    and fitness for herbivore equal to 1.
+    If carn.fitness-herb.fitness is over zero but under DeltaPhiMax=0 the probability is calculated by
+    (carn.fitness - herb.fitness) / DeltaPhiMax.
+    Here it will not be between 0 and DeltaPhiMax.Then we check if carn.fitness > herb.fitness.
+    Here the herbivore has a higher fitness than the carnivore. Then probability of carnivore eating should be equal
+    to zero. The test shows that it is.
+    """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=1))
     field.carn.append(Carnivore(a=5, w=20, fitness=0.5))
@@ -105,9 +115,9 @@ def test_prob_carn_eating_zero():
     assert prob == 0
 
 
-def test_eating_carnivores_Herbs_dying():
+def test_eating_carnivores_herbs_dying():
     """
-    Testing that Herbivores being eaten does die and is removed from herbivore list
+    Testing that Herbivores being eaten does die and is removed from herbivore list.
     """
     field = Highland()
     field.herb.extend([Herbivore(a=5, w=40, fitness=0), Herbivore(a=5, w=20, fitness=0)])
@@ -116,7 +126,14 @@ def test_eating_carnivores_Herbs_dying():
     field.eating_carnivores()
     assert len(field.herb) == 0
 
-def test_eating_carnivores_Not_eat_too_much():
+
+def test_eating_carnivores_not_eat_too_much():
+    """
+    This test checks that a carnivore only eats till full even when there are more food available. We put carnivores
+    fitness equal to 1, herbivores fitness equal to 0 and DeltaPhiMax=0. That way the carnivore will kill all then
+    herbivores until it is full. Here f is default 50. Available food is 60. We check that it only eats 50 and
+    therefore the weight only changes by 50 times beta, where beta is 0.75.
+    """
     field = Highland()
     field.herb.extend([Herbivore(a=5, w=40, fitness=0), Herbivore(a=5, w=20, fitness=0)])
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
@@ -127,10 +144,10 @@ def test_eating_carnivores_Not_eat_too_much():
     field.eating_carnivores()
     assert field.carn[0].w == carn_start_weight + added_weight
 
-def test_eating_carnivores_Herbs_dying():
+
+def test_eating_carnivores_gaining_weight():
     """
-    Testing that Herbivores being eaten does die
-    :return:
+    Testing that carnivore gains weight and the right amount of weight.
     """
     field = Highland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
@@ -142,15 +159,24 @@ def test_eating_carnivores_Herbs_dying():
     field.eating_carnivores()
     assert field.carn[0].w == carn_start_weight + added_weight
 
+
 def test_aging_and_loosing_weight_a():
+    """
+    This test checks that after a year the herbivores has aged a year.
+    """
     field = Desert()
-    field.herb.extend([Herbivore(a=5, w=20), Herbivore(a=5, w=20)])
+    field.herb.extend([Herbivore(a=5, w=20), Herbivore(a=7, w=20)])
     init_a = [herb.a for herb in field.herb]
     field.aging_and_loosing_weight()
     for i in range(len(init_a)):
         assert init_a[i] == field.herb[i].a - 1
 
+
 def test_migrating_animal():
+    """
+    This test sets the params mu=1 and fitness=1 so that the herbivore has to move. Then we check the initial location
+    to see that it is empty, because the herbivore moved to a neighboring cell.
+    """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=1))
     field.herb[0].mu = 1
@@ -159,7 +185,12 @@ def test_migrating_animal():
     newDict = dict[loc].migrating_animal(loc, dict)
     assert len(newDict[loc].herb) == 0
 
+
 def test_breeding():
+    """
+    This test sets the params gamma=1 and fitness=1 so that the probability of breeding is equal to 1.
+    Since both herbivores has a probability of breeding equal to one the number of herbivores should double.
+    """
     field = Lowland()
     field.herb.extend([Herbivore(a=10, w=40, fitness=1), Herbivore(a=10, w=40, fitness=1)])
     field.herb[0].gamma = 1
@@ -167,7 +198,13 @@ def test_breeding():
     field.breeding()
     assert len(field.herb) == 4
 
+
 def test_dying():
+    """
+    This test checks that the herbivores is removed from the list of herbivores if they die.
+    We put the weight of the herbivores equal to zero, then they should both die. We check that the length of the
+    list of herbivores is equal to zero since both die.
+    """
     field = Lowland()
     field.herb.extend([Herbivore(a=5, w=0), Herbivore(a=5, w=0)])
     field.dying()
