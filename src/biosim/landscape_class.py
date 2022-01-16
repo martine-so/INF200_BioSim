@@ -1,6 +1,6 @@
 from operator import attrgetter
-from animals_class import Herbivore
-from animals_class import Carnivore
+from biosim.animals_class import Herbivore
+from biosim.animals_class import Carnivore
 import random
 
 

@@ -1,7 +1,6 @@
-from landscape_class import Lowland
-from landscape_class import Highland
-from landscape_class import Desert
-from operator import attrgetter
+from biosim.landscape_class import Lowland
+from biosim.landscape_class import Highland
+from biosim.landscape_class import Desert
 import random
 import textwrap
 

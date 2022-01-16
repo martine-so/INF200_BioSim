@@ -7,7 +7,7 @@ Full island simulation with herbivores and carnivores.
 __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 import textwrap
-from sim_herb_and_carn import BioSim
+from biosim.sim_herb_and_carn import BioSim
 
 if __name__ == '__main__':
 

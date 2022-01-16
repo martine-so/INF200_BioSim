@@ -5,10 +5,9 @@ Template for BioSim class.
 # The material in this file is licensed under the BSD 3-clause license
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
-from island_class import Island
-import matplotlib.pyplot as plt
-from graphics_code import Graphics
-import random
+from biosim.island_class import Island
+from biosim.graphics_code import Graphics
+
 
 class BioSim:
     def __init__(self, island_map, ini_pop, seed,
