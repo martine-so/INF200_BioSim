@@ -22,6 +22,17 @@ class BioSim:
             for col in row:
                 if col not in {'L', 'W', 'D', 'H'}:
                     raise ValueError('Invalid landscape type')
+            if row[0] != 'W'  and row[-1] != 'W':
+                raise ValueError('Boundary must be W')
+        for col in island_map.split()[0]:
+            if col != 'W':
+                raise ValueError('Boundary must be W')
+        for col in island_map.split()[-1]:
+            if col != 'W':
+                raise ValueError('Boundary must be W')
+
+
+
 
         self.island_map = island_map        # In use on graph
         self.ini_pop = ini_pop              # In use on graph
