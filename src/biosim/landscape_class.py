@@ -38,7 +38,7 @@ class Landscape:
 
     def add_animals(self, pop):
         """
-        Gived a list of dictionaries fornew animals, the method creates new animal class elements by given species,
+        Gives a list of dictionaries for new animals, the method creates new animal class elements by given species,
         age and weight, and place them in the correct list based on species
 
         :param pop: A list of dictionaries containing animals given a species herbivore or carnivore,
