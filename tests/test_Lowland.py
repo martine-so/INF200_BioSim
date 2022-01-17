@@ -1,8 +1,12 @@
-from biosim.landscape_class import Lowland
-from biosim.landscape_class import Highland
-from biosim.landscape_class import Desert
+from biosim.landscape_class import Lowland, Highland, Desert
 from biosim.animals_class import Herbivore
 from biosim.animals_class import Carnivore
+
+
+def test_set_params():
+    field = Lowland()
+    field.set_params({'f_max': 1000})
+    assert field.f_max == 1000
 
 
 def test_add_animals_herb():
@@ -93,7 +97,8 @@ def test_prob_carn_eating_b():
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    field.DeltaPhiMax = 0
+    for carn in field.carn:
+        carn.DeltaPhiMax = 0
     prob = field.prob_carn_eating(field.carn[0], field.herb[0])
     assert prob == 1
 
@@ -120,9 +125,10 @@ def test_eating_carnivores_herbs_dying():
     Testing that Herbivores being eaten does die and is removed from herbivore list.
     """
     field = Highland()
-    field.herb.extend([Herbivore(a=5, w=40, fitness=0), Herbivore(a=5, w=20, fitness=0)])
+    field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    field.DeltaPhiMax = 0
+    for carn in field.carn:
+        carn.DeltaPhiMax = 0
     field.eating_carnivores()
     assert len(field.herb) == 0
 
@@ -137,7 +143,8 @@ def test_eating_carnivores_not_eat_too_much():
     field = Highland()
     field.herb.extend([Herbivore(a=5, w=40, fitness=0), Herbivore(a=5, w=20, fitness=0)])
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    field.DeltaPhiMax = 0
+    for carn in field.carn:
+        carn.DeltaPhiMax = 0
 
     carn_start_weight = field.carn[0].w
     added_weight = (field.herb[0].w + (field.herb[1].w-10)) * field.carn[0].beta
@@ -152,7 +159,8 @@ def test_eating_carnivores_gaining_weight():
     field = Highland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    field.DeltaPhiMax = 0
+    for carn in field.carn:
+        carn.DeltaPhiMax = 0
 
     carn_start_weight = field.carn[0].w
     added_weight = field.herb[0].w * field.carn[0].beta
