@@ -123,35 +123,3 @@ class Island:
                 weight_carn.append(round(carn.w))
                 fitness_carn.append(round(carn.fitness, 2))
         return age_carn, weight_carn, fitness_carn
-
-
-
-geogr = """\
-           WWWWW
-           WWLWW
-           WLLLW
-           WWLWW
-           WWWWW"""
-
-ini_herbs = [{'loc': (3, 3),
-              'pop': [{'species': 'Herbivore',
-                       'age': 5,
-                       'weight': 20}
-                      for _ in range(50)]}]
-
-ini_carns = [{'loc': (2, 3),
-              'pop': [{'species': 'Carnivore',
-                       'age': 5,
-                       'weight': 20}
-                      for _ in range(20)]}]
-
-random.seed(100)
-geogr = textwrap.dedent(geogr)
-island = Island(geogr)
-island.place_animals(ini_herbs)
-island.one_year()
-island.place_animals(ini_carns)
-island.one_year()
-island.matrix()
-# for year in range(10):
-#     island.one_year()
