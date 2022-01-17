@@ -14,11 +14,11 @@ def test_set_params_not_in_new_params():
 
 def test_set_params_():
     """
-    funker ikke???
+    This test checks that parameter gets changed.
     """
     herb = Herbivore()
-    Herbivore.set_params({'w_birth': 20})
-    assert herb.w_birth == 20
+    herb.set_params({'w_birth': 20})
+    assert herb.default_params['w_birth'] == 20
 
 
 def test_set_params_negative():

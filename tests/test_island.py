@@ -30,9 +30,7 @@ def set_params(request):
     yield
     Island.set_params(Island.default_params)
 
-# @pytest.mark.parametrize('set_params', [{'mu': 1}] , indirect=True)
-
-
+@pytest.mark.parametrize('set_params', [{'mu': 1}] , indirect=True)
 def test_migrating():
     geogr = """\
                    WWWWW
@@ -50,9 +48,6 @@ def test_migrating():
     geogr = textwrap.dedent(geogr)
     island = Island(geogr)
     island.place_animals(ini_herbs)
-    for herb in island.animals_loc[(3, 3)].herb:
-        herb.fitness = 1
-        herb.mu = 1
     initial_loc = island.animals_loc
 
     island.migrating()

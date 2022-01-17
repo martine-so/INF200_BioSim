@@ -7,7 +7,7 @@ import pytest
 def test_set_params():
     field = Lowland()
     field.set_params({'f_max': 1000})
-    assert field.f_max == 1000
+    assert field.default_params['f_max'] == 1000
 
 
 def test_set_params_neg():
