@@ -1,12 +1,21 @@
 from biosim.landscape_class import Lowland, Highland, Desert
 from biosim.animals_class import Herbivore
 from biosim.animals_class import Carnivore
+import pytest
 
 
 def test_set_params():
     field = Lowland()
     field.set_params({'f_max': 1000})
     assert field.f_max == 1000
+
+
+def test_set_params_neg():
+    field = Lowland()
+    with pytest.raises(ValueError):
+        field.set_params({'f_max': -100})
+
+
 
 
 def test_add_animals_herb():
