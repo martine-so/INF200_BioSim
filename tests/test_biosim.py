@@ -1,6 +1,6 @@
 import pytest
-from biosim.sim_herb_and_carn import BioSim
-from biosim.animals_class import Herbivore
+from biosim.simulation import BioSim
+from biosim.animals import Herbivore
 
 def test_set_animal_parameters():
     """

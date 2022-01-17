@@ -23,7 +23,7 @@ import os
 import os.path
 import matplotlib.pyplot as plt
 
-from biosim.sim_herb_and_carn import BioSim
+from biosim.simulation import BioSim
 
 
 @pytest.fixture(autouse=True)

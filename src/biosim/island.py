@@ -1,6 +1,6 @@
-from biosim.landscape_class import Lowland
-from biosim.landscape_class import Highland
-from biosim.landscape_class import Desert
+from biosim.landscape import Lowland
+from biosim.landscape import Highland
+from biosim.landscape import Desert
 import random
 import textwrap
 

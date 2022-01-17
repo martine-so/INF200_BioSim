@@ -1,5 +1,5 @@
-from biosim.island_class import Island
-from biosim.animals_class import Herbivore
+from biosim.island import Island
+from biosim.animals import Herbivore
 import textwrap
 import pytest
 

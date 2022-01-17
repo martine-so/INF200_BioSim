@@ -1,5 +1,5 @@
-from biosim.animals_class import Herbivore
-from biosim.animals_class import Carnivore
+from biosim.animals import Herbivore
+from biosim.animals import Carnivore
 import pytest
 
 

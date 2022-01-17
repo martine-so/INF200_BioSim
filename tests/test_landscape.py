@@ -1,6 +1,6 @@
-from biosim.landscape_class import Lowland, Highland, Desert
-from biosim.animals_class import Herbivore
-from biosim.animals_class import Carnivore
+from biosim.landscape import Lowland, Highland, Desert
+from biosim.animals import Herbivore
+from biosim.animals import Carnivore
 import pytest
 
 

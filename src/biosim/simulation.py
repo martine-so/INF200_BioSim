@@ -5,6 +5,11 @@ Template for BioSim class.
 # The material in this file is licensed under the BSD 3-clause license
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
+from biosim.island import Island
+from biosim.animals import Herbivore, Carnivore
+from biosim.landscape import Lowland, Highland, Desert
+from biosim.graphics import Graphics
+
 
 class BioSim:
     def __init__(self, island_map, ini_pop, seed,
@@ -12,18 +17,56 @@ class BioSim:
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
 
-        self.island_map = island_map
-        self.ini_pop = ini_pop
-        self.seed = seed
+        row_len = len(island_map.split()[0])
+        for row in island_map.split():
+            if len(row) != row_len:
+                raise ValueError('Inconsistent length on map rows')
+            for col in row:
+                if col not in {'L', 'W', 'D', 'H'}:
+                    raise ValueError('Invalid landscape type')
+            if row[0] != 'W'  and row[-1] != 'W':
+                raise ValueError('Boundary must be W')
+        for col in island_map.split()[0]:
+            if col != 'W':
+                raise ValueError('Boundary must be W')
+        for col in island_map.split()[-1]:
+            if col != 'W':
+                raise ValueError('Boundary must be W')
+
+
+        self.island_map = island_map        # In use on graph
+        self.ini_pop = ini_pop              # In use on graph
+        self.seed = seed                    # In use on graph
         self.vis_years = vis_years
-        self.ymax_animals = ymax_animals
-        self.cmax_aminals = cmax_animals
-        self.hist_specs = hist_specs
         self.img_dir = img_dir
         self.img_base = img_base
         self.img_fmt = img_fmt
         self.img_years = img_years
         self.log_file = log_file
+        self.hist_specs = hist_specs
+
+        self.cmax_herb = 200
+        self.cmax_carn = 50
+        if cmax_animals is not None:
+            if 'Herbivore' in cmax_animals:
+                self.cmax_herb = cmax_animals['Herbivore']
+            if 'Carnivore' in cmax_animals:
+                self.cmax_carn = cmax_animals['Carnivore']
+
+        self.years = 0
+        self._final_year = 0
+        self.herb = []
+        self.carn = []
+
+        if ymax_animals is None:
+            self.ymax_animals = 6000
+        else:
+            self.ymax_animals = ymax_animals  # In use on graph
+
+        self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, img_name=self.img_base, island_map=self.island_map)
+        self.island = Island(self.island_map)
+        self.island.place_animals(self.ini_pop)
+        self.coordinates = [i['loc'] for i in self.ini_pop]
 
         """
         :param island_map: Multi-line string specifying island geography
@@ -67,38 +110,11 @@ class BioSim:
         :param params: Dict with valid parameter specification for species
         """
 
-        @classmethod
-        def set_params(cls, new_params):
-            """Set class parameters
-            """
+        if species == 'Herbivore':
+            Herbivore.set_params(params)
+        elif species == 'Carnivore':
+            Carnivore.set_params(params)
 
-            for key in new_params:
-                if key not in ('???', '???'):
-                    raise KeyError('Invalid parameter name: ' + key)
-
-            for key in new_params:
-                if not 0 <= new_params[key]:
-                    raise ValueError('All parametervalues must be positiv')
-                cls.key = new_params[key]
-
-            if 'eta' in new_params:
-                if not new_params['eta'] <= 1:
-                    raise ValueError('eta must be in [0, 1].')
-                cls.eta = new_params['eta']
-
-            if 'DeltaPhiMax' in new_params:
-                if not 0 < new_params['DeltaPhiMax']:
-                    raise ValueError('DeltaPhiMax must be higher than 0')
-                cls.DeltaPhiMax = new_params['DeltaPhiMax']
-
-        @classmethod
-        def get_params(cls):
-            """Get class parameters"""
-            return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
-                    'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zigma, 'w_birth': cls.w_birth,
-                    'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
-                    'omega': cls.omega}
-            # mu skal også inn her når de beveger seg
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -107,6 +123,23 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        if landscape == 'L':
+            Lowland.set_params(params)
+        elif landscape == 'H':
+            Highland.set_params(params)
+        elif landscape == 'D':
+            Desert.set_params(params)
+
+
+
+    def num_animals_plot(self):
+        numHerbs = 0
+        numCarns = 0
+        for loc in self.island.animals_loc:
+            numCarns += len(self.island.animals_loc[loc].carn)
+            numHerbs += len(self.island.animals_loc[loc].herb)
+
+        return numHerbs, numCarns
 
     def simulate(self, num_years):
         """
@@ -114,6 +147,28 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
+        self._final_year = self.years + num_years
+        if self.vis_years > 0:
+            if self.img_years is None:
+                self.img_years = self.vis_years
+
+            if self.img_years % self.vis_years != 0:
+                raise ValueError('img_steps must be multiple of vis_steps')
+
+            self._graphics.setup(self.ymax_animals, self._final_year, self.img_years)
+
+            while self.years < self._final_year:
+                self.island.one_year()
+                self.years += 1
+                numHerbs, numCarns = self.num_animals_plot()
+
+                if self.years % self.vis_years == 0:
+                    self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
+                                          self.island, numHerbs, numCarns, self.vis_years)
+        else:
+            while self.years < self._final_year:
+                self.island.one_year()
+                self.years += 1
 
     def add_population(self, population):
         """
@@ -121,18 +176,34 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
+        self.island.place_animals(population)
+
 
     @property
     def year(self):
         """Last year simulated."""
+        return self._final_year
 
     @property
     def num_animals(self):
         """Total number of animals on island."""
+        numHerbs, numCarns = self.num_animals_plot()
+        return numHerbs + numCarns
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
+        numHerbs, numCarns = self.num_animals_plot()
+        return {'Herbivore': numHerbs, 'Carnivore': numCarns}
 
     def make_movie(self):
-        """Create MPEG4 movie from visualization images saved."""
+        """
+                Creates MPEG4 movie from visualization images saved.
+
+                .. :note:
+                    Requires ffmpeg for MP4 and magick for GIF
+
+                The movie is stored as img_base + movie_fmt.
+                """
+
+        self._graphics.make_movie()
