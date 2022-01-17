@@ -24,6 +24,7 @@ and geography of the island. In BioSim you can also choose the initial populatio
 place them. There are two different species you can place on the island, herbivores and carnivores.
 BioSim includes default values for all the params for landscape and animals, or you can easily set the params as you 
 please.
+BioSim provides a few examples that can help you get started with your own simulation project. 
 
 ##License 
 See LICENSE.txt for details and copyright.
