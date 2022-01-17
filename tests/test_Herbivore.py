@@ -3,6 +3,39 @@ from biosim.animals_class import Carnivore
 import pytest
 
 
+def test_set_params_not_in_new_params():
+    """
+    This test checks that KeyError is raised if param is not in new_params.
+    Here we tested it with a typo in w_birth
+    """
+    with pytest.raises(KeyError):
+        Herbivore().set_params({'w_birt': 8})
+
+
+def test_set_params_negative():
+    """
+    This test checks that setting params as negative values raises ValueError.
+    """
+    with pytest.raises(ValueError):
+        Carnivore().set_params({'beta': -2})
+
+
+def test_set_params_eta():
+    """
+    This test checks that setting the param eat as a value of outside of [0,1] raises ValueError.
+    """
+    with pytest.raises(ValueError):
+        Herbivore().set_params({'eta': 3})
+
+
+def test_set_params_deltaphimax():
+    """
+    This test checks that setting the param DeltaPhiMax as a value of zero or less raises ValueError.
+    """
+    with pytest.raises(ValueError):
+        Carnivore().set_params({'DeltaPhiMax': 0})
+
+
 def test_a_w_fitness_is_negative():
     """
     Tests that value error is raised if any the animals attributes initial values
