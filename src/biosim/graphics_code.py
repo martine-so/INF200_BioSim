@@ -277,10 +277,10 @@ class Graphics:
 
         ax_im.imshow(map_rgb)
 
-        ax_im.set_xticks(range(len(map_rgb[0])))
-        ax_im.set_xticklabels(range(1, 1 + len(map_rgb[0])))
-        ax_im.set_yticks(range(len(map_rgb)))
-        ax_im.set_yticklabels(range(1, 1 + len(map_rgb)))
+        ax_im.set_xticks(np.linspace(0, len(map_rgb[0])-1, 5))
+        ax_im.set_xticklabels(np.linspace(1, len(map_rgb[0]), 5, dtype=int))
+        ax_im.set_yticks(np.linspace(0, len(map_rgb)-1, 5))
+        ax_im.set_yticklabels(np.linspace(1, len(map_rgb), 5, dtype=int))
 
         ax_lg = subplot.inset_axes([0.85, 0.1, 0.1, 0.8])  # llx, lly, w, h
         ax_lg.axis('off')

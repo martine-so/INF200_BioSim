@@ -16,12 +16,12 @@ class Landscape:
         """
 
         for key in new_params:
-            if key != 'f_max':
+            if key in cls.default_params:
+                if not 0 <= new_params['f_max']:
+                    raise ValueError('f_max values must be positive')
+                cls.default_params.update(new_params)
+            else:
                 raise KeyError('Invalid parameter name: ' + key)
-            if not 0 <= new_params['f_max']:
-                raise ValueError('f_max values must be positive')
-
-        cls.default_params.update(new_params)
 
     def __init__(self):
         """

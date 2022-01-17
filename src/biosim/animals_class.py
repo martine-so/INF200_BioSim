@@ -13,21 +13,20 @@ class Animals:
         """
 
         for key in new_params:
-            if key not in ('F', 'beta', 'phi_age', 'phi_weight', 'a_half', 'w_half', 'zeta', 'w_birth',
-                           'sigma_birth', 'xi', 'gamma', 'eta', 'omega', 'mu', 'DeltaPhiMax'):
+            if key in cls.default_params:
+                if not 0 <= new_params[key]:
+                    raise ValueError('All parameter values must be positive')
+
+                if key == 'eta':
+                    if not new_params['eta'] <= 1:
+                        raise ValueError('eta must be in [0, 1].')
+
+                if key == 'DeltaPhiMax':
+                    if not 0 < new_params['DeltaPhiMax']:
+                        raise ValueError('DeltaPhiMax must be higher than 0')
+                cls.default_params.update(new_params)
+            else:
                 raise KeyError('Invalid parameter name: ' + key)
-
-            if not 0 <= new_params[key]:
-                raise ValueError('All parameter values must be positive')
-
-            if key == 'eta':
-                if not new_params['eta'] <= 1:
-                    raise ValueError('eta must be in [0, 1].')
-
-            if key == 'DeltaPhiMax':
-                if not 0 < new_params['DeltaPhiMax']:
-                    raise ValueError('DeltaPhiMax must be higher than 0')
-        cls.default_params.update(new_params)
 
     def __init__(self, a=0, w=None, fitness=0):
         """

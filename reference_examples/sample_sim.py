@@ -7,7 +7,7 @@ Full island simulation with herbivores and carnivores.
 __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 import textwrap
-from biosim.simulation import BioSim
+from biosim.sim_herb_and_carn import BioSim
 
 if __name__ == '__main__':
 
@@ -55,6 +55,6 @@ if __name__ == '__main__':
                  img_dir='results',
                  img_base='sample')
     sim.simulate(400)
-    sim.make_movie()
+    # sim.make_movie()
 
     input('Press ENTER')
