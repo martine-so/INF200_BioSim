@@ -76,6 +76,9 @@ class Island:
             self.animals_loc[i].dying()
 
     def matrix(self):
+        """
+        Method that makes a matrix with all coordinates and how many herbivores and carnivores is in each cell.
+        """
         herb_dict = {}
         carn_dict = {}
         for i in range(len(self.island_map)):
@@ -103,6 +106,10 @@ class Island:
         return herb_matrix, carn_matrix
 
     def age_fitness_weigth_herb(self):
+        """
+        Method that makes three lists for herbivores. One for weight, one for age and one for fitness.
+        These are used later when visualizing.
+        """
         age_herb = []
         weight_herb = []
         fitness_herb = []
@@ -114,6 +121,10 @@ class Island:
         return age_herb, weight_herb, fitness_herb
 
     def age_fitness_weigth_carn(self):
+        """
+        Method that makes three lists for carnivores. One for weight, one for age and one for fitness.
+        These are used later when visualizing.
+        """
         age_carn = []
         weight_carn = []
         fitness_carn = []
