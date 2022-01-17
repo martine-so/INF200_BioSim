@@ -48,6 +48,7 @@ def test_reset_fodder_and_moved_f():
     Here it tests for landscape type lowland where f_max=800 as default.
     """
     field = Lowland()
+    Lowland.set_params({'f_max': 800})
     field.fodder = 500
     field.reset_fodder_and_moved()
     assert field.fodder == field.f_max
@@ -196,7 +197,7 @@ def test_migrating_animal():
     """
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=1))
-    field.herb[0].mu = 1
+    Herbivore.set_params({'mu': 1})
     loc = (3, 3)
     dict = {(2, 3): Lowland(), (3, 2): Lowland(), (3, 3): field, (3, 4): Lowland(), (4, 3): Lowland()}
     newDict = dict[loc].migrating_animal(loc, dict)
@@ -210,8 +211,7 @@ def test_breeding():
     """
     field = Lowland()
     field.herb.extend([Herbivore(a=10, w=40, fitness=1), Herbivore(a=10, w=40, fitness=1)])
-    field.herb[0].gamma = 1
-    field.herb[1].gamma = 1
+    Herbivore.set_params({'gamma': 1})
     field.breeding()
     assert len(field.herb) == 4
 

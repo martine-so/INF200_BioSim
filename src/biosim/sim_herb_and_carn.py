@@ -164,7 +164,7 @@ class BioSim:
 
                 if self.years % self.vis_years == 0:
                     self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
-                                          self.island, numHerbs, numCarns)
+                                          self.island, numHerbs, numCarns, self.vis_years)
         else:
             while self.years < self._final_year:
                 self.island.one_year()
@@ -196,14 +196,14 @@ class BioSim:
         numHerbs, numCarns = self.num_animals_plot()
         return {'Herbivore': numHerbs, 'Carnivore': numCarns}
 
-    # def make_movie(self):
-    #     """
-    #             Creates MPEG4 movie from visualization images saved.
-    #
-    #             .. :note:
-    #                 Requires ffmpeg for MP4 and magick for GIF
-    #
-    #             The movie is stored as img_base + movie_fmt.
-    #             """
-    #
-    #     self._graphics.make_movie(movie_fmt)
+    def make_movie(self):
+        """
+                Creates MPEG4 movie from visualization images saved.
+
+                .. :note:
+                    Requires ffmpeg for MP4 and magick for GIF
+
+                The movie is stored as img_base + movie_fmt.
+                """
+
+        self._graphics.make_movie()

@@ -49,6 +49,8 @@ class Graphics:
             img_name = _DEFAULT_GRAPHICS_NAME
 
         if img_dir is not None:
+            if not os.path.isdir(img_dir):
+                os.mkdir(img_dir)
             self._img_base = os.path.join(img_dir, img_name)
         else:
             self._img_base = None
@@ -74,7 +76,7 @@ class Graphics:
         self._histFitness_ax = None
 
     def update(self, hist_specs, year, cmax_herb, cmax_carn,
-               island, numHerbs, numCarns):
+               island, numHerbs, numCarns, vis_years):
         """
         Updates graphics with current data and save to file if necessary.
 
@@ -100,7 +102,7 @@ class Graphics:
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
-        self._save_graphics(year)
+        self._save_graphics(year, vis_years)
 
     def make_movie(self, movie_fmt=None):
         """
@@ -194,14 +196,23 @@ class Graphics:
         elif self._animals_graph_ax is not None:
             self._animals_graph_ax.set_xlim(0, final_year + 1)
 
+        map = self.island_map.split()
         if self._heatPlot_herb_ax is None:
             self._heatPlot_herb_ax = self._fig.add_subplot(3, 2, 3)
             self._heatPlot_herb_ax.title.set_text('Herbivore distribution')
+            self._heatPlot_herb_ax.set_xticks(np.linspace(0, len(map[0]) - 1, 5))
+            self._heatPlot_herb_ax.set_xticklabels(np.linspace(1, len(map[0]), 5, dtype=int))
+            self._heatPlot_herb_ax.set_yticks(np.linspace(0, len(map) - 1, 5))
+            self._heatPlot_herb_ax.set_yticklabels(np.linspace(1, len(map), 5, dtype=int))
             self._img_heatPlot_herb_axis = None
 
         if self._heatPlot_carn_ax is None:
             self._heatPlot_carn_ax = self._fig.add_subplot(3, 2, 4)
             self._heatPlot_carn_ax.title.set_text('Carnivore distribution')
+            self._heatPlot_carn_ax.set_xticks(np.linspace(0, len(map[0]) - 1, 5))
+            self._heatPlot_carn_ax.set_xticklabels(np.linspace(1, len(map[0]), 5, dtype=int))
+            self._heatPlot_carn_ax.set_yticks(np.linspace(0, len(map) - 1, 5))
+            self._heatPlot_carn_ax.set_yticklabels(np.linspace(1, len(map), 5, dtype=int))
             self._img_heatPlot_herb_axis = None
 
         if self._histAge_ax is None:
@@ -383,18 +394,19 @@ class Graphics:
         self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
                                     fancybox=True, shadow=True)
 
-    def _save_graphics(self, year):
+    def _save_graphics(self, year, vis_years):
         """
         Saves graphics to file if file name given.
         Code authored by: Hans Ekkehard Plesser
 
-        :param:
+        :param year: ...
         """
 
-        if self._img_base is None or year % self._img_year != 0:
-            return
+        if self._img_base is not None or (year % self._img_year) == 0 or vis_years != 0:
 
-        plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
-                                                     num=self._img_ctr,
-                                                     type=self._img_fmt))
-        self._img_ctr += 1
+            plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
+                                                         num=self._img_ctr,
+                                                         type=self._img_fmt))
+            self._img_ctr += 1
+        else:
+            return

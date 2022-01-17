@@ -235,7 +235,7 @@ def test_breeding_herb_works():
     herb = Herbivore(a=10, w=40)
     # herb.calculate_fitness()
     herb.fitness = 1
-    herb.gamma = 1
+    Herbivore.set_params({'gamma': 1})
     breeding = herb.breeding(2)
     assert breeding is not None
 
@@ -341,7 +341,7 @@ def test_migrating_herb():
     Checks that animals move when probability is 1 and they have not moved before
     """
     herb = Herbivore()
-    herb.mu = 1
+    Herbivore.set_params({'mu': 1})
     herb.fitness = 1
     assert herb.migrating() is True
 
@@ -358,7 +358,7 @@ def test_migrating_carn():
     Checks that animals move when probability is 1 and they have not moved before
     """
     carn = Carnivore()
-    carn.mu = 1
+    Carnivore.set_params({'mu': 1})
     carn.fitness = 1
     assert carn.migrating() is True
 
