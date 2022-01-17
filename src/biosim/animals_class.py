@@ -13,8 +13,8 @@ class Animals:
         """
 
         for key in new_params:
-            if key not in ('beta', 'phi_age', 'phi_weight', 'a_half', 'w_half', 'zeta', 'w_birth',
-                           'sigma_birth', 'xi', 'gamma', 'eta', 'omega'):
+            if key not in ('F', 'beta', 'phi_age', 'phi_weight', 'a_half', 'w_half', 'zeta', 'w_birth',
+                           'sigma_birth', 'xi', 'gamma', 'eta', 'omega', 'mu', 'DeltaPhiMax'):
                 raise KeyError('Invalid parameter name: ' + key)
 
             if not 0 <= new_params[key]:
@@ -28,14 +28,6 @@ class Animals:
                 if not 0 < new_params['DeltaPhiMax']:
                     raise ValueError('DeltaPhiMax must be higher than 0')
             cls.key = new_params[key]
-
-    @classmethod
-    def get_params(cls):
-        """ Get classparameters"""
-        return {'F': cls.F, 'beta': cls.beta, 'phi_age': cls.phi_age, 'phi_weight': cls.phi_weight,
-                'a_half': cls.a_half, 'w_half': cls.w_half, 'zeta': cls.zeta, 'w_birth': cls.w_birth,
-                'sigma_birth': cls.sigma_birth, 'xi': cls.xi, 'gamma': cls.gamma, 'eta': cls.eta,
-                'omega': cls.omega, 'mu': cls.mu, 'DeltaPhiMax': cls.DeltaPhiMax}
 
     def __init__(self, a=0, w=None, fitness=0):
         """

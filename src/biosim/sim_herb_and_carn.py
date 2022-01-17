@@ -6,6 +6,8 @@ Template for BioSim class.
 # https://opensource.org/licenses/BSD-3-Clause
 # (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
 from biosim.island_class import Island
+from biosim.animals_class import Herbivore, Carnivore
+from biosim.landscape_class import Lowland, Highland, Desert
 from biosim.graphics_code import Graphics
 
 
@@ -54,7 +56,7 @@ class BioSim:
                 self.cmax_carn = cmax_animals['Carnivore']
 
         self.years = 0
-        self._final_year = None
+        self._final_year = 0
         self.herb = []
         self.carn = []
 
@@ -110,11 +112,10 @@ class BioSim:
         :param params: Dict with valid parameter specification for species
         """
 
-        # if species == 'Herbivore':
-        #     Herbivore.set_params(params)
-        # elif species == 'Carnivore':
-        #     Carnivore.set_params(params)
-        pass
+        if species == 'Herbivore':
+            Herbivore.set_params(params)
+        elif species == 'Carnivore':
+            Carnivore.set_params(params)
 
 
     def set_landscape_parameters(self, landscape, params):
@@ -124,13 +125,12 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        # if landscape == 'L':
-        #     Lowland.set_params(params)
-        # elif landscape == 'H':
-        #     Highland.set_params(params)
-        # elif landscape == 'D':
-        #     Desert.set_params(params)
-        pass
+        if landscape == 'L':
+            Lowland.set_params(params)
+        elif landscape == 'H':
+            Highland.set_params(params)
+        elif landscape == 'D':
+            Desert.set_params(params)
 
 
 
@@ -149,53 +149,28 @@ class BioSim:
 
         :param num_years: number of years to simulate
         """
-        if self.img_years is None:
-            self.img_years = self.vis_years
-
-        if self.img_years % self.vis_years != 0:
-            raise ValueError('img_steps must be multiple of vis_steps')
-
         self._final_year = self.years + num_years
-        self._graphics.setup(self.ymax_animals, self._final_year, self.img_years)
+        if self.vis_years > 0:
+            if self.img_years is None:
+                self.img_years = self.vis_years
 
-        while self.years < self._final_year:
-            self.island.one_year()
-            self.years += 1
-            numHerbs, numCarns = self.num_animals_plot()
+            if self.img_years % self.vis_years != 0:
+                raise ValueError('img_steps must be multiple of vis_steps')
 
-            if self.years % self.vis_years == 0:
-                self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
-                                      self.island, numHerbs, numCarns)
+            self._graphics.setup(self.ymax_animals, self._final_year, self.img_years)
 
+            while self.years < self._final_year:
+                self.island.one_year()
+                self.years += 1
+                numHerbs, numCarns = self.num_animals_plot()
 
-
-        # num_herbs = [len(self.herb)]
-        # num_carns = []
-        # num_years_list = list(range(self.years, self.years + num_years+1))
-        # field = self.island.animals_loc[self.coordinates[0]]
-        #
-        # for year in range(num_years):
-        #     field.reset_fodder()
-        #     field.eating_herbivores()
-        #     field.eating_carnivores()
-        #     field.breeding()
-        #     # print(len(animals))
-        #     field.aging_and_loosing_weight()
-        #     field.dying()
-        #     self.herb = field.herb
-        #     self.carn = field.carn
-        #
-        #     num_herbs.append(len(self.herb))
-        #     num_carns.append(len(self.carn))
-        #     print(len(self.herb), len(self.carn))
-        #
-        # plt.figure()
-        # plt.plot(num_years_list, num_herbs)
-        # plt.ylim(0, self.ymax_animals)
-        # plt.show()
-        #
-        # self.years += num_years
-
+                if self.years % self.vis_years == 0:
+                    self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
+                                          self.island, numHerbs, numCarns)
+        else:
+            while self.years < self._final_year:
+                self.island.one_year()
+                self.years += 1
 
     def add_population(self, population):
         """
@@ -209,7 +184,7 @@ class BioSim:
     @property
     def year(self):
         """Last year simulated."""
-        return self._final.year
+        return self._final_year
 
     @property
     def num_animals(self):

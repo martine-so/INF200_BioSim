@@ -331,12 +331,13 @@ class Graphics:
     def _update_hist_age(self, hist_specs, age_herb, age_carn):
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
-        if 'age' in hist_specs:
-            x_lim = hist_specs['age']['max']
-            width = hist_specs['age']['delta']
-        else:
-            x_lim = 40
-            width = 2
+
+        x_lim = 40
+        width = 2
+        if hist_specs is not None:
+            if 'age' in hist_specs:
+                x_lim = hist_specs['age']['max']
+                width = hist_specs['age']['delta']
 
         n = int(x_lim / width)
         # Herbs:
@@ -348,12 +349,12 @@ class Graphics:
     def _update_hist_weight(self, hist_specs, weight_herb, weight_carn):
         self._histWeight_ax.clear()
         self._histWeight_ax.title.set_text('Weight')
-        if 'weight' in hist_specs:
-            x_lim = hist_specs['weight']['max']
-            width = hist_specs['weight']['delta']
-        else:
-            x_lim = 100
-            width = 2
+        x_lim = 100
+        width = 2
+        if hist_specs is not None:
+            if 'weight' in hist_specs:
+                x_lim = hist_specs['weight']['max']
+                width = hist_specs['weight']['delta']
 
         n = int(x_lim/width)
         # Herbs:
@@ -365,12 +366,12 @@ class Graphics:
     def _update_hist_fitness(self, hist_specs, fitness_herb, fitness_carn):
         self._histFitness_ax.clear()
         self._histFitness_ax.title.set_text('Fitness')
-        if 'fitness' in hist_specs:
-            x_lim = hist_specs['fitness']['max']
-            width = hist_specs['fitness']['delta']
-        else:
-            x_lim = 1
-            width = 0.05
+        x_lim = 1
+        width = 0.05
+        if hist_specs is not None:
+            if 'fitness' in hist_specs:
+                x_lim = hist_specs['fitness']['max']
+                width = hist_specs['fitness']['delta']
 
         n = int(x_lim / width)
 
