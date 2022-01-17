@@ -24,7 +24,7 @@ class Animals:
                 if key == 'DeltaPhiMax':
                     if not 0 < new_params['DeltaPhiMax']:
                         raise ValueError('DeltaPhiMax must be higher than 0')
-                cls.default_params.update(new_params)
+                cls.default_params[key] = new_params[key]
             else:
                 raise KeyError('Invalid parameter name: ' + key)
 
@@ -45,7 +45,7 @@ class Animals:
         self.moved = False
 
         if w is None:
-            self.w = random.gauss(self.w_birth, self.sigma_birth)
+            self.w = random.gauss(self.default_params['w_birth'], self.default_params['sigma_birth'])
         else:
             self.w = w
 
@@ -59,7 +59,7 @@ class Animals:
 
         :param f: amount of food eaten by an animal that year
         """
-        self.w += self.beta * f
+        self.w += self.default_params['beta'] * f
 
     def calculate_fitness(self):
         """"
@@ -69,8 +69,8 @@ class Animals:
             self.fitness = 0
 
         else:
-            self.fitness = (1/(1 + math.exp(self.phi_age * (self.a - self.a_half)))) * \
-                           (1/(1 + math.exp(-self.phi_weight * (self.w - self.w_half))))
+            self.fitness = (1/(1 + math.exp(self.default_params['phi_age'] * (self.a - self.default_params['a_half'])))) * \
+                           (1/(1 + math.exp(-self.default_params['phi_weight'] * (self.w - self.default_params['w_half']))))
 
     def breeding(self, num_of_animals):
         """
@@ -84,12 +84,13 @@ class Animals:
         :rtype: Newborn is animal class object of the same type as animal giving birth
         """
         newborn = type(self)()
-        if self.w < self.zeta * (self.w_birth + self.sigma_birth) or self.w < self.xi * newborn.w:
+        if self.w < self.default_params['zeta'] * (self.default_params['w_birth'] + self.default_params['sigma_birth'])\
+        or self.w < self.default_params['xi'] * newborn.w:
             return None
 
-        prob = min(1, self.gamma * self.fitness * (num_of_animals - 1))
+        prob = min(1, self.default_params['gamma'] * self.fitness * (num_of_animals - 1))
         if random.random() < prob:
-            self.w -= self.xi * newborn.w
+            self.w -= self.default_params['xi'] * newborn.w
             return newborn
         else:
             return None
@@ -102,7 +103,7 @@ class Animals:
         :return: True, if requirements are met
         """
         if self.moved is False:
-            prob = self.mu * self.fitness
+            prob = self.default_params['mu'] * self.fitness
             if random.random() < prob:
                 return True
 
@@ -111,7 +112,7 @@ class Animals:
         Updates the age of an animal by 1 and decreases weight by latest weight times set parameter eta
         """
         self.a += 1
-        self.w -= self.eta * self.w
+        self.w -= self.default_params['eta'] * self.w
 
     def death(self):
         """
@@ -121,7 +122,7 @@ class Animals:
 
         :return: True, if requirements are met
         """
-        prob = self.omega * (1 - self.fitness)
+        prob = self.default_params['omega'] * (1 - self.fitness)
         if random.random() < prob or self.w == 0:
             return True
 

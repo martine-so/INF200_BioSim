@@ -89,10 +89,10 @@ class Island:
             herb_dict[coord] = len(self.animals_loc[coord].herb)
             carn_dict[coord] = len(self.animals_loc[coord].carn)
 
-        temp_x = max([cord[0] for cord in herb_dict.keys()])
-        temp_y = max([cord[1] for cord in herb_dict.keys()])
-        herb_matrix = [[0] * (temp_y) for ele in range(temp_x)]
-        carn_matrix = [[0] * (temp_y) for ele in range(temp_x)]
+        coord_x = max([cord[0] for cord in herb_dict.keys()])
+        coord_y = max([cord[1] for cord in herb_dict.keys()])
+        herb_matrix = [[0] * (coord_y) for ele in range(coord_x)]
+        carn_matrix = [[0] * (coord_y) for ele in range(coord_x)]
 
         for (i, j), val in herb_dict.items():
             herb_matrix[i-1][j-1] = val
@@ -123,35 +123,3 @@ class Island:
                 weight_carn.append(round(carn.w))
                 fitness_carn.append(round(carn.fitness, 2))
         return age_carn, weight_carn, fitness_carn
-
-
-
-geogr = """\
-           WWWWW
-           WWLWW
-           WLLLW
-           WWLWW
-           WWWWW"""
-
-ini_herbs = [{'loc': (3, 3),
-              'pop': [{'species': 'Herbivore',
-                       'age': 5,
-                       'weight': 20}
-                      for _ in range(50)]}]
-
-ini_carns = [{'loc': (2, 3),
-              'pop': [{'species': 'Carnivore',
-                       'age': 5,
-                       'weight': 20}
-                      for _ in range(20)]}]
-
-random.seed(100)
-geogr = textwrap.dedent(geogr)
-island = Island(geogr)
-island.place_animals(ini_herbs)
-island.one_year()
-island.place_animals(ini_carns)
-island.one_year()
-island.matrix()
-# for year in range(10):
-#     island.one_year()

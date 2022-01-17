@@ -19,9 +19,9 @@ class Landscape:
             if key in cls.default_params:
                 if not 0 <= new_params['f_max']:
                     raise ValueError('f_max values must be positive')
-                cls.default_params.update(new_params)
             else:
                 raise KeyError('Invalid parameter name: ' + key)
+        cls.default_params.update(new_params)
 
     def __init__(self):
         """
@@ -47,7 +47,7 @@ class Landscape:
         """
         Resets fodder amount to f_max and runs through every animal in class object and resets moved attribute to False
         """
-        self.fodder = self.f_max
+        self.fodder = self.default_params['f_max']
 
         for herb in self.herb:
             herb.moved = False
@@ -220,7 +220,7 @@ class Lowland(Landscape):
     default_params = {'f_max': f_max}
 
     def __init__(self):
-        self.fodder = self.f_max
+        self.fodder = self.default_params['f_max']
 
         super().__init__()
 
@@ -234,7 +234,7 @@ class Highland(Landscape):
     default_params = {'f_max': f_max}
 
     def __init__(self):
-        self.fodder = self.f_max
+        self.fodder = self.default_params['f_max']
 
         super().__init__()
 
@@ -248,6 +248,6 @@ class Desert(Landscape):
     default_params = {'f_max': f_max}
 
     def __init__(self):
-        self.fodder = self.f_max
+        self.fodder = self.default_params['f_max']
 
         super().__init__()
