@@ -63,7 +63,7 @@ class BioSim:
         else:
             self.ymax_animals = ymax_animals  # In use on graph
 
-        self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, island_map=self.island_map)
+        self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, img_name=self.img_base, island_map=self.island_map)
         self.island = Island(self.island_map)
         self.island.place_animals(self.ini_pop)
         self.coordinates = [i['loc'] for i in self.ini_pop]
