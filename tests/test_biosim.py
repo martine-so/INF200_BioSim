@@ -15,7 +15,7 @@ def test_set_animal_parameters():
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
     bio_sim.set_animal_parameters('Herbivore', {'w_birth': 6})
 
-    assert bio_sim.island.animals_loc[(2, 2)].herb[0].w_birth == 6
+    assert bio_sim.island.animals_loc[(2, 2)].herb[0].default_params["w_birth"] == 6
 
 def test_set_landscape_parameters():
     """
@@ -23,7 +23,7 @@ def test_set_landscape_parameters():
     """
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
     bio_sim.set_landscape_parameters('L', {'f_max': 500})
-    assert bio_sim.island.animals_loc[(2, 2)].f_max == 500
+    assert bio_sim.island.animals_loc[(2, 2)].default_params['f_max'] == 500
 
 def test_num_animals_plot():
     """
