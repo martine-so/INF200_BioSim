@@ -12,6 +12,15 @@ def test_set_params_not_in_new_params():
         Herbivore().set_params({'w_birt': 8})
 
 
+def test_set_params_():
+    """
+    funker ikke???
+    """
+    herb = Herbivore()
+    Herbivore.set_params({'w_birth': 20})
+    assert herb.w_birth == 20
+
+
 def test_set_params_negative():
     """
     This test checks that setting params as negative values raises ValueError.
