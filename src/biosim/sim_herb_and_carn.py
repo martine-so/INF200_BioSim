@@ -34,8 +34,6 @@ class BioSim:
                 raise ValueError('Boundary must be W')
 
 
-
-
         self.island_map = island_map        # In use on graph
         self.ini_pop = ini_pop              # In use on graph
         self.seed = seed                    # In use on graph
@@ -195,7 +193,8 @@ class BioSim:
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
-        return {'Herbivore': len(self.herb), 'Carnivore': len(self.carn)}
+        numHerbs, numCarns = self.num_animals_plot()
+        return {'Herbivore': numHerbs, 'Carnivore': numCarns}
 
     # def make_movie(self):
     #     """

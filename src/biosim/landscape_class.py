@@ -16,17 +16,12 @@ class Landscape:
         """
 
         for key in new_params:
-            if key not in ('f_max', 'DeltaPhiMax'):
+            if key != 'f_max':
                 raise KeyError('Invalid parameter name: ' + key)
+            if not 0 <= new_params['f_max']:
+                raise ValueError('f_max values must be positive')
 
-            if key == 'f_max':
-                if not 0 <= new_params['f_max']:
-                    raise ValueError('f_max values must be positive')
-
-            if key == 'DeltaPhiMax':
-                if not 0 < new_params['DeltaPhiMax']:
-                    raise ValueError('DeltaPhiMax must be higher than 0')
-            cls.key = new_params[key]
+        cls.default_params.update(new_params)
 
     def __init__(self):
         """
