@@ -30,7 +30,9 @@ def set_params(request):
     yield
     Island.set_params(Island.default_params)
 
-@pytest.mark.parameterize('set_params', [{'mu': 1}] , indirect=True)
+# @pytest.mark.parametrize('set_params', [{'mu': 1}] , indirect=True)
+
+
 def test_migrating():
     geogr = """\
                    WWWWW
@@ -42,16 +44,20 @@ def test_migrating():
     ini_herbs = [{'loc': (3, 3),
                   'pop': [{'species': 'Herbivore',
                            'age': 5,
-                           'weight': 20}]}]
+                           'weight': 20}
+                          for _ in range(2)]}]
+
     geogr = textwrap.dedent(geogr)
     island = Island(geogr)
     island.place_animals(ini_herbs)
+    for herb in island.animals_loc[(3, 3)].herb:
+        herb.fitness = 1
+        herb.mu = 1
     initial_loc = island.animals_loc
 
     island.migrating()
-    for loc in initial_loc:
-    # assert len(initial_loc[loc].herb) != len(island.animals_loc[loc].herb)
-        pass
+    assert len(initial_loc[(3, 3)].herb) != len(island.animals_loc[(3, 3)].herb)
+
 
 
 def test_one_year():
