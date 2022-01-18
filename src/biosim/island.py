@@ -32,6 +32,7 @@ class Island:
         If the cell is not on the island or is water a ValueError is risen and the animals are not placed there.
 
         :param pop: List of dictionaries specifying population
+        :type pop: list
         """
         for i in pop:
             if i['loc'] not in self.animals_loc:
@@ -71,6 +72,7 @@ class Island:
     def matrix(self):
         """
         Method that makes a matrix with all coordinates and how many herbivores and carnivores is in each cell.
+        :return: herb_matrix, carn_matrix
         """
         herb_dict = {}
         carn_dict = {}
@@ -101,6 +103,8 @@ class Island:
         """
         Method that makes three lists for herbivores. One for weight, one for age and one for fitness.
         These are used later when visualizing.
+
+        :return: age_herb, weight_herb, fitness_herb
         """
         age_herb = []
         weight_herb = []
@@ -116,6 +120,8 @@ class Island:
         """
         Method that makes three lists for carnivores. One for weight, one for age and one for fitness.
         These are used later when visualizing.
+
+        :return: age_carn, weight_carn, fitness_carn
         """
         age_carn = []
         weight_carn = []

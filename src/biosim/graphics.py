@@ -59,6 +59,7 @@ class Graphics:
 
         self._img_ctr = 0
         self._img_year = 1
+        self.ymax_animals = None
 
         # the following will be initialized by _setup_graphics
         self._fig = None
@@ -89,7 +90,7 @@ class Graphics:
         :param cmax_carn: upper bound on color domain for carnivore heatmap
         :type cmax_carn: int
         :param island: class object of the island the simulation runs on
-        :type island : object
+        :type island: object
         :param numHerbs: Number of herbivores in each island cell
         :type numHerbs: int
         :param numCarns: Number of carnivores in each island cell
@@ -162,13 +163,14 @@ class Graphics:
         the final time step has changed.
 
         :param ymax_animals: y-limit on animal count graph
-        :type ymax_animals : int
+        :type ymax_animals: int
         :param final_year: last year to be visualized (upper limit of x-axis on 'animal count' graph)
-        :type final_year : int
+        :type final_year: int
         :param img_step: interval between saving image to file
-        :type img_step : int
+        :type img_step: int
         """
 
+        self.ymax_animals = ymax_animals
         self._img_year = img_year
         plt.style.use('default')
 
@@ -240,9 +242,6 @@ class Graphics:
 
         plt.pause(0.01)  # pause required to make figure visible
 
-        # needs updating on subsequent calls to simulate()
-        # add 1 so we can show values for time zero and time final_step
-
         # Graph line for Herbivores
         if self._herb_graph_line is None:
             herb_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
@@ -274,8 +273,9 @@ class Graphics:
         Updating year shown in simulation graphics
 
         :param year: Current year being simulated on island
-        :type year : int
+        :type year: int
         """
+
         self.txt.set_text(self.template.format(year))
         plt.pause(0.1)  # pause required to make update visible
 
@@ -287,8 +287,9 @@ class Graphics:
 
         :param subplot: subplot to plot map in
         :param island_map: lines of string
-        :type island_map : str
+        :type island_map: str
         """
+
         # #                   R    G    B
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
                      'L': (0.0, 0.6, 0.0),  # dark green
@@ -365,8 +366,9 @@ class Graphics:
         y_data_carn[year] = numCarns
         self._carn_graph_line.set_ydata(y_data_carn)
 
-        if self._animals_graph_ax.get_ylim()[1] < max(numHerbs, numCarns):
-            self._animals_graph_ax.set_ylim(0, max(numHerbs, numCarns))
+        if self.ymax_animals is None:
+            if self._animals_graph_ax.get_ylim()[1] < max(numHerbs, numCarns):
+                self._animals_graph_ax.set_ylim(0, max(numHerbs, numCarns))
 
     def _update_hist_age(self, hist_specs, age_herb, age_carn):
         """

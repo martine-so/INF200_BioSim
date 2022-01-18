@@ -44,18 +44,16 @@ class BioSim:
         If ymax_animals is None, the y-axis limit should be adjusted automatically.
         If cmax_animals is None, sensible, fixed default values should be used.
         cmax_animals is a dict mapping species names to numbers, e.g.,
-           {'Herbivore': 50, 'Carnivore': 20}
+        {'Herbivore': 50, 'Carnivore': 20}
 
         hist_specs is a dictionary with one entry per property for which a histogram shall be shown.
         For each property, a dictionary providing the maximum value and the bin width must be
         given, e.g.,
-            {'weight': {'max': 80, 'delta': 2}, 'fitness': {'max': 1.0, 'delta': 0.05}}
+        {'weight': {'max': 80, 'delta': 2}, 'fitness': {'max': 1.0, 'delta': 0.05}}
         Permitted properties are 'weight', 'age', 'fitness'.
 
-        If img_dir is None, no figures are written to file. Filenames are formed as
-
-            f'{os.path.join(img_dir, img_base}_{img_number:05d}.{img_fmt}'
-
+        If img_dir is None, no figures are written to file. Filenames are formed as:
+        f'{os.path.join(img_dir, img_base}_{img_number:05d}.{img_fmt}'
         where img_number are consecutive image numbers starting from 0.
 
         img_dir and img_base must either be both None or both strings.
@@ -77,8 +75,8 @@ class BioSim:
             if col != 'W':
                 raise ValueError('Boundary must be W')
 
-        self.island_map = island_map  # In use on graph
-        self.ini_pop = ini_pop  # In use on graph
+        self.island_map = island_map
+        self.ini_pop = ini_pop
         self.vis_years = vis_years
         self.img_dir = img_dir
         self.img_base = img_base
@@ -102,9 +100,9 @@ class BioSim:
         self.log_file = log_file
 
         if ymax_animals is None:
-            self.ymax_animals = 6000
+            self.ymax_animals = None
         else:
-            self.ymax_animals = ymax_animals  # In use on graph
+            self.ymax_animals = ymax_animals
 
         self._graphics = Graphics(img_dir=self.img_dir, img_fmt=self.img_fmt, img_name=self.img_base,
                                   island_map=self.island_map)
@@ -143,21 +141,6 @@ class BioSim:
         elif landscape == 'D':
             Desert.set_params(params)
 
-    def num_animals_plot(self):
-        """
-        This is a method that calculates the number of herbivores and carnivores in total on the island and returns
-        tha value for both.
-        :return: numHerb, numCarn
-        :rtype: int
-        """
-        numHerbs = 0
-        numCarns = 0
-        for loc in self.island.animals_loc:
-            numCarns += len(self.island.animals_loc[loc].carn)
-            numHerbs += len(self.island.animals_loc[loc].herb)
-
-        return numHerbs, numCarns
-
     def simulate(self, num_years):
         """
         Run simulation while visualizing the result.
@@ -178,15 +161,14 @@ class BioSim:
             while self.years < self._final_year:
                 self.island.one_year()
                 self.years += 1
-                numHerbs, numCarns = self.num_animals_plot()
+                numHerbs = self.num_animals_per_species['Herbivore']
+                numCarns = self.num_animals_per_species['Carnivore']
 
                 if self.years % self.vis_years == 0:
                     self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
                                           self.island, numHerbs, numCarns)
 
                 if self.log_file is not None:
-                    numHerbs = self.num_animals_per_species['Herbivore']
-                    numCarns = self.num_animals_per_species['Carnivore']
                     with open(self.log_file, 'a') as infile:
                         infile.writelines(f'{self.years},{numHerbs},{numCarns}\n')
 
@@ -220,7 +202,8 @@ class BioSim:
         :return: numHerb + numCarn
         :rtype: int
         """
-        numHerbs, numCarns = self.num_animals_plot()
+        numHerbs = self.num_animals_per_species['Herbivore']
+        numCarns = self.num_animals_per_species['Carnivore']
         return numHerbs + numCarns
 
     @property
@@ -230,7 +213,11 @@ class BioSim:
         :return: {'Herbivore': numHerbs, 'Carnivore': numCarns}
         :rtype: dict
         """
-        numHerbs, numCarns = self.num_animals_plot()
+        numHerbs = 0
+        numCarns = 0
+        for loc in self.island.animals_loc:
+            numCarns += len(self.island.animals_loc[loc].carn)
+            numHerbs += len(self.island.animals_loc[loc].herb)
         return {'Herbivore': numHerbs, 'Carnivore': numCarns}
 
     def make_movie(self):

@@ -25,25 +25,6 @@ def test_set_landscape_parameters():
     bio_sim.set_landscape_parameters('L', {'f_max': 500})
     assert bio_sim.island.animals_loc[(2, 2)].default_params['f_max'] == 500
 
-
-def test_num_animals_plot():
-    """
-    Testing that method for finding amount of herbivores and carnivores separately
-    works, by checking if correct amount is returned for given species
-    """
-    ini_pop = [{'loc': (2, 2),
-                'pop': [{'species': 'Herbivore',
-                         'age': 5,
-                         'weight': 20}
-                        for _ in range(50)]}]
-    bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
-    herbs_on_island = 0
-    for loc in bio_sim.island.animals_loc:
-        herbs_on_island += len(bio_sim.island.animals_loc[loc].herb)
-    numHerbs, numCarns = bio_sim.num_animals_plot()
-    assert herbs_on_island == numHerbs
-
-
 def test_simulate_and_property_year():
     """
     Testing that year count is correct, even when visualization is not wanted for simulation
@@ -83,5 +64,9 @@ def test_property_num_animals_per_species():
                          'weight': 20}
                         for _ in range(50)]}]
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
-    numHerbs, numCarns = bio_sim.num_animals_plot()
+    numHerbs = 0
+    numCarns = 0
+    for loc in bio_sim.island.animals_loc:
+        numHerbs += len(bio_sim.island.animals_loc[loc].herb)
+        numCarns += len(bio_sim.island.animals_loc[loc].carn)
     assert bio_sim.num_animals_per_species == {'Herbivore': numHerbs, 'Carnivore': numCarns}

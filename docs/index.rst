@@ -6,7 +6,17 @@
 Welcome to Biosim's documentation!
 ==================================
 
-* document code with 'Sphinx <http://sphinx-doc.org>'_
+BioSim is a simulator for population on an island. The program lets you put an initial population of herbivores,
+carnivores or both on an island. You can design the island as you wish, within some criteria. The simulation shows:
+ * Animal count
+      - A graph over total number of animals by species
+ * Histograms
+      - displaying age, weight and fitness for both species.
+ * Counter
+      - counts how many years have passed
+ * Population density map
+      - one for each species. Where the density of population is displayed by different colors and color bars over the years
+Document code with Sphinx: http://sphinx-doc.org
 
 
 .. toctree::
