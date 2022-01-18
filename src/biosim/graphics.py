@@ -87,6 +87,7 @@ class Graphics:
         :param island:
         :param numHerbs: array with numbers of herbivores in each island cell (2d array)
         :param numCarns: array with numbers of carnivores in each island cell (2d array)
+        :param vis_years:
         """
         herb_matrix, carn_matrix = island.matrix()
         age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
@@ -176,7 +177,6 @@ class Graphics:
                                 verticalalignment='center',
                                 transform=axt.transAxes)  # relative coordinates
 
-
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
@@ -185,7 +185,6 @@ class Graphics:
             self._map_ax.title.set_text('Island')
             self._map_ax.axis('off')
             self._map_ax = self.plot_map(self._map_ax, self.island_map)
-
 
         # Add right subplot for line graph of mean.
         if self._animals_graph_ax is None:
@@ -245,12 +244,12 @@ class Graphics:
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
                 self._herb_graph_line.set_data(np.hstack((x_data, x_new)),
-                                                np.hstack((y_data, y_new)))
+                                               np.hstack((y_data, y_new)))
 
         # Graph for Herbivores
         if self._carn_graph_line is None:
             carn_plot = self._animals_graph_ax.plot(np.arange(0, final_year + 1),
-                                                       np.full(final_year + 1, np.nan), label='Carnivores')
+                                                    np.full(final_year + 1, np.nan), label='Carnivores')
             self._carn_graph_line = carn_plot[0]
         else:
             x_data, y_data = self._carn_graph_line.get_data()
@@ -258,7 +257,7 @@ class Graphics:
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
                 self._carn_graph_line.set_data(np.hstack((x_data, x_new)),
-                                                  np.hstack((y_data, y_new)))
+                                               np.hstack((y_data, y_new)))
 
     def count_plot(self, year):
         self.txt.set_text(self.template.format(year))
