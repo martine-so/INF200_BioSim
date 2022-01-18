@@ -61,6 +61,9 @@ class Animals:
         Updates an animal's weight adding given parameter beta multiplied by food eaten
         that year
 
+        .. math::
+           w(x) = {beta} * {f}
+
         :param f: amount of food eaten by an animal that year
         :type f: int
         """
@@ -68,8 +71,10 @@ class Animals:
 
     def calculate_fitness(self):
         """"
-        Calculates and updates an animals fitness as a number between 0 and 1 based on
-
+        Calculates and updates an animals fitness as a number between 0 and 1 based on a formula.
+        Fitness is equal to:
+        (1/ (1 + e^(phi_age * (age - a_half))) * (1/(1 + e^(-phi_weight * (weight - w_half))))
+        If the animals weight is zero or less fitness is zero.
         """
         if self.w <= 0:
             self.fitness = 0
@@ -105,6 +110,9 @@ class Animals:
         """
         Checks if animal has moved before. If not, the method calculates the probability for moving.
         If a generated random number is lower than calculated probability, the method is to return True
+
+        .. math::
+           P(x) = {mu}*fitness
 
         :return: True, if requirements are met
         """
