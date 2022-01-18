@@ -235,7 +235,7 @@ def test_breeding_herb_works():
     herb = Herbivore(a=10, w=40)
     # herb.calculate_fitness()
     herb.fitness = 1
-    Herbivore.set_params({'gamma': 1})
+    Herbivore.set_params({'gamma': 1, 'w_birth': 8})
     breeding = herb.breeding(2)
     assert breeding is not None
 
