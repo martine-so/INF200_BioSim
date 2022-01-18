@@ -76,18 +76,24 @@ class Graphics:
         self._histFitness_ax = None
 
     def update(self, hist_specs, year, cmax_herb, cmax_carn,
-               island, numHerbs, numCarns, vis_years):
+               island, numHerbs, numCarns):
         """
         Updates graphics with current data and save to file if necessary.
 
-        :param hist_specs:
-        :param year: current year
-        :param cmax_herb:
-        :param cmax_carn:
-        :param island:
-        :param numHerbs: array with numbers of herbivores in each island cell (2d array)
-        :param numCarns: array with numbers of carnivores in each island cell (2d array)
-        :param vis_years:
+        :param hist_specs: dictionary with specifications for histograms.
+        :type: dict
+        :param year: current year simulated on island
+        :type: int
+        :param cmax_herb: upper bound on color domain for herbivore heatmap
+        :type: int
+        :param cmax_carn: upper bound on color domain for carnivore heatmap
+        :type: int
+        :param island: class object of the island the simulation runs on
+        :type: class object
+        :param numHerbs: Number of herbivores in each island cell
+        :type: int
+        :param numCarns: Number of carnivores in each island cell
+        :type: int
         """
         herb_matrix, carn_matrix = island.matrix()
         age_herb, weight_herb, fitness_herb = island.age_fitness_weight_herb()
@@ -103,7 +109,7 @@ class Graphics:
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
-        self._save_graphics(year, vis_years)
+        self._save_graphics(year)
 
     def make_movie(self, movie_fmt=None):
         """
@@ -148,7 +154,7 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def setup(self, ymax_animals, final_year, img_step):
+    def setup(self, ymax_animals, final_year, img_year):
         """
         Prepare graphics.
 
@@ -156,11 +162,11 @@ class Graphics:
         the final time step has changed.
 
         :param ymax_animals: y-limit on animal count graph
-        :param final_year: last time step to be visualised (upper limit of x-axis)
+        :param final_year: last year to be visualized (upper limit of x-axis on 'animal count' graph)
         :param img_step: interval between saving image to file
         """
 
-        self._img_step = img_step
+        self._img_year = img_year
         plt.style.use('default')
 
         # create new figure window
@@ -177,16 +183,14 @@ class Graphics:
                                 verticalalignment='center',
                                 transform=axt.transAxes)  # relative coordinates
 
-        # Add left subplot for images created with imshow().
-        # We cannot create the actual ImageAxis object before we know
-        # the size of the image, so we delay its creation.
+        # Creating subplot for island map.
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(3, 3, 1)
             self._map_ax.title.set_text('Island')
             self._map_ax.axis('off')
             self._map_ax = self.plot_map(self._map_ax, self.island_map)
 
-        # Add right subplot for line graph of mean.
+        # Creating subplot for aminal count graph if it does not already exist.
         if self._animals_graph_ax is None:
             self._animals_graph_ax = self._fig.add_subplot(3, 3, 3)
             self._animals_graph_ax.title.set_text('Animal count')
@@ -195,6 +199,7 @@ class Graphics:
         elif self._animals_graph_ax is not None:
             self._animals_graph_ax.set_xlim(0, final_year + 1)
 
+        # Creating subplot for herbivore heat plot if it does not already exist
         map = self.island_map.split()
         if self._heatPlot_herb_ax is None:
             self._heatPlot_herb_ax = self._fig.add_subplot(3, 2, 3)
@@ -205,6 +210,7 @@ class Graphics:
             self._heatPlot_herb_ax.set_yticklabels(np.linspace(1, len(map), 5, dtype=int))
             self._img_heatPlot_herb_axis = None
 
+        # Creating subplot for carnivore heat plot if it does not already exist
         if self._heatPlot_carn_ax is None:
             self._heatPlot_carn_ax = self._fig.add_subplot(3, 2, 4)
             self._heatPlot_carn_ax.title.set_text('Carnivore distribution')
@@ -214,14 +220,17 @@ class Graphics:
             self._heatPlot_carn_ax.set_yticklabels(np.linspace(1, len(map), 5, dtype=int))
             self._img_heatPlot_herb_axis = None
 
+        # Creating subplot for age histogram if it does not already exist
         if self._histAge_ax is None:
             self._histAge_ax = self._fig.add_subplot(3, 3, 7)
             self._histAge_ax.title.set_text('Age')
 
+        # Creating subplot for weight histogram if it does not already exist
         if self._histWeight_ax is None:
             self._histWeight_ax = self._fig.add_subplot(3, 3, 8)
             self._histWeight_ax.title.set_text('Weight')
 
+        # Creating subplot for fitness histogram if it does not already exist
         if self._histFitness_ax is None:
             self._histFitness_ax = self._fig.add_subplot(3, 3, 9)
             self._histFitness_ax.title.set_text('Fitness')
@@ -231,9 +240,7 @@ class Graphics:
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
 
-        # self._animals_graph_ax.set_xlim(0, final_year+1)
-
-        # Graph for Herbivores
+        # Graph line for Herbivores
         if self._herb_graph_line is None:
             herb_plot = self._animals_graph_ax.plot(np.arange(0, final_year+1),
                                            np.full(final_year+1, np.nan), label='Herbivores')
@@ -246,7 +253,7 @@ class Graphics:
                 self._herb_graph_line.set_data(np.hstack((x_data, x_new)),
                                                np.hstack((y_data, y_new)))
 
-        # Graph for Herbivores
+        # Graph line for Carnivores
         if self._carn_graph_line is None:
             carn_plot = self._animals_graph_ax.plot(np.arange(0, final_year + 1),
                                                     np.full(final_year + 1, np.nan), label='Carnivores')
@@ -260,10 +267,13 @@ class Graphics:
                                                np.hstack((y_data, y_new)))
 
     def count_plot(self, year):
+        """
+        Updating year shown in simulation graphics
+
+        :param year: Curreny yeat being simulated on island
+        """
         self.txt.set_text(self.template.format(year))
         plt.pause(0.1)  # pause required to make update visible
-        #
-        # plt.show()
 
     def plot_map(self, subplot, island_map):
         """
@@ -303,7 +313,7 @@ class Graphics:
         Update heat plot for herbivores
 
         :param herb_matrix: ...
-        :param cmax: ...
+        :param cmax: upper bound on color domain for heatmap
         """
         if self._img_heatPlot_herb_axis is not None:
             self._img_heatPlot_herb_axis.set_data(herb_matrix)
@@ -317,8 +327,8 @@ class Graphics:
     def _update_heat_plot_carn(self, carn_matrix, cmax):
         """
         Updates heat plot for carnivores
-        :param carn_matrix: ...
-        :param cmax: ...
+        :param carn_matrix: Matrix containing number of carnivores on each location on the island map
+        :param cmax: upper bound on color domain for heatmap
         """
         if self._img_heatPlot_carn_axis is not None:
             self._img_heatPlot_carn_axis.set_data(carn_matrix)
@@ -330,6 +340,16 @@ class Graphics:
                          orientation='vertical')
 
     def _update_animal_graph(self, year, numHerbs, numCarns):
+        """
+        Update 'animal count' graph to include current year simulated on the island.
+
+        :param year: Current year shown on simulation
+        :type: int
+        :param numHerbs: total amount of herbiovores on the island
+        :type: int
+        :param numCarns: total amount of carnivores on the island
+        :type: int
+        """
         y_data_herb = self._herb_graph_line.get_ydata()
         y_data_herb[year] = numHerbs
         self._herb_graph_line.set_ydata(y_data_herb)
@@ -342,6 +362,15 @@ class Graphics:
             self._animals_graph_ax.set_ylim(0, max(numHerbs, numCarns))
 
     def _update_hist_age(self, hist_specs, age_herb, age_carn):
+        """
+        Update histogram for age, showing only distribution of age for current year
+
+        :param hist_specs: dictionary with histogram specifications
+        :param age_herb: list of age for every herbivore on island
+        :type: list
+        :param age_carn: list of age for every carnivore on island
+        :type: list
+        """
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
 
@@ -353,13 +382,21 @@ class Graphics:
                 width = hist_specs['age']['delta']
 
         n = int(x_lim / width)
-        # Herbs:
         self._histAge_ax.set_xlim(0, x_lim)
         self._histAge_ax.hist(age_herb, n, label='Herbivores', histtype='step')
-        # Carns
         self._histAge_ax.hist(age_carn, n,  label='Carnivores', histtype='step')
 
     def _update_hist_weight(self, hist_specs, weight_herb, weight_carn):
+        """
+        Update histogram for weight, showing only distribution of weight for current year
+
+        :param hist_specs: dictionary with histogram specifications
+        :type: list
+        :param weight_herb: list of weight for every herbivore on island
+        :type: list
+        :param weight_carn: list of weight for every carnivore on island
+        :type: list
+        """
         self._histWeight_ax.clear()
         self._histWeight_ax.title.set_text('Weight')
         x_lim = 100
@@ -370,13 +407,21 @@ class Graphics:
                 width = hist_specs['weight']['delta']
 
         n = int(x_lim/width)
-        # Herbs:
         self._histWeight_ax.set_xlim(0, x_lim)
         self._histWeight_ax.hist(weight_herb, n, label='Herbivores', histtype='step')
-        # Carns
         self._histWeight_ax.hist(weight_carn, n, label='Carnivores', histtype='step')
 
     def _update_hist_fitness(self, hist_specs, fitness_herb, fitness_carn):
+        """
+        Update histogram for fitness, showing only distribution of fitness for current year
+
+        :param hist_specs: dictionary with histogram specifications
+        :type: dict
+        :param fitness_herb: list of fitness for every herbivore on island
+        :type: list
+        :param fitness_carn:  list of fitness for every carnivore on island
+        :type: list
+        """
         self._histFitness_ax.clear()
         self._histFitness_ax.title.set_text('Fitness')
         x_lim = 1
@@ -388,23 +433,22 @@ class Graphics:
 
         n = int(x_lim / width)
 
-        # Herbs:
         self._histFitness_ax.set_xlim(0, x_lim)
         self._histFitness_ax.hist(fitness_herb, n, label='Herbivores', histtype='step')
-        # Carns
         self._histFitness_ax.hist(fitness_carn, n,  label='Carnivores', histtype='step')
         self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
                                     fancybox=True, shadow=True)
 
-    def _save_graphics(self, year, vis_years):
+    def _save_graphics(self, year):
         """
         Saves graphics to file if file name given.
         Code authored by: Hans Ekkehard Plesser
 
-        :param year: ...
+        :param year: current year on island after simulation starts.
+        :type: int.
         """
 
-        if self._img_base is not None or (year % self._img_year) == 0 or vis_years != 0:
+        if self._img_base is not None or (year % self._img_year) == 0:
 
             plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
                                                          num=self._img_ctr,
