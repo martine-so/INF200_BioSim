@@ -1,8 +1,8 @@
 # This file is a build on from one of the files shared by Hans Ekkhard Plesser.
-from biosim.island import Island
-from biosim.animals import Herbivore, Carnivore
-from biosim.landscape import Lowland, Highland, Desert
-from biosim.graphics import Graphics
+from .island import Island
+from .animals import Herbivore, Carnivore
+from .landscape import Lowland, Highland, Desert
+from .graphics import Graphics
 import random
 
 

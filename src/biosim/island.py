@@ -1,7 +1,4 @@
-from biosim.landscape import Lowland
-from biosim.landscape import Highland
-from biosim.landscape import Desert
-import textwrap
+from .landscape import Lowland, Highland, Desert
 
 
 class Island:
