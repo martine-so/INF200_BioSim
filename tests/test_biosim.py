@@ -25,6 +25,7 @@ def test_set_landscape_parameters():
     bio_sim.set_landscape_parameters('L', {'f_max': 500})
     assert bio_sim.island.animals_loc[(2, 2)].default_params['f_max'] == 500
 
+
 def test_simulate_and_property_year():
     """
     Testing that year count is correct, even when visualization is not wanted for simulation
@@ -33,6 +34,7 @@ def test_simulate_and_property_year():
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
     bio_sim.simulate(num_years=5)
     assert bio_sim.years == 5 and bio_sim.year == 5
+
 
 def test_property_num_animals():
     """
