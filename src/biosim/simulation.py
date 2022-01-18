@@ -9,6 +9,7 @@ from biosim.island import Island
 from biosim.animals import Herbivore, Carnivore
 from biosim.landscape import Lowland, Highland, Desert
 from biosim.graphics import Graphics
+import random
 
 
 class BioSim:
@@ -36,7 +37,6 @@ class BioSim:
 
         self.island_map = island_map        # In use on graph
         self.ini_pop = ini_pop              # In use on graph
-        self.seed = seed                    # In use on graph
         self.vis_years = vis_years
         self.img_dir = img_dir
         self.img_base = img_base
@@ -45,6 +45,7 @@ class BioSim:
         self.log_file = log_file
         self.hist_specs = hist_specs
 
+        random.seed(seed)
         self.cmax_herb = 200
         self.cmax_carn = 50
         if cmax_animals is not None:
