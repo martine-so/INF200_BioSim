@@ -87,7 +87,7 @@ class Island:
         coord_x = max([cord[0] for cord in herb_dict.keys()])
         coord_y = max([cord[1] for cord in herb_dict.keys()])
         herb_matrix = [[0] * coord_y for _ in range(coord_x)]
-        carn_matrix = herb_matrix
+        carn_matrix = [[0] * coord_y for _ in range(coord_x)]
 
         for (i, j), val in herb_dict.items():
             herb_matrix[i-1][j-1] = val
