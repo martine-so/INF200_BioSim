@@ -38,7 +38,7 @@ class Landscape:
 
         :param pop: A list of dictionaries containing animals given a species herbivore or carnivore,
                     as well as age and weight
-        :type: List
+        :type pop: List
         """
         self.herb.extend([Herbivore(i['age'], i['weight']) for i in pop if i['species'] == 'Herbivore'])
         self.carn.extend([Carnivore(i['age'], i['weight']) for i in pop if i['species'] == 'Carnivore'])
@@ -152,11 +152,11 @@ class Landscape:
         The method moved herbivores first, before proceeding to move carnivores
 
         :param loc: initial coordinates for animals before they migrate
-        :type: tuple
+        :type loc: tuple
 
         :param dict_with_land_locs: dictionary where keys are coordinates for land on the island with
                                     dict. values as class object for land type at that coordinate
-        :type: dictionary
+        :type dict_with_land_locs: dictionary
 
         :return dict_with_land_locs: Returns updated dictionary with class object of land type at each coordinate
                                     with land on island, where animals at an initial coordinate has migrated from.

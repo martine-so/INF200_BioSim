@@ -190,6 +190,7 @@ class BioSim:
     def year(self):
         """
         Method that returns last year simulated.
+
         :return: _final_year
         :rtype: int
         """
@@ -199,6 +200,7 @@ class BioSim:
     def num_animals(self):
         """
         Method that returns total number of animals on island.
+
         :return: numHerb + numCarn
         :rtype: int
         """
@@ -210,6 +212,7 @@ class BioSim:
     def num_animals_per_species(self):
         """
         Method that returns number of animals per species in island, as dictionary.
+
         :return: {'Herbivore': numHerbs, 'Carnivore': numCarns}
         :rtype: dict
         """

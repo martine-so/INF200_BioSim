@@ -283,7 +283,7 @@ class Graphics:
         """
         Plots island map
 
-        Code authored by: Hans Ekkehard Plesser
+        Base code authored by: Hans Ekkehard Plesser
 
         :param subplot: subplot to plot map in
         :param island_map: lines of string
@@ -452,7 +452,7 @@ class Graphics:
     def _save_graphics(self, year):
         """
         Saves graphics to file if file name given.
-        Code authored by: Hans Ekkehard Plesser
+        Base code authored by: Hans Ekkehard Plesser
 
         :param year: current year on island after simulation starts.
         :type year: int.
