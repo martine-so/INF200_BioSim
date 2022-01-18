@@ -27,5 +27,7 @@ BioSim provides a few examples that can help you get started with your own simul
 See LICENSE.txt for details and copyright.
 
 
-##Acknowledgement  ?
+##Acknowledgement 
+We have discussed with another group. This may have led to some similarities in how we solved some problems in the code.
+A big thank you to all the amazing TAs!
 
