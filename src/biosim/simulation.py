@@ -171,7 +171,7 @@ class BioSim:
 
                 if self.years % self.vis_years == 0:
                     self._graphics.update(self.hist_specs, self.years, self.cmax_herb, self.cmax_carn,
-                                          self.island, numHerbs, numCarns, self.vis_years)
+                                          self.island, numHerbs, numCarns)
 
                 if self.log_file is not None:
                     numHerbs = self.num_animals_per_species['Herbivore']
