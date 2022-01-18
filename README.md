@@ -7,11 +7,8 @@ carnivores or both on an island. You can design the island as you wish, within s
  * A graph over total number of animals by species
  * Histograms displaying age, weight and fitness for both species. 
  * Counter that counts how many years have passed
- * Population map
+ * Population density map
    - one for each species. Where the density of population is displayed by different colors and color bars over the years
-   
-For more information see:
-* link/sphinx
 
 ##How do I use BioSim?
 You can use BioSim via Python. There you can design your own island. Add the population you wish and change the 
