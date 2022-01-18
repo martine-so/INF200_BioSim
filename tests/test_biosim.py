@@ -1,21 +1,21 @@
-import pytest
 from biosim.simulation import BioSim
-from biosim.animals import Herbivore
+
 
 def test_set_animal_parameters():
     """
     Testing that setting new parameters for given animal species works properly
     """
     ini_pop = [{'loc': (2, 2),
-              'pop': [{'species': 'Herbivore',
-                       'age': 5,
-                       'weight': 20}
-                      for _ in range(50)]}]
+                'pop': [{'species': 'Herbivore',
+                        'age': 5,
+                         'weight': 20}
+                        for _ in range(50)]}]
 
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
     bio_sim.set_animal_parameters('Herbivore', {'w_birth': 6})
 
     assert bio_sim.island.animals_loc[(2, 2)].herb[0].default_params["w_birth"] == 6
+
 
 def test_set_landscape_parameters():
     """
@@ -24,6 +24,7 @@ def test_set_landscape_parameters():
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
     bio_sim.set_landscape_parameters('L', {'f_max': 500})
     assert bio_sim.island.animals_loc[(2, 2)].default_params['f_max'] == 500
+
 
 def test_num_animals_plot():
     """
@@ -42,6 +43,7 @@ def test_num_animals_plot():
     numHerbs, numCarns = bio_sim.num_animals_plot()
     assert herbs_on_island == numHerbs
 
+
 def test_simulate_and_property_year():
     """
     Testing that year count is correct, even when visualization is not wanted for simulation
@@ -50,6 +52,7 @@ def test_simulate_and_property_year():
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
     bio_sim.simulate(num_years=5)
     assert bio_sim.years == 5 and bio_sim.year == 5
+
 
 def test_add_population():
     pass
@@ -67,6 +70,7 @@ def test_property_num_animals():
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
     numHerbs, numCarns = bio_sim.num_animals_plot()
     assert bio_sim.num_animals == numHerbs + numCarns
+
 
 def test_property_num_animals_per_species():
     """
