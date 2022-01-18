@@ -27,13 +27,6 @@ def test_place_animals():
         island.place_animals(ini_herbs)
 
 
-# @pytest.fixture
-# def set_params(request):
-#     Island.set_params(request.param)
-#     yield
-#     Island.set_params(Island.default_params)
-
-# @pytest.mark.parametrize('set_params', [{'mu': 1}] , indirect=True)
 def test_migrating():
     """
     Testing the animals migrate on the island when parameters are manipulated to guarantee migration for animals
@@ -61,9 +54,6 @@ def test_migrating():
     assert initial_num_animals != len(island.animals_loc[(3, 3)].herb)
 
 
-def test_one_year():
-    pass
-
 def test_matrix():
     """
     Testing the matrix has dimentions corresponding with the given island
@@ -81,6 +71,7 @@ def test_matrix():
 
     for row in herb_matrix:
         assert len(row) == len(geogr.split()[0])
+
 
 def test_age_fitness_weight_herb():
     """
