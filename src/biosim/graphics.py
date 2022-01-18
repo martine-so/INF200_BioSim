@@ -338,6 +338,9 @@ class Graphics:
         y_data_carn[year] = numCarns
         self._carn_graph_line.set_ydata(y_data_carn)
 
+        if self._animals_graph_ax.get_ylim()[1] < max(numHerbs, numCarns):
+            self._animals_graph_ax.set_ylim(0, max(numHerbs, numCarns))
+
     def _update_hist_age(self, hist_specs, age_herb, age_carn):
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
