@@ -85,13 +85,13 @@ class Graphics:
         :param year: current year simulated on island
         :type year: int
         :param cmax_herb: upper bound on color domain for herbivore heatmap
-        :type cmax-herb: int
+        :type cmax_herb: int
         :param cmax_carn: upper bound on color domain for carnivore heatmap
-        :type cmax-carn: int
+        :type cmax_carn: int
         :param island: class object of the island the simulation runs on
-        :type island : class object
+        :type island : object
         :param numHerbs: Number of herbivores in each island cell
-        :type numbHerbs: int
+        :type numHerbs: int
         :param numCarns: Number of carnivores in each island cell
         :type numCarns: int
         """
@@ -162,8 +162,11 @@ class Graphics:
         the final time step has changed.
 
         :param ymax_animals: y-limit on animal count graph
+        :type ymax_animals : int
         :param final_year: last year to be visualized (upper limit of x-axis on 'animal count' graph)
+        :type final_year : int
         :param img_step: interval between saving image to file
+        :type img_step : int
         """
 
         self._img_year = img_year
@@ -270,7 +273,8 @@ class Graphics:
         """
         Updating year shown in simulation graphics
 
-        :param year: Curreny yeat being simulated on island
+        :param year: Current year being simulated on island
+        :type year : int
         """
         self.txt.set_text(self.template.format(year))
         plt.pause(0.1)  # pause required to make update visible
@@ -282,7 +286,8 @@ class Graphics:
         Code authored by: Hans Ekkehard Plesser
 
         :param subplot: subplot to plot map in
-        :param island_map: ...
+        :param island_map: lines of string
+        :type island_map : str
         """
         # #                   R    G    B
         rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
@@ -312,8 +317,9 @@ class Graphics:
         """
         Update heat plot for herbivores
 
-        :param herb_matrix: ...
+        :param herb_matrix: matrix with how many herbivores there are in each cell
         :param cmax: upper bound on color domain for heatmap
+        :type cmax: int
         """
         if self._img_heatPlot_herb_axis is not None:
             self._img_heatPlot_herb_axis.set_data(herb_matrix)
@@ -329,6 +335,7 @@ class Graphics:
         Updates heat plot for carnivores
         :param carn_matrix: Matrix containing number of carnivores on each location on the island map
         :param cmax: upper bound on color domain for heatmap
+        :type cmax: int
         """
         if self._img_heatPlot_carn_axis is not None:
             self._img_heatPlot_carn_axis.set_data(carn_matrix)
@@ -344,11 +351,11 @@ class Graphics:
         Update 'animal count' graph to include current year simulated on the island.
 
         :param year: Current year shown on simulation
-        :type: int
+        :type year: int
         :param numHerbs: total amount of herbiovores on the island
-        :type: int
+        :type numHerbs: int
         :param numCarns: total amount of carnivores on the island
-        :type: int
+        :type numCarns: int
         """
         y_data_herb = self._herb_graph_line.get_ydata()
         y_data_herb[year] = numHerbs
@@ -366,10 +373,11 @@ class Graphics:
         Update histogram for age, showing only distribution of age for current year
 
         :param hist_specs: dictionary with histogram specifications
+        :type hist_specs: dict
         :param age_herb: list of age for every herbivore on island
-        :type: list
+        :type age_herb: list
         :param age_carn: list of age for every carnivore on island
-        :type: list
+        :type age_carn: list
         """
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
@@ -391,11 +399,11 @@ class Graphics:
         Update histogram for weight, showing only distribution of weight for current year
 
         :param hist_specs: dictionary with histogram specifications
-        :type: list
+        :type hist_specs: dict
         :param weight_herb: list of weight for every herbivore on island
-        :type: list
+        :type weight_herb: list
         :param weight_carn: list of weight for every carnivore on island
-        :type: list
+        :type weight_carn: list
         """
         self._histWeight_ax.clear()
         self._histWeight_ax.title.set_text('Weight')
@@ -416,11 +424,11 @@ class Graphics:
         Update histogram for fitness, showing only distribution of fitness for current year
 
         :param hist_specs: dictionary with histogram specifications
-        :type: dict
+        :type hist_specs: dict
         :param fitness_herb: list of fitness for every herbivore on island
-        :type: list
+        :type fitness_herb: list
         :param fitness_carn:  list of fitness for every carnivore on island
-        :type: list
+        :type fitness_carn: list
         """
         self._histFitness_ax.clear()
         self._histFitness_ax.title.set_text('Fitness')
@@ -445,7 +453,7 @@ class Graphics:
         Code authored by: Hans Ekkehard Plesser
 
         :param year: current year on island after simulation starts.
-        :type: int.
+        :type year: int.
         """
 
         if self._img_base is not None or (year % self._img_year) == 0:
