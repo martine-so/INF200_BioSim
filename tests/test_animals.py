@@ -314,8 +314,8 @@ def test_death_herb_dies():
     Checks that herbivores die when probability is set to 1
     """
     herb = Herbivore(a=5, w=20)
+    Herbivore.set_params({'omega': 1})
     herb.fitness = 0
-    herb.omega = 1
     assert herb.death() is True
 
 
@@ -332,8 +332,8 @@ def test_death_carn_dies():
     Checks that herbivores die when probability is set to 1
     """
     carn = Carnivore(a=5, w=20)
+    Carnivore.set_params({'omega': 1})
     carn.fitness = 0
-    carn.omega = 1
     assert carn.death() is True
 
 def test_migrating_herb():

@@ -42,24 +42,18 @@ def test_num_animals_plot():
     numHerbs, numCarns = bio_sim.num_animals_plot()
     assert herbs_on_island == numHerbs
 
-def test_simulate():
+def test_simulate_and_property_year():
     """
     Testing that year count is correct, even when visualization is not wanted for simulation
+    Also testing that year property shows last year simulated
     """
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
     bio_sim.simulate(num_years=5)
-    assert bio_sim.years == 5
+    assert bio_sim.years == 5 and bio_sim.year == 5
 
 def test_add_population():
     pass
 
-def test_property_year():
-    """
-    Testing year property shows last year simulated
-    """
-    bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=[], seed=1, vis_years=0)
-    bio_sim.simulate(num_years=5)
-    assert bio_sim.year == 5
 
 def test_property_num_animals():
     """
