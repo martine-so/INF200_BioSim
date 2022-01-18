@@ -1,10 +1,4 @@
-"""
-Template for BioSim class.
-"""
-
-# The material in this file is licensed under the BSD 3-clause license
-# https://opensource.org/licenses/BSD-3-Clause
-# (C) Copyright 2021 Hans Ekkehard Plesser / NMBU
+# This file is a build on from one of the files shared by Hans Ekkhard Plesser.
 from biosim.island import Island
 from biosim.animals import Herbivore, Carnivore
 from biosim.landscape import Lowland, Highland, Desert

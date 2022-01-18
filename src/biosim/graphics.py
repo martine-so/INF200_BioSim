@@ -1,5 +1,5 @@
 """
-:mod:`randvis.graphics` provides graphics support for RandVis.
+:mod:`biosim.graphics` provides graphics support for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
@@ -33,7 +33,7 @@ _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 
 
 class Graphics:
-    """Provides graphics support for RandVis."""
+    """Provides graphics support for BioSim."""
 
     def __init__(self, img_dir=None, img_name=None, img_fmt=None, island_map=None):
         """
@@ -81,19 +81,19 @@ class Graphics:
         Updates graphics with current data and save to file if necessary.
 
         :param hist_specs: dictionary with specifications for histograms.
-        :type: dict
+        :type hist_specs: dict
         :param year: current year simulated on island
-        :type: int
+        :type year: int
         :param cmax_herb: upper bound on color domain for herbivore heatmap
-        :type: int
+        :type cmax-herb: int
         :param cmax_carn: upper bound on color domain for carnivore heatmap
-        :type: int
+        :type cmax-carn: int
         :param island: class object of the island the simulation runs on
-        :type: class object
+        :type island : class object
         :param numHerbs: Number of herbivores in each island cell
-        :type: int
+        :type numbHerbs: int
         :param numCarns: Number of carnivores in each island cell
-        :type: int
+        :type numCarns: int
         """
         herb_matrix, carn_matrix = island.matrix()
         age_herb, weight_herb, fitness_herb = island.age_fitness_weight_herb()
