@@ -17,17 +17,29 @@ class BioSim:
                  log_file=None):
         """
         :param island_map: Multi-line string specifying island geography
+        :type island_map: str
         :param ini_pop: List of dictionaries specifying initial population
+        :type ini_pop: list
         :param seed: Integer used as random number seed
+        :type seed: int
         :param ymax_animals: Number specifying y-axis limit for graph showing animal numbers
+        :type ymax_animals: int
         :param cmax_animals: Dict specifying color-code limits for animal densities
+        :type cmax_animals: int
         :param hist_specs: Specifications for histograms, see below
+        :type hist_specs: dict
         :param vis_years: years between visualization updates (if 0, disable graphics)
+        :type vis_years: int
         :param img_dir: String with path to directory for figures
+        :type img_dir: str
         :param img_base: String with beginning of file name for figures
+        :type img_base: str
         :param img_fmt: String with file type for figures, e.g. 'png'
+        :type img_fmt: str
         :param img_years: years between visualizations saved to files (default: vis_years)
+        :type img_years: int
         :param log_file: If given, write animal counts to this file
+        :type log_file: str
 
         If ymax_animals is None, the y-axis limit should be adjusted automatically.
         If cmax_animals is None, sensible, fixed default values should be used.
@@ -105,7 +117,9 @@ class BioSim:
         Set parameters for animal species.
 
         :param species: String, name of animal species
+        :type species: str
         :param params: Dict with valid parameter specification for species
+        :type params: dict
         """
 
         if species == 'Herbivore':
@@ -118,7 +132,9 @@ class BioSim:
         Set parameters for landscape type.
 
         :param landscape: String, code letter for landscape
+        :type landscape: str
         :param params: Dict with valid parameter specification for landscape
+        :type params: dict
         """
         if landscape == 'L':
             Lowland.set_params(params)
@@ -147,6 +163,7 @@ class BioSim:
         Run simulation while visualizing the result.
 
         :param num_years: number of years to simulate
+        :type num_years: int
         """
         self._final_year = self.years + num_years
         if self.vis_years > 0:
@@ -183,6 +200,7 @@ class BioSim:
         Add a population to the island
 
         :param population: List of dictionaries specifying population
+        :type population: list
         """
         self.island.place_animals(population)
 

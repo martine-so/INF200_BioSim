@@ -36,9 +36,12 @@ class Animals:
         value error is raised.
 
         :param a: age of an animal. Zero as default value.
+        :type a: int
         :param w: Weight of an animal.
+        :type w: int
         :param fitness: Animals fitness with zero as default value.
                         Used mostly when running tests
+        :type fitness: float
         """
         self.a = a
         self.fitness = fitness
@@ -59,12 +62,14 @@ class Animals:
         that year
 
         :param f: amount of food eaten by an animal that year
+        :type f: int
         """
         self.w += self.default_params['beta'] * f
 
     def calculate_fitness(self):
         """"
         Calculates and updates an animals fitness as a number between 0 and 1 based on
+
         """
         if self.w <= 0:
             self.fitness = 0
@@ -79,7 +84,7 @@ class Animals:
         for giving birth. Method returns animal class element if it gives birth, if not it returns None
 
         :param num_of_animals: Number of animals in same place as self animal
-        :type: int
+        :type num_of_animals: int
 
         :return: Newborn if animal can and will give birth. If not; None
         :rtype: Newborn is animal class object of the same type as animal giving birth
@@ -156,7 +161,9 @@ class Herbivore(Animals):
         :param a: age of an animal. Zero as default value.
         :type a: int
         :param w: Weight of an animal.
+        :type w: int
         :param fitness: Animals fitness
+        :type fitness: float
         """
         super().__init__(a, w, fitness)
 
@@ -188,7 +195,10 @@ class Carnivore(Animals):
     def __init__(self, a=0, w=None, fitness=0):
         """
         :param a: Age of an animal. Zero as default value.
+        :type a: int
         :param w: Weight of an animal.
+        :type w: int
         :param fitness: Animals fitness
+        :type fitness: float
         """
         super().__init__(a, w, fitness)
