@@ -1,5 +1,5 @@
 """
-:mod:`randvis.graphics` provides graphics support for RandVis.
+:mod:`biosim.graphics` provides graphics support for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
@@ -33,7 +33,7 @@ _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 
 
 class Graphics:
-    """Provides graphics support for RandVis."""
+    """Provides graphics support for BioSim."""
 
     def __init__(self, img_dir=None, img_name=None, img_fmt=None, island_map=None):
         """
