@@ -25,7 +25,7 @@ class BioSim:
         :param ymax_animals: Number specifying y-axis limit for graph showing animal numbers
         :type ymax_animals: int
         :param cmax_animals: Dict specifying color-code limits for animal densities
-        :type cmax_animals: int
+        :type cmax_animals: dict
         :param hist_specs: Specifications for histograms, see below
         :type hist_specs: dict
         :param vis_years: years between visualization updates (if 0, disable graphics)
