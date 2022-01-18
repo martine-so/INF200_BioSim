@@ -90,8 +90,8 @@ class Graphics:
         :param vis_years:
         """
         herb_matrix, carn_matrix = island.matrix()
-        age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
-        age_carn, weight_carn, fitness_carn = island.age_fitness_weigth_carn()
+        age_herb, weight_herb, fitness_herb = island.age_fitness_weight_herb()
+        age_carn, weight_carn, fitness_carn = island.age_fitness_weight_carn()
 
         self._update_heat_plot_herb(herb_matrix, cmax_herb)
         self._update_heat_plot_carn(carn_matrix, cmax_carn)
