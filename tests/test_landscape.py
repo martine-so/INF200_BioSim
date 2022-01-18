@@ -107,8 +107,7 @@ def test_prob_carn_eating_b():
     field = Lowland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    for carn in field.carn:
-        carn.DeltaPhiMax = 0
+    field.carn[0].DeltaPhiMax = 0
     prob = field.prob_carn_eating(field.carn[0], field.herb[0])
     assert prob == 1
 
@@ -137,8 +136,7 @@ def test_eating_carnivores_herbs_dying():
     field = Highland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    for carn in field.carn:
-        carn.DeltaPhiMax = 0
+    field.carn[0].DeltaPhiMax = 0
     field.eating_carnivores()
     assert len(field.herb) == 0
 
@@ -153,8 +151,7 @@ def test_eating_carnivores_not_eat_too_much():
     field = Highland()
     field.herb.extend([Herbivore(a=5, w=40, fitness=0), Herbivore(a=5, w=20, fitness=0)])
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    for carn in field.carn:
-        carn.DeltaPhiMax = 0
+    field.carn[0].DeltaPhiMax = 0
 
     carn_start_weight = field.carn[0].w
     added_weight = (field.herb[0].w + (field.herb[1].w-10)) * field.carn[0].beta
@@ -169,8 +166,7 @@ def test_eating_carnivores_gaining_weight():
     field = Highland()
     field.herb.append(Herbivore(a=5, w=20, fitness=0))
     field.carn.append(Carnivore(a=5, w=20, fitness=1))
-    for carn in field.carn:
-        carn.DeltaPhiMax = 0
+    field.carn[0].DeltaPhiMax = 0
 
     carn_start_weight = field.carn[0].w
     added_weight = field.herb[0].w * field.carn[0].beta
@@ -211,7 +207,7 @@ def test_breeding():
     """
     field = Lowland()
     field.herb.extend([Herbivore(a=10, w=40, fitness=1), Herbivore(a=10, w=40, fitness=1)])
-    Herbivore.set_params({'gamma': 1})
+    Herbivore.set_params({'gamma': 1, 'w_birth': 8})
     field.breeding()
     assert len(field.herb) == 4
 
