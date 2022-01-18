@@ -1,9 +1,7 @@
 from biosim.landscape import Lowland
 from biosim.landscape import Highland
 from biosim.landscape import Desert
-import random
 import textwrap
-
 
 
 class Island:
@@ -51,11 +49,6 @@ class Island:
 
         self.animals_loc = new_animals_loc
 
-
-        #for i in self.animals_loc:
-        #    print(len(self.animals_loc[i].herb), len(self.animals_loc[i].carn))
-        #print(' ')
-
     def one_year(self):
         """
         Runs trough everything that happens in a year on the island. First it resets fodder amount to f_max
@@ -87,14 +80,13 @@ class Island:
                 herb_dict[loc] = 0
                 carn_dict[loc] = 0
 
-
         for coord in self.animals_loc:
             herb_dict[coord] = len(self.animals_loc[coord].herb)
             carn_dict[coord] = len(self.animals_loc[coord].carn)
 
         coord_x = max([cord[0] for cord in herb_dict.keys()])
         coord_y = max([cord[1] for cord in herb_dict.keys()])
-        herb_matrix = [[0] * (coord_y) for ele in range(coord_x)]
+        herb_matrix = [[0] * coord_y for _ in range(coord_x)]
         carn_matrix = herb_matrix
 
         for (i, j), val in herb_dict.items():
@@ -105,7 +97,7 @@ class Island:
 
         return herb_matrix, carn_matrix
 
-    def age_fitness_weigth_herb(self):
+    def age_fitness_weight_herb(self):
         """
         Method that makes three lists for herbivores. One for weight, one for age and one for fitness.
         These are used later when visualizing.
@@ -120,7 +112,7 @@ class Island:
                 fitness_herb.append(round(herb.fitness, 2))
         return age_herb, weight_herb, fitness_herb
 
-    def age_fitness_weigth_carn(self):
+    def age_fitness_weight_carn(self):
         """
         Method that makes three lists for carnivores. One for weight, one for age and one for fitness.
         These are used later when visualizing.
@@ -135,14 +127,5 @@ class Island:
                 fitness_carn.append(round(carn.fitness, 2))
         return age_carn, weight_carn, fitness_carn
 
-geogr = """\
-                       WWWWW
-                       WWLWW
-                       WLLLW
-                       WWLWW
-                       WWWWW"""
 
-geogr = textwrap.dedent(geogr)
-island = Island(geogr)
-herb_matrix, carn_matrix = island.matrix()
-print(herb_matrix)
+
