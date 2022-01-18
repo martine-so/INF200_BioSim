@@ -104,6 +104,6 @@ def test_age_fitness_weight_herb():
 
     num_herbs = len(island.animals_loc[(3, 3)].herb)
     num_carns = len(island.animals_loc[(3, 3)].carn)
-    age_herb, weight_herb, fitness_herb = island.age_fitness_weigth_herb()
-    age_carn, weight_carn, fitness_carn = island.age_fitness_weigth_carn()
+    age_herb, weight_herb, fitness_herb = island.age_fitness_weight_herb()
+    age_carn, weight_carn, fitness_carn = island.age_fitness_weight_carn()
     assert len(age_herb) == num_herbs and len(age_carn) == num_carns
