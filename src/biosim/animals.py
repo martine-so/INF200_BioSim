@@ -75,6 +75,11 @@ class Animals:
         Fitness is equal to:
         (1/ (1 + e^(phi_age * (age - a_half))) * (1/(1 + e^(-phi_weight * (weight - w_half))))
         If the animals weight is zero or less fitness is zero.
+
+        .. math::
+           f(x) = (1/(1 + e^{({phi age} * ({a} - {a half}))})) * (1/(1 + e^{({phi weight} * ({w} - {w half}))}))
+
+
         """
         if self.w <= 0:
             self.fitness = 0
