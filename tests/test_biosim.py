@@ -44,7 +44,8 @@ def test_property_num_animals():
                          'weight': 20}
                         for _ in range(50)]}]
     bio_sim = BioSim(island_map="WWWW\nWLHW\nWWWW", ini_pop=ini_pop, seed=1, vis_years=0)
-    numHerbs, numCarns = bio_sim.num_animals_plot()
+    numHerbs = bio_sim.num_animals_per_species['Herbivore']
+    numCarns = bio_sim.num_animals_per_species['Carnivore']
     assert bio_sim.num_animals == numHerbs + numCarns
 
 
