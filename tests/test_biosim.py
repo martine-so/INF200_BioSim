@@ -34,11 +34,6 @@ def test_simulate_and_property_year():
     bio_sim.simulate(num_years=5)
     assert bio_sim.years == 5 and bio_sim.year == 5
 
-
-def test_add_population():
-    pass
-
-
 def test_property_num_animals():
     """
     Testing num_animals property is the correct total amount of animals on the island
