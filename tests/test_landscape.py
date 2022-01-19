@@ -16,8 +16,6 @@ def test_set_params_neg():
         field.set_params({'f_max': -100})
 
 
-
-
 def test_add_animals_herb():
     """
     Checks that the method add_animals actually adds animals. Here it does so by adding one herbivore and
@@ -222,4 +220,3 @@ def test_dying():
     field.herb.extend([Herbivore(a=5, w=0), Herbivore(a=5, w=0)])
     field.dying()
     assert len(field.herb) == 0
-
