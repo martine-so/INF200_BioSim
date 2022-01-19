@@ -14,6 +14,7 @@
 """
 
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gs
 import numpy as np
 import subprocess
 import os
@@ -169,7 +170,7 @@ class Graphics:
         :param img_step: interval between saving image to file
         :type img_step: int
         """
-
+        self.gs = gs.GridSpec(12, 12)
         self.ymax_animals = ymax_animals
         self._img_year = img_year
         plt.style.use('default')
@@ -190,14 +191,14 @@ class Graphics:
 
         # Creating subplot for island map.
         if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(3, 3, 1)
+            self._map_ax = self._fig.add_subplot(self.gs[:4, 1:4])
             self._map_ax.title.set_text('Island')
             self._map_ax.axis('off')
             self._map_ax = self.plot_map(self._map_ax, self.island_map)
 
         # Creating subplot for aminal count graph if it does not already exist.
         if self._animals_graph_ax is None:
-            self._animals_graph_ax = self._fig.add_subplot(3, 3, 3)
+            self._animals_graph_ax = self._fig.add_subplot(self.gs[:4, 8:11])
             self._animals_graph_ax.title.set_text('Animal count')
             self._animals_graph_ax.set_xlim(0, final_year + 1)
             self._animals_graph_ax.set_ylim(0, ymax_animals)
@@ -207,7 +208,7 @@ class Graphics:
         # Creating subplot for herbivore heat plot if it does not already exist
         map = self.island_map.split()
         if self._heatPlot_herb_ax is None:
-            self._heatPlot_herb_ax = self._fig.add_subplot(3, 2, 3)
+            self._heatPlot_herb_ax = self._fig.add_subplot(self.gs[5:9, 2:5])
             self._heatPlot_herb_ax.title.set_text('Herbivore distribution')
             self._heatPlot_herb_ax.set_xticks(np.linspace(0, len(map[0]) - 1, 5))
             self._heatPlot_herb_ax.set_xticklabels(np.linspace(1, len(map[0]), 5, dtype=int))
@@ -217,7 +218,7 @@ class Graphics:
 
         # Creating subplot for carnivore heat plot if it does not already exist
         if self._heatPlot_carn_ax is None:
-            self._heatPlot_carn_ax = self._fig.add_subplot(3, 2, 4)
+            self._heatPlot_carn_ax = self._fig.add_subplot(self.gs[5:9, 7:10])
             self._heatPlot_carn_ax.title.set_text('Carnivore distribution')
             self._heatPlot_carn_ax.set_xticks(np.linspace(0, len(map[0]) - 1, 5))
             self._heatPlot_carn_ax.set_xticklabels(np.linspace(1, len(map[0]), 5, dtype=int))
@@ -227,17 +228,17 @@ class Graphics:
 
         # Creating subplot for age histogram if it does not already exist
         if self._histAge_ax is None:
-            self._histAge_ax = self._fig.add_subplot(3, 3, 7)
+            self._histAge_ax = self._fig.add_subplot(self.gs[10:, :3])
             self._histAge_ax.title.set_text('Age')
 
         # Creating subplot for weight histogram if it does not already exist
         if self._histWeight_ax is None:
-            self._histWeight_ax = self._fig.add_subplot(3, 3, 8)
+            self._histWeight_ax = self._fig.add_subplot(self.gs[10:, 4:7])
             self._histWeight_ax.title.set_text('Weight')
 
         # Creating subplot for fitness histogram if it does not already exist
         if self._histFitness_ax is None:
-            self._histFitness_ax = self._fig.add_subplot(3, 3, 9)
+            self._histFitness_ax = self._fig.add_subplot(self.gs[10:, 8:11])
             self._histFitness_ax.title.set_text('Fitness')
 
         plt.pause(0.01)  # pause required to make figure visible
@@ -384,7 +385,7 @@ class Graphics:
         self._histAge_ax.clear()
         self._histAge_ax.title.set_text('Age')
 
-        x_lim = 40
+        x_lim = 60
         width = 2
         if hist_specs is not None:
             if 'age' in hist_specs:
@@ -446,7 +447,7 @@ class Graphics:
         self._histFitness_ax.set_xlim(0, x_lim)
         self._histFitness_ax.hist(fitness_herb, n, label='Herbivores', histtype='step')
         self._histFitness_ax.hist(fitness_carn, n,  label='Carnivores', histtype='step')
-        self._histFitness_ax.legend(loc='best', bbox_to_anchor=(1, 0.5), title='Animal',
+        self._histFitness_ax.legend(loc='upper left', bbox_to_anchor=(1.05, 1), title='Animal',
                                     fancybox=True, shadow=True)
 
     def _save_graphics(self, year):
